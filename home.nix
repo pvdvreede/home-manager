@@ -61,9 +61,6 @@
       push = {
         default = "simple";
       };
-      pull = {
-        rebase = "preserve";
-      };
       branch = {
         autosetuprebase = "always";
       };
