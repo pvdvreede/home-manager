@@ -102,13 +102,15 @@
   programs.vim = {
     enable = true;
     plugins = with pkgs.vimPlugins; [
+      catppuccin-vim
       ctrlp
       vim-airline
       vim-commentary
-      vim-visual-multi
-      catppuccin-vim
       vim-move
       vim-nix
+      vim-visual-multi
+      vim-yaml
+      vimux
     ];
     settings = {
       relativenumber = true;
@@ -117,13 +119,25 @@
       expandtab = true;
     };
     extraConfig = ''
-      let g:move_key_modifier = 'C'
+      let mapleader=","
       autocmd BufWritePre * :%s/\s\+$//e
+
+      " vim-move
+      let g:move_key_modifier = 'C'
+      let g:move_key_modifier_visualmode = 'C'
 
       " catppucin theme
       set termguicolors
       let g:airline_theme = 'catppuccin_mocha'
       colorscheme catppuccin_mocha
+
+      " vimux config
+      let g:VimuxOrientation = "h"
+      let g:VimuxHeight = "30"
+      let g:VimuxCloseOnExit = 1
+      nnoremap <leader>vn :VimuxPromptCommand<cr>
+      nnoremap <leader>vr :VimuxRunLastCommand<cr>
+      nnoremap <leader>vc :VimuxCloseRunner<cr>
     '';
   };
   programs.tmux = {
