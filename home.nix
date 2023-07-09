@@ -97,6 +97,7 @@
       ga = "git add";
       gc = "git commit";
       gd = "git diff";
+      gpom = "git push origin main";
     };
   };
   programs.vim = {
