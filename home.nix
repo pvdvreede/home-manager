@@ -46,8 +46,36 @@
     userEmail = "pvdvreede@gmail.com";
     userName = "pvdvreede";
     ignores = [
-      ".DS_store"
+      "#*"
+      "*~"
+      ".DS_Store"
+      ".netrwhist"
     ];
+    extraConfig = {
+      init = {
+        defaultBranch = "main";
+      };
+      color = {
+        ui = true;
+      };
+      push = {
+        default = "simple";
+      };
+      pull = {
+        rebase = "preserve";
+      };
+      branch = {
+        autosetuprebase = "always";
+      };
+      rebase = {
+        autosquash = true;
+      };
+    };
+
+  };
+  programs.gh = {
+    enable = true;
+    enableGitCredentialHelper = true;
   };
   programs.fish = {
     enable = true;
@@ -56,6 +84,10 @@
       gco = "git checkout";
       ga = "git add";
       gc = "git commit";
+      gd = "git diff";
+
+      fig = "docker-compose";
+      k = "kubectl";
     };
   };
   programs.vim = {
@@ -82,7 +114,18 @@
     baseIndex = 1;
     clock24 = true;
     disableConfirmationPrompt = true;
-    extraConfig = "";
+    terminal = "xterm-256color";
+    shell = "${pkgs.fish}/bin/fish";
+    extraConfig = ''
+      # pneumonic for splitting windows
+      bind-key v split-window -h
+      bind-key s split-window -v
+      # vim keybindings for navigation
+      bind-key -r h select-pane -L
+      bind-key -r j select-pane -D
+      bind-key -r k select-pane -U
+      bind-key -r l select-pane -R
+    '';
     keyMode = "vi";
     newSession = true;
     prefix = "C-Space";
