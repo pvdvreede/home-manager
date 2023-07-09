@@ -78,15 +78,28 @@
   };
   programs.fish = {
     enable = true;
-    shellAbbrs = {
+    plugins = with pkgs.fishPlugins; [
+      {
+        name = "z";
+        src = z;
+      }
+    ];
+    functions = {
+      fish_prompt = {
+        body = ''
+          set_color purple;
+          echo (pwd) '>' (set_color normal);
+        '';
+      };
+    };
+    shellAliases = {
+      ll = "ls -lah";
+      fig = "docker-compose";
       gst = "git status";
       gco = "git checkout";
       ga = "git add";
       gc = "git commit";
       gd = "git diff";
-
-      fig = "docker-compose";
-      k = "kubectl";
     };
   };
   programs.vim = {
@@ -94,6 +107,9 @@
     plugins = with pkgs.vimPlugins; [
       ctrlp
       vim-airline
+      vim-commentary
+      vim-visual-multi
+      catppuccin-vim
       vim-move
       vim-nix
     ];
@@ -106,6 +122,11 @@
     extraConfig = ''
       let g:move_key_modifier = 'C'
       autocmd BufWritePre * :%s/\s\+$//e
+
+      " catppucin theme
+      set termguicolors
+      let g:airline_theme = 'catppuccin_mocha'
+      colorscheme catppuccin_mocha
     '';
   };
   programs.tmux = {
