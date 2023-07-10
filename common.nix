@@ -41,6 +41,7 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
   programs.git = {
     enable = true;
     userEmail = "pvdvreede@gmail.com";
@@ -69,16 +70,18 @@
       };
     };
   };
+
   programs.gh = {
     enable = true;
     enableGitCredentialHelper = true;
   };
+
   programs.fish = {
     enable = true;
     plugins = with pkgs.fishPlugins; [
       {
         name = "z";
-        src = z;
+        src = z.src;
       }
     ];
     functions = {
@@ -103,6 +106,7 @@
       hms = "home-manager switch";
     };
   };
+
   programs.vim = {
     enable = true;
     plugins = with pkgs.vimPlugins; [
@@ -144,6 +148,7 @@
       nnoremap <leader>vc :VimuxCloseRunner<cr>
     '';
   };
+
   programs.tmux = {
     enable = true;
     baseIndex = 1;
