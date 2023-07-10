@@ -97,6 +97,7 @@
       ga = "git add";
       gc = "git commit";
       gd = "git diff";
+      gdca = "git diff --cached";
       gpom = "git push origin main";
 
       hms = "home-manager switch";

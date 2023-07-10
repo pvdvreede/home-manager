@@ -15,6 +15,7 @@
         pkgs = nixpkgs.legacyPackages.aarch64-darwin;
         modules = [
           ./common.nix
+          ./work.nix
           {
             home = {
               username = "paulv";
