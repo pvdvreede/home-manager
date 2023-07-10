@@ -107,6 +107,11 @@
     };
   };
 
+  programs.fzf = {
+    enable = true;
+    enableFishIntegration = true;
+  };
+
   programs.vim = {
     enable = true;
     plugins = with pkgs.vimPlugins; [
