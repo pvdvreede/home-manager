@@ -1,29 +1,29 @@
 { config, pkgs, ... }:
 
 {
-  home.username = "pvdvreede";
-  home.homeDirectory = "/home/pvdvreede";
+  # home.username = username;
+  # home.homeDirectory = homeDir;
 
-  home.stateVersion = "23.05";
+  # home.stateVersion = "23.05";
 
-  home.packages = [
+  # home.packages = [
 
-  ];
+  # ];
 
-  # Home Manager is pretty good at managing dotfiles. The primary way to manage
-  # plain files is through 'home.file'.
-  home.file = {
-    # # Building this configuration will create a copy of 'dotfiles/screenrc' in
-    # # the Nix store. Activating the configuration will then make '~/.screenrc' a
-    # # symlink to the Nix store copy.
-    # ".screenrc".source = dotfiles/screenrc;
+  # # Home Manager is pretty good at managing dotfiles. The primary way to manage
+  # # plain files is through 'home.file'.
+  # home.file = {
+  #   # # Building this configuration will create a copy of 'dotfiles/screenrc' in
+  #   # # the Nix store. Activating the configuration will then make '~/.screenrc' a
+  #   # # symlink to the Nix store copy.
+  #   # ".screenrc".source = dotfiles/screenrc;
 
-    # # You can also set the file content immediately.
-    # ".gradle/gradle.properties".text = ''
-    #   org.gradle.console=verbose
-    #   org.gradle.daemon.idletimeout=3600000
-    # '';
-  };
+  #   # # You can also set the file content immediately.
+  #   # ".gradle/gradle.properties".text = ''
+  #   #   org.gradle.console=verbose
+  #   #   org.gradle.daemon.idletimeout=3600000
+  #   # '';
+  # };
 
   # You can also manage environment variables but you will have to manually
   # source
@@ -98,6 +98,8 @@
       gc = "git commit";
       gd = "git diff";
       gpom = "git push origin main";
+
+      hms = "home-manager switch";
     };
   };
   programs.vim = {
