@@ -1,6 +1,15 @@
 { pkgs, ... }:
 
 {
+  home.file = {
+    wezterm = {
+      enable = true;
+      executable = false;
+      source = ./wezterm.lua;
+      target = ".wezterm.lua";
+    };
+  };
+
   home.packages = with pkgs; [
     kubectl
     istioctl
