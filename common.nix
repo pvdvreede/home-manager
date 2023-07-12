@@ -6,9 +6,9 @@
 
   # home.stateVersion = "23.05";
 
-  # home.packages = [
-
-  # ];
+  home.packages = [
+    pkgs.tree
+  ];
 
   # # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # # plain files is through 'home.file'.
@@ -51,6 +51,7 @@
       "*~"
       ".DS_Store"
       ".netrwhist"
+      "*.swp"
     ];
     extraConfig = {
       init = {
@@ -119,6 +120,9 @@
       ctrlp
       vim-airline
       vim-commentary
+      vim-easy-align
+      vim-elixir
+      vim-expand-region
       vim-move
       vim-nix
       vim-visual-multi
@@ -134,6 +138,11 @@
     extraConfig = ''
       let mapleader=","
       autocmd BufWritePre * :%s/\s\+$//e
+      set noswapfile
+
+      " show whitespace chars
+      set listchars=tab:!·,trail:·
+      set list
 
       " vim-move
       let g:move_key_modifier = 'C'

@@ -15,8 +15,10 @@
     istioctl
     kubernetes-helm
     awscli
+    kind
     saml2aws
   ];
+
   programs.k9s = {
     enable = true;
     settings = {
@@ -25,6 +27,7 @@
       };
     };
   };
+
   programs.fish = {
     shellAliases = {
       k = "kubectl";
