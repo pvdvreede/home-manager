@@ -41,5 +41,7 @@
           }
         ];
       };
+
+      homeConfigurations.pvdvreede = homeConfigurations.home;
     };
 }
