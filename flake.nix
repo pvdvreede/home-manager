@@ -32,6 +32,7 @@
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         modules = [
           ./common.nix
+          ./home.nix
           {
             home = {
               username = "pvdvreede";
