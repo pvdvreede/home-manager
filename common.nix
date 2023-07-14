@@ -92,6 +92,15 @@
           echo (pwd) '>' (set_color normal);
         '';
       };
+      envsource = {
+        body = ''
+          for line in (cat $argv | grep -v '^#')
+            set item (string split -m 1 '=' $line)
+            set -gx $item[1] $item[2]
+            echo "Exported key $item[1]"
+          end
+        '';
+      };
     };
     shellAliases = {
       ll = "ls -lah";
@@ -125,6 +134,7 @@
       vim-expand-region
       vim-move
       vim-nix
+      vim-terraform
       vim-visual-multi
       vim-yaml
       vimux

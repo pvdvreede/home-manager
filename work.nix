@@ -22,8 +22,11 @@
   programs.k9s = {
     enable = true;
     settings = {
-      logger = {
-        textWrap = true;
+      k9s = {
+        logger = {
+          textWrap = true;
+          sinceSeconds = 6000;
+        };
       };
     };
   };
