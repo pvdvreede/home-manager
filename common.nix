@@ -1,29 +1,34 @@
 { config, pkgs, ... }:
 
 {
-  # home.username = username;
-  # home.homeDirectory = homeDir;
-
-  # home.stateVersion = "23.05";
+  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnfreePredicate = (_: true);
 
   home.packages = [
     pkgs.tree
+    pkgs.jetbrains-mono
+    pkgs.source-code-pro
   ];
 
   # # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # # plain files is through 'home.file'.
-  # home.file = {
-  #   # # Building this configuration will create a copy of 'dotfiles/screenrc' in
-  #   # # the Nix store. Activating the configuration will then make '~/.screenrc' a
-  #   # # symlink to the Nix store copy.
-  #   # ".screenrc".source = dotfiles/screenrc;
+  home.file = {
+    # # Building this configuration will create a copy of 'dotfiles/screenrc' in
+    # # the Nix store. Activating the configuration will then make '~/.screenrc' a
+    # # symlink to the Nix store copy.
+    # ".screenrc".source = dotfiles/screenrc;
 
-  #   # # You can also set the file content immediately.
-  #   # ".gradle/gradle.properties".text = ''
-  #   #   org.gradle.console=verbose
-  #   #   org.gradle.daemon.idletimeout=3600000
-  #   # '';
-  # };
+    # # You can also set the file content immediately.
+    # ".gradle/gradle.properties".text = ''
+    #   org.gradle.console=verbose
+    #   org.gradle.daemon.idletimeout=3600000
+    # '';
+    nixconfig = {
+      executable = false;
+      text = "{ allowUnfree = true; }";
+      target = ".config/nixpkgs/config.nix";
+    };
+  };
 
   # You can also manage environment variables but you will have to manually
   # source
@@ -38,6 +43,8 @@
   home.sessionVariables = {
     EDITOR = "vim";
   };
+
+  fonts.fontconfig.enable = true;
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
