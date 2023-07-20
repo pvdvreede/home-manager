@@ -41,16 +41,26 @@
       hashicorp.terraform
       redhat.vscode-yaml
       ms-azuretools.vscode-docker
-      # ms-vscode-remote.remote-containers
+      oderwat.indent-rainbow
+      catppuccin.catppuccin-vsc
     ];
     userSettings = {
       "editor.tabSize" = 2;
       "files.trimTrailingWhitespace" = true;
-      "editor.fontSize" = 14;
+      "editor.fontSize" = 16;
       "files.autoSave" = "onFocusChange";
       "editor.fontFamily" = "'JetBrains Mono', Menlo, Monaco, 'Courier New', monospace";
       "editor.fontLigatures" = true;
+      "workbench.colorTheme" = "Catppuccin Mocha";
     };
+    userTasks = {};
+    keybindings = [
+      {
+        key = "ctrl+shift+d";
+        command = "editor.action.copyLinesDownAction";
+        when = "editorTextFocus && !editorReadonly";
+      }
+    ];
   };
 
   programs.fish = {
