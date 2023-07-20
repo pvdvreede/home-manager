@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, vscode-marketplace, ... }:
 
 {
   home.file = {
@@ -36,13 +36,14 @@
     package = pkgs.vscode;
     enableUpdateCheck = false;
     mutableExtensionsDir = false;
-    extensions = with pkgs.vscode-extensions; [
+    extensions = with vscode-marketplace; [
       bbenoist.nix
-      hashicorp.terraform
-      redhat.vscode-yaml
-      ms-azuretools.vscode-docker
-      oderwat.indent-rainbow
       catppuccin.catppuccin-vsc
+      hashicorp.terraform
+      ms-azuretools.vscode-docker
+      ms-vscode-remote.remote-containers
+      oderwat.indent-rainbow
+      redhat.vscode-yaml
     ];
     userSettings = {
       "editor.tabSize" = 2;
@@ -58,6 +59,21 @@
       {
         key = "ctrl+shift+d";
         command = "editor.action.copyLinesDownAction";
+        when = "editorTextFocus && !editorReadonly";
+      }
+      {
+        key = "ctrl+shift+k";
+        command = "editor.action.deleteLines";
+        when = "editorTextFocus && !editorReadonly";
+      }
+      {
+        key = "ctrl+shift+up";
+        command = "editor.action.moveLinesUpAction";
+        when = "editorTextFocus && !editorReadonly";
+      }
+      {
+        key = "ctrl+shift+down";
+        command = "editor.action.moveLinesDownAction";
         when = "editorTextFocus && !editorReadonly";
       }
     ];

@@ -3,13 +3,14 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { nixpkgs, home-manager, ... }:
+  outputs = { nixpkgs, home-manager, nix-vscode-extensions, ... }:
     rec {
       homeConfigurations.work = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.aarch64-darwin;
@@ -24,6 +25,9 @@
             };
           }
         ];
+        extraSpecialArgs = {
+          vscode-marketplace = nix-vscode-extensions.extensions.aarch64-darwin.vscode-marketplace;
+        };
       };
 
       homeConfigurations.paulv = homeConfigurations.work;
