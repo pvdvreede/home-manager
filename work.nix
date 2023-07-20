@@ -11,12 +11,14 @@
   };
 
   home.packages = with pkgs; [
-    kubectl
-    istioctl
-    kubernetes-helm
     awscli
+    istioctl
+    jq
     kind
+    kubectl
+    kubernetes-helm
     saml2aws
+    step-cli
   ];
 
   programs.k9s = {
@@ -44,6 +46,7 @@
       ms-vscode-remote.remote-containers
       oderwat.indent-rainbow
       redhat.vscode-yaml
+      johnpapa.vscode-peacock
     ];
     userSettings = {
       "editor.tabSize" = 2;

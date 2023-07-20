@@ -59,6 +59,7 @@
       ".DS_Store"
       ".netrwhist"
       "*.swp"
+      ".vscode/settings.json"
     ];
     extraConfig = {
       init = {
