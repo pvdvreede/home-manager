@@ -8,6 +8,21 @@
       source = ./wezterm.lua;
       target = ".wezterm.lua";
     };
+
+    zshrc = {
+      enable = true;
+      executable = true;
+      text = ''
+      #! /bin/sh
+
+      if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+        source '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+      fi
+
+      fish -l
+      '';
+      target = ".zshrc";
+    };
   };
 
   home.packages = with pkgs; [
@@ -80,6 +95,11 @@
       {
         key = "ctrl+shift+down";
         command = "editor.action.moveLinesDownAction";
+        when = "editorTextFocus && !editorReadonly";
+      }
+      {
+        key = "ctrl+/";
+        command = "editor.action.commentLine";
         when = "editorTextFocus && !editorReadonly";
       }
     ];
