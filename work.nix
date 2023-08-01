@@ -19,7 +19,7 @@
         source '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
       fi
 
-      fish -l
+      fish
       '';
       target = ".zshrc";
     };
