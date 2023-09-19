@@ -21,7 +21,7 @@
             home = {
               username = "paulv";
               homeDirectory = "/Users/paulv";
-              stateVersion = "23.05";
+              stateVersion = "23.11";
             };
           }
         ];
@@ -41,7 +41,7 @@
             home = {
               username = "pvdvreede";
               homeDirectory = "/home/pvdvreede";
-              stateVersion = "23.05";
+              stateVersion = "23.11";
             };
           }
         ];
