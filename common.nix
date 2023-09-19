@@ -85,6 +85,21 @@
     gitCredentialHelper.enable = true;
   };
 
+  programs.nushell = {
+    enable = true;
+    shellAliases = {
+      fig = "docker-compose";
+      gst = "git status";
+      gco = "git checkout";
+      ga = "git add";
+      gc = "git commit";
+      gd = "git diff";
+      gdca = "git diff --cached";
+      gpom = "git push origin main";
+      hms = "home-manager switch";
+    };
+  };
+
   programs.fish = {
     enable = true;
     plugins = with pkgs.fishPlugins; [

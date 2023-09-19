@@ -63,6 +63,7 @@
       ms-vscode-remote.remote-containers
       oderwat.indent-rainbow
       redhat.vscode-yaml
+      thenuprojectcontributors.vscode-nushell-lang
     ];
     userSettings = {
       "editor.tabSize" = 2;
