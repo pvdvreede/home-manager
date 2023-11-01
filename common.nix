@@ -138,6 +138,11 @@
 
       hms = "home-manager switch";
     };
+    interactiveShellInit = ''
+    if test -e ~/.custom.fish
+      source ~/.custom.fish
+    end
+    '';
   };
 
   programs.fzf = {
