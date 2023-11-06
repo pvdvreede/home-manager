@@ -8,6 +8,7 @@
     pkgs.tree
     pkgs.jetbrains-mono
     pkgs.source-code-pro
+    (pkgs.callPackage ./modules/dotree.nix { pkgs = pkgs; })
   ];
 
   # # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -27,6 +28,21 @@
       executable = false;
       text = "{ allowUnfree = true; }";
       target = ".config/nixpkgs/config.nix";
+    };
+
+    dotree = {
+      executable = false;
+      target = "dotree.dt";
+      text = ''
+      menu root {
+        g: git
+      }
+
+      menu git {
+        b: "git branch -v"
+        l: "git log"
+      }
+      '';
     };
   };
 
@@ -137,6 +153,7 @@
       gpom = "git push origin main";
 
       hms = "home-manager switch";
+      dtl = "dt -l";
     };
     interactiveShellInit = ''
     if test -e ~/.custom.fish
