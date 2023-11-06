@@ -85,7 +85,7 @@
         ui = true;
       };
       push = {
-        default = "simple";
+        default = "current";
       };
       branch = {
         autosetuprebase = "always";
