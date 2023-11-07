@@ -32,17 +32,8 @@
 
     dotree = {
       executable = false;
-      target = "dotree.dt";
-      text = ''
-      menu root {
-        g: git
-      }
-
-      menu git {
-        b: "git branch -v"
-        l: "git log"
-      }
-      '';
+      target = ".config/dotree.dt";
+      source = ./dotree.dt;
     };
   };
 

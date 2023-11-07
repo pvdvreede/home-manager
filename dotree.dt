@@ -1,0 +1,25 @@
+menu root {
+  g: git
+}
+
+menu git {
+  b: "git branch -v"
+  l: "git log"
+  nb: cmd {
+    vars branch_name
+    "new branch" - !"
+      git pull
+      git checkout -b $branch_name
+    "!
+  }
+  no: cmd {
+    vars branch_name
+    "new clean orphan branch" - !"
+      git checkout --orphan $branch_name
+      git rm --cached -r .
+      git clean -fd
+    "!
+  }
+  am: "amend staged" - "git commit --amend --no-edit"
+  aam: "amend all" - "git commit -a --amend --no-edit"
+}
