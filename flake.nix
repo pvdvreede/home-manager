@@ -20,6 +20,8 @@
         modules = [
           ./common.nix
           ./work.nix
+          ./modules/vscode
+          ./modules/lazygit.nix
           {
             home = {
               username = "paulv";

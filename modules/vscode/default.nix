@@ -25,6 +25,7 @@
         anseki.vscode-color
         vscodevim.vim
         jnoortheen.nix-ide
+        bierner.markdown-mermaid
       ];
       userSettings = {
         "editor.tabSize" = 2;
