@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, vscode-marketplace, ... }:
 
 {
   nixpkgs.config.allowUnfree = true;
@@ -49,6 +49,7 @@
   # if you don't want to manage your shell through Home Manager.
   home.sessionVariables = {
     EDITOR = "vim";
+    TERMINAL = "alacritty";
   };
 
   fonts.fontconfig.enable = true;
@@ -90,21 +91,6 @@
   programs.gh = {
     enable = true;
     gitCredentialHelper.enable = true;
-  };
-
-  programs.nushell = {
-    enable = true;
-    shellAliases = {
-      fig = "docker-compose";
-      gst = "git status";
-      gco = "git checkout";
-      ga = "git add";
-      gc = "git commit";
-      gd = "git diff";
-      gdca = "git diff --cached";
-      gpom = "git push origin main";
-      hms = "home-manager switch";
-    };
   };
 
   programs.fish = {

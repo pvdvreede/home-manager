@@ -10,8 +10,11 @@
     };
   };
 
-  outputs = { nixpkgs, home-manager, nix-vscode-extensions, ... }:
+  outputs = { nixpkgs, home-manager, nix-vscode-extensions, nur, ... } @ inputs:
     rec {
+
+      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
+
       homeConfigurations.work = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.aarch64-darwin;
         modules = [
@@ -37,6 +40,11 @@
         modules = [
           ./common.nix
           ./home.nix
+          ./modules/rofi.nix
+          ./modules/polybar
+          ./modules/i3
+          ./modules/vscode
+          ./modules/lazygit.nix
           {
             home = {
               username = "pvdvreede";
@@ -45,8 +53,17 @@
             };
           }
         ];
+        extraSpecialArgs = {
+          vscode-marketplace = nix-vscode-extensions.extensions.x86_64-linux.vscode-marketplace;
+        };
       };
 
       homeConfigurations.pvdvreede = homeConfigurations.home;
+
+      nixosConfigurations.vagabond = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [ ./nixos/configuration.nix ];
+        specialArgs.flake-inputs = inputs;
+      };
     };
 }
