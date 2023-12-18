@@ -23,6 +23,7 @@
           ./work.nix
           ./modules/vscode
           ./modules/lazygit.nix
+          ./modules/alacritty.nix
           {
             home = {
               username = "paulv";
@@ -49,6 +50,7 @@
           ./modules/i3
           ./modules/vscode
           ./modules/lazygit.nix
+          ./modules/alacritty.nix
           {
             home = {
               username = "pvdvreede";
