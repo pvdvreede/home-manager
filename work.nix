@@ -2,13 +2,6 @@
 
 {
   home.file = {
-    wezterm = {
-      enable = true;
-      executable = false;
-      source = ./wezterm.lua;
-      target = ".wezterm.lua";
-    };
-
     zshrc = {
       enable = true;
       executable = true;
