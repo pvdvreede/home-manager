@@ -61,30 +61,14 @@
     enable = true;
     userEmail = "pvdvreede@gmail.com";
     userName = "pvdvreede";
-    ignores = [
-      "#*"
-      "*~"
-      ".DS_Store"
-      ".netrwhist"
-      "*.swp"
-      ".vscode/settings.json"
-    ];
+    ignores =
+      [ "#*" "*~" ".DS_Store" ".netrwhist" "*.swp" ".vscode/settings.json" ];
     extraConfig = {
-      init = {
-        defaultBranch = "main";
-      };
-      color = {
-        ui = true;
-      };
-      push = {
-        default = "current";
-      };
-      branch = {
-        autosetuprebase = "always";
-      };
-      rebase = {
-        autosquash = true;
-      };
+      init = { defaultBranch = "main"; };
+      color = { ui = true; };
+      push = { default = "current"; };
+      branch = { autosetuprebase = "always"; };
+      rebase = { autosquash = true; };
     };
   };
 
@@ -95,12 +79,10 @@
 
   programs.fish = {
     enable = true;
-    plugins = with pkgs.fishPlugins; [
-      {
-        name = "z";
-        src = z.src;
-      }
-    ];
+    plugins = with pkgs.fishPlugins; [{
+      name = "z";
+      src = z.src;
+    }];
     functions = {
       fish_prompt = {
         body = ''
@@ -133,9 +115,9 @@
       dtl = "dt -l";
     };
     interactiveShellInit = ''
-    if test -e ~/.custom.fish
-      source ~/.custom.fish
-    end
+      if test -e ~/.custom.fish
+        source ~/.custom.fish
+      end
     '';
   };
 
@@ -199,10 +181,7 @@
     enable = true;
     baseIndex = 1;
     clock24 = true;
-    plugins = with pkgs.tmuxPlugins; [
-      catppuccin
-      tmux-fzf
-    ];
+    plugins = with pkgs.tmuxPlugins; [ catppuccin tmux-fzf ];
     disableConfirmationPrompt = true;
     terminal = "xterm-256color";
     shell = "${pkgs.fish}/bin/fish";

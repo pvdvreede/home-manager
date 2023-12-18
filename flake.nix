@@ -10,10 +10,11 @@
     };
   };
 
-  outputs = { nixpkgs, home-manager, nix-vscode-extensions, nur, ... } @ inputs:
-    rec {
+  outputs =
+    { nixpkgs, home-manager, nix-vscode-extensions, nur, ... }@inputs: rec {
 
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
+      formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt;
 
       homeConfigurations.work = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.aarch64-darwin;
@@ -31,7 +32,8 @@
           }
         ];
         extraSpecialArgs = {
-          vscode-marketplace = nix-vscode-extensions.extensions.aarch64-darwin.vscode-marketplace;
+          vscode-marketplace =
+            nix-vscode-extensions.extensions.aarch64-darwin.vscode-marketplace;
         };
       };
 
@@ -56,7 +58,8 @@
           }
         ];
         extraSpecialArgs = {
-          vscode-marketplace = nix-vscode-extensions.extensions.x86_64-linux.vscode-marketplace;
+          vscode-marketplace =
+            nix-vscode-extensions.extensions.x86_64-linux.vscode-marketplace;
         };
       };
 
