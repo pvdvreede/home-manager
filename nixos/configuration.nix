@@ -86,8 +86,8 @@
     vim
     curl
     git
-    firefox
     docker-compose
+    brave
 
     # system settings/control
     networkmanagerapplet
