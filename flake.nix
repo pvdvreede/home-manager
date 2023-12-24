@@ -45,8 +45,6 @@
         modules = [
           ./common.nix
           ./home.nix
-          ./modules/rofi.nix
-          ./modules/polybar
           ./modules/i3
           ./modules/vscode
           ./modules/lazygit.nix

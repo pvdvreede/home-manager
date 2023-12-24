@@ -1,12 +1,9 @@
 { pkgs, ... }:
 
 {
-  programs.feh = { enable = true; };
-
-  programs.firefox = {
-    enable = true;
-    profiles.pvdvreede = { };
-  };
+  home.packages = [
+    pkgs.godot_4
+  ];
 }
 
 # https://discourse.nixos.org/t/how-do-you-organize-your-configuration/7306/10
