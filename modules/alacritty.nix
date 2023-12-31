@@ -20,7 +20,7 @@
         bold.style = "Bold";
         italic.family = family;
         italic.style = "MediumItalic";
-        size = 14;
+        size = 12;
       };
       live_config_reload = true;
       shell.program = "fish";
