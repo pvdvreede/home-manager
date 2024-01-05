@@ -45,6 +45,7 @@
         modules = [
           ./common.nix
           ./home.nix
+          ./modules/gnome.nix
           ./modules/vscode
           ./modules/lazygit.nix
           ./modules/alacritty.nix
