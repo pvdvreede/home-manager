@@ -117,6 +117,7 @@
 
       hms = "home-manager switch";
       dtl = "dt -l";
+      lz = "lazygit";
     };
     interactiveShellInit = ''
       if test -e ~/.custom.fish
