@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./gnome.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -37,31 +38,8 @@
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
-    exportConfiguration = true;
-    extraConfig = ''
-    Section "InputClass"
-      Identifier "ASUSTeK ROG CHAKRAM"
-      MatchDriver "libinput"
-      Option "AccelSpeed" "-0.7"
-    EndSection
-    '';
-
-    displayManager = {
-      lightdm = {
-        enable = true;
-      };
-    };
-
-    desktopManager = {
-      gnome.enable = true;
-    };
   };
 
-  services.xserver.windowManager.i3 = {
-    enable = true;
-  };
-
-  services.xserver.displayManager.defaultSession = "none+i3";
 
   # Configure keymap in X11
   services.xserver.layout = "us";
@@ -88,9 +66,6 @@
     git
     docker-compose
     brave
-
-    # system settings/control
-    networkmanagerapplet
   ];
 
   virtualisation.docker = {
