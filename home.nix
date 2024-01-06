@@ -1,6 +1,14 @@
 { pkgs, ... }:
 
 {
+  home.sessionVariables = {
+    EDITOR = "hx";
+  };
+
+  programs.fish.shellAliases = {
+    vim = "hx";
+  };
+  
   home.packages = [
     pkgs.godot_4
   ];

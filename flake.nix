@@ -52,6 +52,7 @@
           ./modules/vscode
           ./modules/lazygit.nix
           ./modules/alacritty.nix
+          ./modules/helix.nix
           {
             home = {
               username = "pvdvreede";

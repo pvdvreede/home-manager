@@ -48,7 +48,7 @@
   #
   # if you don't want to manage your shell through Home Manager.
   home.sessionVariables = {
-    EDITOR = "vim";
+    EDITOR = pkgs.lib.mkDefault "vim";
     TERMINAL = "alacritty";
   };
 
