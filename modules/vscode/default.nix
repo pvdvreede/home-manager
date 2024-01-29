@@ -23,9 +23,9 @@
         thenuprojectcontributors.vscode-nushell-lang
         naumovs.color-highlight
         anseki.vscode-color
-        vscodevim.vim
         jnoortheen.nix-ide
         bierner.markdown-mermaid
+        ms-vscode.sublime-keybindings
       ];
       userSettings = {
         "editor.tabSize" = 2;
@@ -37,9 +37,6 @@
         "editor.fontLigatures" = true;
         "workbench.colorTheme" = "Catppuccin Mocha";
         "editor.wordWrap" = "on";
-        "vim.disableExtension" = false;
-        "vim.surround" = true;
-        "vim.smartRelativeLine" = true;
       };
       userTasks = {};
       keybindings = [
