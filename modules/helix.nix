@@ -5,9 +5,7 @@
     enable = true;
     settings = {
       theme = "gruvbox_dark_hard";
-      editor = {
-        line-number = "relative";
-      };
+      editor = { line-number = "relative"; };
     };
   };
 

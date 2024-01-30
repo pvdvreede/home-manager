@@ -1,9 +1,7 @@
 { pkgs, ... }:
 
 {
-  home.packages = [
-    pkgs.jetbrains-mono
-  ];
+  home.packages = [ pkgs.jetbrains-mono ];
 
   programs.alacritty = {
     enable = true;

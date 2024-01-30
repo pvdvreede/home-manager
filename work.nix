@@ -6,13 +6,13 @@
       enable = true;
       executable = true;
       text = ''
-      #! /bin/sh
+        #! /bin/sh
 
-      if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
-        source '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
-      fi
+        if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+          source '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+        fi
 
-      fish
+        fish
       '';
       target = ".zshrc";
     };
@@ -46,7 +46,7 @@
       sa = "saml2aws";
     };
     interactiveShellInit = ''
-    complete --command aws --no-files --arguments '(begin; set --local --export COMP_SHELL fish; set --local --export COMP_LINE (commandline); aws_completer | sed \'s/ $//\'; end)'
+      complete --command aws --no-files --arguments '(begin; set --local --export COMP_SHELL fish; set --local --export COMP_LINE (commandline); aws_completer | sed \'s/ $//\'; end)'
     '';
   };
 }

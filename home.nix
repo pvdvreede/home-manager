@@ -1,17 +1,11 @@
 { pkgs, ... }:
 
 {
-  home.sessionVariables = {
-    EDITOR = "hx";
-  };
+  home.sessionVariables = { EDITOR = "hx"; };
 
-  programs.fish.shellAliases = {
-    vim = "hx";
-  };
-  
-  home.packages = [
-    pkgs.godot_4
-  ];
+  programs.fish.shellAliases = { vim = "hx"; };
+
+  home.packages = [ pkgs.godot_4 ];
 }
 
 # https://discourse.nixos.org/t/how-do-you-organize-your-configuration/7306/10
