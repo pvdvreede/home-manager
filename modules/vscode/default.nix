@@ -17,7 +17,6 @@
         hashicorp.terraform
         johnpapa.vscode-peacock
         ms-azuretools.vscode-docker
-        ms-vscode-remote.remote-containers
         oderwat.indent-rainbow
         redhat.vscode-yaml
         thenuprojectcontributors.vscode-nushell-lang
@@ -26,7 +25,14 @@
         jnoortheen.nix-ide
         bierner.markdown-mermaid
         ms-vscode.sublime-keybindings
-      ];
+      ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+      {
+        name = "remote-containers";
+        publisher = "ms-vscode-remote";
+        version = "0.329.0";
+        sha256 = "6dPTOa2ZlIDF3QDsqBq78e01MSqyQVtWKVIhwhoZWfg=";
+      }
+    ];
       userSettings = {
         "editor.tabSize" = 2;
         "files.trimTrailingWhitespace" = true;
