@@ -24,7 +24,7 @@
         anseki.vscode-color
         jnoortheen.nix-ide
         bierner.markdown-mermaid
-        ms-vscode.sublime-keybindings
+        tuttieee.emacs-mcx
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
       {
         name = "remote-containers";
