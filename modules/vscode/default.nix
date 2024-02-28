@@ -15,6 +15,7 @@
         adamhartford.vscode-base64
         catppuccin.catppuccin-vsc
         hashicorp.terraform
+        hashicorp.hcl
         johnpapa.vscode-peacock
         ms-azuretools.vscode-docker
         oderwat.indent-rainbow
