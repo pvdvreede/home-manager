@@ -26,6 +26,8 @@
         jnoortheen.nix-ide
         bierner.markdown-mermaid
         tuttieee.emacs-mcx
+        donjayamanne.githistory
+        eamodio.gitlens
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
       {
         name = "remote-containers";
