@@ -8,7 +8,6 @@
     pkgs.tree
     pkgs.jetbrains-mono
     pkgs.source-code-pro
-    (pkgs.callPackage ./modules/dotree.nix { pkgs = pkgs; })
   ];
 
   # # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -28,12 +27,6 @@
       executable = false;
       text = "{ allowUnfree = true; }";
       target = ".config/nixpkgs/config.nix";
-    };
-
-    dotree = {
-      executable = false;
-      target = ".config/dotree.dt";
-      source = ./dotree.dt;
     };
   };
 
