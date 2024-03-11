@@ -11,10 +11,14 @@
       url = "github:nix-community/home-manager/release-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
-    { nixpkgs, home-manager, nix-vscode-extensions, nur, ... }@inputs: rec {
+    { nixpkgs, home-manager, nix-vscode-extensions, nur, nix-darwin, ... }@inputs: rec {
 
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
       formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt;
@@ -72,6 +76,13 @@
       nixosConfigurations.vagabond = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [ ./nixos/configuration.nix ];
+        specialArgs.flake-inputs = inputs;
+      };
+
+      darwinConfigurations.work = nix-darwin.lib.darwinSystem {
+        modules = [
+          ./nix-darwin/configuration.nix
+        ];
         specialArgs.flake-inputs = inputs;
       };
     };
