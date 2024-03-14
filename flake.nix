@@ -30,7 +30,7 @@
           ./work.nix
           ./modules/vscode
           ./modules/lazygit.nix
-          ./modules/alacritty.nix
+          ./modules/kitty.nix
           {
             home = {
               username = "paulv";

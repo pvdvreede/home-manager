@@ -14,12 +14,18 @@
     dock.autohide-delay = 0.2;
     dock.wvous-tl-corner = 2; #mission control
     dock.wvous-br-corner = 13; #lock the screen
+    finder._FXShowPosixPathInTitle = true;
     finder.AppleShowAllExtensions = true;
     finder.AppleShowAllFiles = true;
     finder.CreateDesktop = false;
     finder.ShowPathbar = true;
     finder.ShowStatusBar = true;
-    trackpad.Clicking = true;
+
+    trackpad = {
+      Clicking = true;
+      TrackpadRightClick = true;
+      TrackpadThreeFingerDrag = true;
+    };
 
     menuExtraClock = {
       Show24Hour = true;
@@ -40,16 +46,10 @@
   homebrew = {
     enable = true;
     onActivation.autoUpdate = true;
-    onActivation.cleanup = "zap";
 
     casks = [
       "amethyst"
+      "kitty"
     ];
-
-    # for apps that are not allowed to run, use here with no-quarantine
-    extraConfig =
-    ''
-      cask "alacritty", args: { "no-quarantine": true }
-    '';
   };
 }
