@@ -186,6 +186,9 @@
     extraConfig = ''
       set -g status-position top
 
+      # stop delay in esc key for helix
+      set -sg escape-time 0
+
       # pneumonic for splitting windows
       bind-key v split-window -h
       bind-key s split-window -v
