@@ -4,9 +4,7 @@
   services.xserver = {
     enable = true;
 
-    desktopManager.gnome = {
-      enable = true;
-    };
+    desktopManager.gnome = { enable = true; };
 
     displayManager = {
       defaultSession = "gnome";
@@ -17,20 +15,18 @@
     };
   };
 
-  environment.gnome.excludePackages = (with pkgs; [
-    gnome-photos
-    gnome-tour
-  ]) ++ (with pkgs.gnome; [
-    gnome-terminal
-    gnome-music
-    epiphany
-    gedit
-    geary
-    tali
-    iagno
-    hitori
-    atomix
-  ]);
+  environment.gnome.excludePackages = (with pkgs; [ gnome-photos gnome-tour ])
+    ++ (with pkgs.gnome; [
+      gnome-terminal
+      gnome-music
+      epiphany
+      gedit
+      geary
+      tali
+      iagno
+      hitori
+      atomix
+    ]);
 
   environment.systemPackages = with pkgs.gnomeExtensions; [
     forge

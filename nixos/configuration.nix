@@ -5,11 +5,10 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ./gnome.nix
-    ];
+  imports = [ # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    ./gnome.nix
+  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -18,7 +17,8 @@
   networking.hostName = "vagabond"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  networking.networkmanager.enable =
+    true; # Easiest to use and most distros use this by default.
 
   # Set your time zone.
   time.timeZone = "Australia/Melbourne";
@@ -36,10 +36,7 @@
   # };
 
   # Enable the X11 windowing system.
-  services.xserver = {
-    enable = true;
-  };
-
+  services.xserver = { enable = true; };
 
   # Configure keymap in X11
   services.xserver.layout = "us";
@@ -68,16 +65,14 @@
     brave
   ];
 
-  virtualisation.docker = {
-    enable = true;
-  };
+  virtualisation.docker = { enable = true; };
 
   system.autoUpgrade.enable = false;
 
   nix = {
     package = pkgs.nixFlakes;
     extraOptions = ''
-    experimental-features = nix-command flakes
+      experimental-features = nix-command flakes
     '';
     gc = {
       automatic = true;

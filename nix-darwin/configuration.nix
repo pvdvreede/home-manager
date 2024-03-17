@@ -6,14 +6,12 @@
   environment.shells = [ pkgs.fish ];
   programs.fish.enable = true;
   system.defaults = {
-    NSGlobalDomain = {
-      "com.apple.swipescrolldirection" = false;
-    };
+    NSGlobalDomain = { "com.apple.swipescrolldirection" = false; };
 
     dock.autohide = true;
     dock.autohide-delay = 0.2;
-    dock.wvous-tl-corner = 2; #mission control
-    dock.wvous-br-corner = 13; #lock the screen
+    dock.wvous-tl-corner = 2; # mission control
+    dock.wvous-br-corner = 13; # lock the screen
     finder._FXShowPosixPathInTitle = true;
     finder.AppleShowAllExtensions = true;
     finder.AppleShowAllFiles = true;
@@ -47,9 +45,6 @@
     enable = true;
     onActivation.autoUpdate = true;
 
-    casks = [
-      "amethyst"
-      "kitty"
-    ];
+    casks = [ "amethyst" "kitty" ];
   };
 }

@@ -13,10 +13,10 @@
       target = ".config/polybar/launch.sh";
       executable = true;
       text = ''
-      #!/usr/bin/env bash
+        #!/usr/bin/env bash
 
-      killall -q polybar
-      polybar &
+        killall -q polybar
+        polybar &
       '';
     };
   };

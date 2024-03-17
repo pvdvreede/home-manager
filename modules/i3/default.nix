@@ -1,12 +1,7 @@
 { ... }:
 
 {
-  imports = [
-    ../wallpaper
-    ../polybar
-    ../rofi.nix
-  ];
-
+  imports = [ ../wallpaper ../polybar ../rofi.nix ];
 
   home.file = {
     i3 = {

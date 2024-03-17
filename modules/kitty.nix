@@ -3,7 +3,7 @@
 {
   programs.kitty = {
     enable = true;
-    environment = {};
+    environment = { };
     font.name = "JetBrains Mono";
     font.package = pkgs.jetbrains-mono;
     font.size = 14;
