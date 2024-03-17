@@ -15,14 +15,20 @@
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    flake-utils = { url = "github:numtide/flake-utils"; };
   };
 
-  outputs =
-    { nixpkgs, home-manager, nix-vscode-extensions, nur, nix-darwin, ... }@inputs: rec {
+  outputs = { nixpkgs, home-manager, nix-vscode-extensions, nur, nix-darwin
+    , flake-utils, ... }@inputs:
+    flake-utils.lib.eachDefaultSystem (system:
+      let pkgs = nixpkgs.legacyPackages.${system};
+      in {
+        formatter = pkgs.nixfmt;
+        devShells.default =
+          pkgs.mkShell { buildInputs = with pkgs; [ nil nixfmt ]; };
+      })
 
-      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
-      formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt;
-
+    // rec {
       homeConfigurations.work = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.aarch64-darwin;
         modules = [
