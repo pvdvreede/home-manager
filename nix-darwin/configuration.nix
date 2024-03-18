@@ -45,6 +45,6 @@
     enable = true;
     onActivation.autoUpdate = true;
 
-    casks = [ "amethyst" "kitty" ];
+    casks = [ "amethyst" "kitty" "1password"];
   };
 }
