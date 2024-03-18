@@ -35,6 +35,7 @@
           ./common.nix
           ./work.nix
           ./modules/vscode
+          ./modules/helix.nix
           ./modules/lazygit.nix
           ./modules/kitty.nix
           {
