@@ -8,6 +8,7 @@
       editor = {
         line-number = "relative";
         mouse = false;
+        cursorline = true;
         indent-guides = {
           render = true;
           character = "|";
@@ -29,6 +30,9 @@
         };
         lsp = {
           display-messages = true;
+        };
+        file-picker = {
+          hidden = false;
         };
       };
       keys.normal = {
