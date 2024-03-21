@@ -55,7 +55,7 @@
         { before = [ "leader" "h"]; commands = [ "workbench.action.focusLeftGroup" ]; }
         { before = [ "leader" "l"]; commands = [ "workbench.action.focusRightGroup" ]; }
         { before = [ "leader" "k"]; commands = [ "workbench.action.focusAboveGroup" ]; }
-        { before = [ "leader" "j"]; commands = [ "workbench.action.focusAboveGroup" ]; }
+        { before = [ "leader" "j"]; commands = [ "workbench.action.focusBelowGroup" ]; }
       ];
       "vim.visualModeKeyBindingsNonRecursive" = [
         { before = [ "<" ]; commands = [ "editor.action.outdentLines" ]; }
