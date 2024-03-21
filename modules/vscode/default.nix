@@ -23,9 +23,7 @@
         anseki.vscode-color
         jnoortheen.nix-ide
         bierner.markdown-mermaid
-        tuttieee.emacs-mcx
-        donjayamanne.githistory
-        eamodio.gitlens
+        vscodevim.vim
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [{
         name = "remote-containers";
         publisher = "ms-vscode-remote";
@@ -43,6 +41,29 @@
       "editor.fontLigatures" = true;
       "workbench.colorTheme" = "Catppuccin Mocha";
       "editor.wordWrap" = "on";
+      "vim.disableExtension" = false;
+      "vim.surround" = true;
+      "vim.easymotion" = true;
+      "vim.smartRelativeLine" = true;
+      "vim.leader" = "<Space>";
+      "vim.hlsearch" = true;
+      "vim.normalModeKeyBindingsNonRecursive" = [
+        { before = [ "<S-h>"]; commands = [ ":bprevious" ]; }
+        { before = [ "<S-l>" ]; commands = [ ":bnext" ]; }
+        { before = [ "leader" "v"]; commands = [ ":vsplit" ]; }
+        { before = [ "leader" "s"]; commands = [ ":split" ]; }
+        { before = [ "leader" "h"]; commands = [ "workbench.action.focusLeftGroup" ]; }
+        { before = [ "leader" "l"]; commands = [ "workbench.action.focusRightGroup" ]; }
+        { before = [ "leader" "k"]; commands = [ "workbench.action.focusAboveGroup" ]; }
+        { before = [ "leader" "j"]; commands = [ "workbench.action.focusAboveGroup" ]; }
+      ];
+      "vim.visualModeKeyBindingsNonRecursive" = [
+        { before = [ "<" ]; commands = [ "editor.action.outdentLines" ]; }
+        { before = [ ">" ]; commands = [ "editor.action.indentLines" ]; }
+        { before = [ "J" ]; commands = [ "editor.action.moveLinesDownAction" ]; }
+        { before = [ "K" ]; commands = [ "editor.action.moveLinesUpAction" ]; }
+        { before = [ "leader" "c" ]; commands = [ "editor.action.commentLine" ]; }
+      ];
     };
     userTasks = { };
     keybindings = [
@@ -70,6 +91,59 @@
         key = "ctrl+/";
         command = "editor.action.commentLine";
         when = "editorTextFocus && !editorReadonly";
+      }
+      {
+        "key" = "ctrl+shift+a";
+        "command" = "workbench.action.terminal.focusNext";
+        "when" = "terminalFocus";
+      }
+      {
+        "key" = "ctrl+shift+b";
+        "command" = "workbench.action.terminal.focusPrevious";
+        "when" = "terminalFocus";
+      }
+      {
+        "key" = "ctrl+shift+j";
+        "command" = "workbench.action.togglePanel";
+      }
+      {
+        "key" = "ctrl+shift+n";
+        "command" = "workbench.action.terminal.new";
+        "when" = "terminalFocus";
+      }
+      {
+        "key" = "ctrl+shift+w";
+        "command" = "workbench.action.terminal.kill";
+        "when" = "terminalFocus";
+      }
+      {
+        "command" = "workbench.action.toggleSidebarVisibility";
+        "key" = "ctrl+e";
+      }
+      {
+        "command" = "workbench.files.action.focusFilesExplorer";
+        "key" = "ctrl+e";
+        "when" = "editorTextFocus";
+      }
+      {
+        "key" = "n";
+        "command" = "explorer.newFile";
+        "when" = "filesExplorerFocus && !inputFocus";
+      }
+      {
+        "command" = "renameFile";
+        "key" = "r";
+        "when" = "filesExplorerFocus && !inputFocus";
+      }
+      {
+        "key" = "shift+n";
+        "command" = "explorer.newFolder";
+        "when" = "explorerViewletFocus";
+      }
+      {
+        "command" = "deleteFile";
+        "key" = "d";
+        "when" = "filesExplorerFocus && !inputFocus";
       }
     ];
   };

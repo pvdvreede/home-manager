@@ -45,6 +45,6 @@
     enable = true;
     onActivation.autoUpdate = true;
 
-    casks = [ "amethyst" "kitty" "1password"];
+    casks = [ "amethyst" "kitty" "1password" "visual-studio-code" ];
   };
 }
