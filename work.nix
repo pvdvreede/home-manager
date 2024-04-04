@@ -11,8 +11,6 @@
         if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
           source '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
         fi
-
-        fish
       '';
       target = ".zshrc";
     };
@@ -47,6 +45,8 @@
     };
     interactiveShellInit = ''
       complete --command aws --no-files --arguments '(begin; set --local --export COMP_SHELL fish; set --local --export COMP_LINE (commandline); aws_completer | sed \'s/ $//\'; end)'
+
+      fish_add_path --global --append /opt/homebrew/bin /opt/homebrew/sbin
     '';
   };
 }
