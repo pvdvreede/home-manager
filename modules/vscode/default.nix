@@ -31,10 +31,21 @@
         sha256 = "6dPTOa2ZlIDF3QDsqBq78e01MSqyQVtWKVIhwhoZWfg=";
       }];
     userSettings = {
+      "nix.serverSettings" = {
+        "nil" = {
+          "diagnostics" = {
+            "ignored" = [];
+          };
+          "formatting" = {
+            "command" = ["nixpkgs-fmt"];
+          };
+        };
+      };
       "editor.tabSize" = 2;
       "files.trimTrailingWhitespace" = true;
       "editor.fontSize" = 16;
       "terminal.integrated.fontSize" = 14;
+      "terminal.integrated.defaultProfile.osx" = "fish";
       "files.autoSave" = "onFocusChange";
       "editor.fontFamily" =
         "'JetBrains Mono', 'Source Code Pro', Menlo, Monaco, 'Courier New', monospace";
