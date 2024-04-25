@@ -45,7 +45,7 @@
       "files.trimTrailingWhitespace" = true;
       "editor.fontSize" = 16;
       "terminal.integrated.fontSize" = 14;
-      "terminal.integrated.defaultProfile.osx" = "fish";
+      "terminal.integrated.defaultProfile.osx" = "elvish";
       "files.autoSave" = "onFocusChange";
       "editor.fontFamily" =
         "'JetBrains Mono', 'Source Code Pro', Menlo, Monaco, 'Courier New', monospace";

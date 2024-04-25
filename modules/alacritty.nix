@@ -21,8 +21,8 @@
         size = 12;
       };
       live_config_reload = true;
-      shell.program = "fish";
-      shell.args = [ "-l" ];
+      shell.program = "elvish";
+      shell.args = [];
     };
   };
 }
