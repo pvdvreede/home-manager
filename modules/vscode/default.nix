@@ -24,6 +24,7 @@
         jnoortheen.nix-ide
         bierner.markdown-mermaid
         vscodevim.vim
+        elves.elvish
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [{
         name = "remote-containers";
         publisher = "ms-vscode-remote";
@@ -45,6 +46,12 @@
       "files.trimTrailingWhitespace" = true;
       "editor.fontSize" = 16;
       "terminal.integrated.fontSize" = 14;
+      "terminal.integrated.profiles.osx" = {
+        elvish = {
+          path = "${pkgs.elvish}/bin/elvish";
+          args = [];
+        };
+      };
       "terminal.integrated.defaultProfile.osx" = "elvish";
       "files.autoSave" = "onFocusChange";
       "editor.fontFamily" =

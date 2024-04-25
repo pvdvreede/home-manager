@@ -34,6 +34,7 @@
         modules = [
           ./common.nix
           ./work.nix
+          ./modules/shell
           ./modules/vscode
           ./modules/zellij.nix
           ./modules/helix.nix

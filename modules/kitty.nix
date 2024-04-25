@@ -11,6 +11,7 @@
       disable_ligatures = "never";
       window_padding_width = 4;
       confirm_os_window_close = -1;
+      shell = "${pkgs.elvish}/bin/elvish";
     };
     shellIntegration.enableFishIntegration = true;
   };
