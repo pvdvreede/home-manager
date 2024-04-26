@@ -7,7 +7,7 @@
       theme = "gruvbox_dark_hard";
       editor = {
         line-number = "relative";
-        mouse = false;
+        mouse = true;
         cursorline = true;
         indent-guides = {
           render = true;

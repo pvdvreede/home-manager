@@ -35,6 +35,7 @@
           ./common.nix
           ./work.nix
           ./modules/vscode
+          ./modules/zellij.nix
           ./modules/helix.nix
           ./modules/lazygit.nix
           ./modules/kitty.nix
@@ -62,6 +63,7 @@
           ./modules/gnome.nix
           ./modules/shell
           ./modules/vscode
+          ./modules/zellij.nix
           ./modules/lazygit.nix
           ./modules/alacritty.nix
           ./modules/helix.nix

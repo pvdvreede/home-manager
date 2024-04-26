@@ -17,7 +17,7 @@
       # keep rprompt after enter for time
       set edit:rprompt-persistent = $true
       set edit:rprompt = { styled (date) blue }
-      set edit:prompt = { (styled (tilde-abbr (pwd)) green) }
+      set edit:prompt = { styled (tilde-abbr (pwd)) green; styled ' > ' white }
 
       # insert keyboard navigate
       set edit:insert:binding[Ctrl-A] = $edit:move-dot-sol~
@@ -26,6 +26,8 @@
 
       fn ll {|@a| e:ls -lah --color $@a }
       fn hms {|@a| e:home-manager switch $@a }
+
+      set E:EDITOR = "hx"
       '';
     };
   };
