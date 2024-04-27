@@ -3,12 +3,17 @@
 {
   nixpkgs.hostPlatform = "aarch64-darwin";
   nix.settings.experimental-features = "nix-command flakes";
-  environment.shells = [ pkgs.fish ];
-  programs.fish.enable = true;
+  environment.shells = [ pkgs.elvish ];
   system.defaults = {
-    NSGlobalDomain = { "com.apple.swipescrolldirection" = false; };
+    NSGlobalDomain = {
+      AppleShowAllFiles = true;
+      AppleShowAllExtensions = true;
+      AppleICUForce24HourTime = true;
+      "com.apple.swipescrolldirection" = false;
+    };
 
     dock.autohide = true;
+    dock.mru-spaces = false;
     dock.autohide-delay = 0.2;
     dock.wvous-tl-corner = 2; # mission control
     dock.wvous-br-corner = 13; # lock the screen
@@ -39,12 +44,17 @@
   services.nix-daemon.enable = true;
   nix.package = pkgs.nix;
 
+  # window manager
+  services.yabai = {
+    enable = true;
+  };
+
   # make sure homebrew is pre-installed for this to work
   # TODO: is there a hook to run install command?
   homebrew = {
     enable = true;
     onActivation.autoUpdate = true;
 
-    casks = [ "amethyst" "kitty" "1password" "visual-studio-code" ];
+    casks = [ "kitty" "1password" "visual-studio-code" ];
   };
 }

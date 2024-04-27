@@ -12,7 +12,6 @@
       eval (${pkgs.carapace}/bin/carapace _carapace|slurp)
 
       set edit:prompt-stale-transform = {|x| styled $x bright-black }
-      # set edit:prompt = { pwd }
       set edit:-prompt-eagerness = 5
       # keep rprompt after enter for time
       set edit:rprompt-persistent = $true
@@ -26,8 +25,12 @@
 
       fn ll {|@a| e:ls -lah --color $@a }
       fn hms {|@a| e:home-manager switch $@a }
+      fn fig {|@a| e:docker-compose $@a }
 
       set E:EDITOR = "hx"
+
+      # make sure nix is in the path
+      set paths = (conj $paths $E:HOME/.nix-profile/bin /nix/var/nix/profiles/default/bin)
       '';
     };
   };
