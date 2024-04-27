@@ -58,6 +58,7 @@
       push = { default = "current"; };
       branch = { autosetuprebase = "always"; };
       rebase = { autosquash = true; };
+      pull.rebase = true;
     };
   };
 
