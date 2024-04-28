@@ -7,7 +7,7 @@
 {
   imports = [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ./i3.nix
+    ./i3
   ];
 
   # Use the systemd-boot EFI boot loader.
