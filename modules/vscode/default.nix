@@ -52,7 +52,14 @@
           args = [];
         };
       };
+      "terminal.integrated.profiles.linux" = {
+        elvish = {
+          path = "${pkgs.elvish}/bin/elvish";
+          args = [];
+        };
+      };
       "terminal.integrated.defaultProfile.osx" = "elvish";
+      "terminal.integrated.defaultProfile.linux" = "elvish";
       "files.autoSave" = "onFocusChange";
       "editor.fontFamily" =
         "'JetBrains Mono', 'Source Code Pro', Menlo, Monaco, 'Courier New', monospace";
