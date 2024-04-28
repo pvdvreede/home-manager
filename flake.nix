@@ -61,7 +61,7 @@
         modules = [
           ./common.nix
           ./home.nix
-          ./modules/gnome.nix
+          ./modules/i3
           ./modules/shell
           ./modules/vscode
           ./modules/zellij.nix
