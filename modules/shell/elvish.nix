@@ -26,11 +26,13 @@
       fn ll {|@a| e:ls -lah --color $@a }
       fn hms {|@a| e:home-manager switch $@a }
       fn fig {|@a| e:docker-compose $@a }
+      fn k {|@a| e:kubectl $@a }
+
 
       set E:EDITOR = "hx"
 
       # make sure nix is in the path
-      set paths = (conj $paths $E:HOME/.nix-profile/bin /nix/var/nix/profiles/default/bin)
+      set paths = (conj $paths $E:HOME/.nix-profile/bin /nix/var/nix/profiles/default/bin /usr/local/bin)
       '';
     };
   };
