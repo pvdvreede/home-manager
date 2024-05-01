@@ -4,11 +4,16 @@
   programs.helix = {
     enable = true;
     settings = {
-      theme = "gruvbox_dark_hard";
+      theme = "spacebones_light";
       editor = {
         line-number = "relative";
         mouse = true;
         cursorline = true;
+        cursor-shape = {
+          insert = "bar";
+          normal = "block";
+          select = "underline";
+        };
         indent-guides = {
           render = true;
           character = "|";
@@ -30,6 +35,7 @@
         };
         lsp = {
           display-messages = true;
+          display-inlay-hints = true;
         };
         file-picker = {
           hidden = false;
