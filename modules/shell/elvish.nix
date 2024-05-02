@@ -32,7 +32,7 @@
       set E:EDITOR = "hx"
 
       # make sure nix is in the path
-      set paths = (conj $paths $E:HOME/.nix-profile/bin /nix/var/nix/profiles/default/bin /usr/local/bin)
+      set paths = (conj $paths $E:HOME/.nix-profile/bin /nix/var/nix/profiles/default/bin /usr/local/bin /opt/homebrew/bin)
       '';
     };
   };
