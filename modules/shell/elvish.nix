@@ -27,7 +27,7 @@
       fn hms {|@a| e:home-manager switch $@a }
       fn fig {|@a| e:docker-compose $@a }
       fn k {|@a| e:kubectl $@a }
-
+      fn lz {|@a| e:lazygit $@a }
 
       set E:EDITOR = "hx"
 
