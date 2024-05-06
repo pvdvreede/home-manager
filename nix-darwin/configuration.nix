@@ -55,6 +55,6 @@
     enable = true;
     onActivation.autoUpdate = true;
 
-    casks = [ "kitty" "1password" "visual-studio-code" ];
+    casks = [ "1password" ];
   };
 }

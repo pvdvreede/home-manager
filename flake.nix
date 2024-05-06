@@ -40,6 +40,7 @@
           ./modules/helix.nix
           ./modules/lazygit.nix
           ./modules/kitty.nix
+          ./modules/macappfix.nix
           {
             home = {
               username = "paulv";
