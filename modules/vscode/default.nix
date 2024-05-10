@@ -35,10 +35,10 @@
       "nix.serverSettings" = {
         "nil" = {
           "diagnostics" = {
-            "ignored" = [];
+            "ignored" = [ ];
           };
           "formatting" = {
-            "command" = ["nixpkgs-fmt"];
+            "command" = [ "nixpkgs-fmt" ];
           };
         };
       };
@@ -49,13 +49,13 @@
       "terminal.integrated.profiles.osx" = {
         elvish = {
           path = "${pkgs.elvish}/bin/elvish";
-          args = [];
+          args = [ ];
         };
       };
       "terminal.integrated.profiles.linux" = {
         elvish = {
           path = "${pkgs.elvish}/bin/elvish";
-          args = [];
+          args = [ ];
         };
       };
       "terminal.integrated.defaultProfile.osx" = "elvish";
@@ -73,14 +73,14 @@
       "vim.leader" = "<Space>";
       "vim.hlsearch" = true;
       "vim.normalModeKeyBindingsNonRecursive" = [
-        { before = [ "<S-h>"]; commands = [ ":bprevious" ]; }
+        { before = [ "<S-h>" ]; commands = [ ":bprevious" ]; }
         { before = [ "<S-l>" ]; commands = [ ":bnext" ]; }
-        { before = [ "leader" "v"]; commands = [ ":vsplit" ]; }
-        { before = [ "leader" "s"]; commands = [ ":split" ]; }
-        { before = [ "leader" "h"]; commands = [ "workbench.action.focusLeftGroup" ]; }
-        { before = [ "leader" "l"]; commands = [ "workbench.action.focusRightGroup" ]; }
-        { before = [ "leader" "k"]; commands = [ "workbench.action.focusAboveGroup" ]; }
-        { before = [ "leader" "j"]; commands = [ "workbench.action.focusBelowGroup" ]; }
+        { before = [ "leader" "v" ]; commands = [ ":vsplit" ]; }
+        { before = [ "leader" "s" ]; commands = [ ":split" ]; }
+        { before = [ "leader" "h" ]; commands = [ "workbench.action.focusLeftGroup" ]; }
+        { before = [ "leader" "l" ]; commands = [ "workbench.action.focusRightGroup" ]; }
+        { before = [ "leader" "k" ]; commands = [ "workbench.action.focusAboveGroup" ]; }
+        { before = [ "leader" "j" ]; commands = [ "workbench.action.focusBelowGroup" ]; }
       ];
       "vim.visualModeKeyBindingsNonRecursive" = [
         { before = [ "<" ]; commands = [ "editor.action.outdentLines" ]; }

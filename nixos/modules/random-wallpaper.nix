@@ -28,19 +28,19 @@ in
 
   config =
     pkgs.writeShellApplication
-    {
-      name = "random-wallpaper";
-      runtimeInputs = with pkgs; [ feh wget imagemagick ];
-      text = ''
-        workdir="$HOME/${cfg.workdir}"
-        mkdir -p "$workdir"
-        wget -O "$workdir"/random.jpg \
-          https://source.unsplash.com/${cfg.resolution}/?${cfg.category}
+      {
+        name = "random-wallpaper";
+        runtimeInputs = with pkgs; [ feh wget imagemagick ];
+        text = ''
+          workdir="$HOME/${cfg.workdir}"
+          mkdir -p "$workdir"
+          wget -O "$workdir"/random.jpg \
+            https://source.unsplash.com/${cfg.resolution}/?${cfg.category}
 
-        # create a blurred version
-        convert -scale 10% -blur 0x2.5 -resize 1000% "$workdir"/random.jpg "$workdir"/random-blurred.png
+          # create a blurred version
+          convert -scale 10% -blur 0x2.5 -resize 1000% "$workdir"/random.jpg "$workdir"/random-blurred.png
 
-        feh --bg-scale "$workdir"/random.jpg
-      '';
-    };
+          feh --bg-scale "$workdir"/random.jpg
+        '';
+      };
 }

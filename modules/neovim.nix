@@ -7,10 +7,10 @@
       lazy-nvim
     ];
     extraLuaConfig = ''
-    plugins = {
+      plugins = {
 
-    }
-    require("lazy").setup(plugins, {})
+      }
+      require("lazy").setup(plugins, {})
     '';
   };
 }

@@ -25,9 +25,9 @@
           space = "all";
         };
         statusline = {
-          left = ["spinner" "mode"];
-          center = ["file-name" "read-only-indicator" "file-modification-indicator"];
-          right = ["version-control" "diagnostics" "file-type"];
+          left = [ "spinner" "mode" ];
+          center = [ "file-name" "read-only-indicator" "file-modification-indicator" ];
+          right = [ "version-control" "diagnostics" "file-type" ];
           separator = "│";
           mode.normal = "NORMAL";
           mode.insert = "INSERT";
