@@ -16,11 +16,25 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-utils = { url = "github:numtide/flake-utils"; };
+    plasma-manager = {
+      url = "github:pjones/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
   };
 
-  outputs = { nixpkgs, home-manager, nix-vscode-extensions, nur, nix-darwin
-    , flake-utils, ... }@inputs:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs =
+    { nixpkgs
+    , home-manager
+    , nix-vscode-extensions
+    , nur
+    , nix-darwin
+    , flake-utils
+    , plasma-manager
+    , ...
+    }@inputs:
+    flake-utils.lib.eachDefaultSystem
+      (system:
       let pkgs = nixpkgs.legacyPackages.${system};
       in {
         formatter = pkgs.nixfmt;
@@ -60,10 +74,11 @@
       homeConfigurations.home = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         modules = [
+          plasma-manager.homeManagerModules.plasma-manager
           ./common.nix
           ./home.nix
-          ./modules/i3
           ./modules/shell
+          ./modules/plasma.nix
           ./modules/vscode
           ./modules/zellij.nix
           ./modules/lazygit.nix
