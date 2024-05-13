@@ -11,7 +11,7 @@
     extensions = with vscode-marketplace;
       [
         adamhartford.vscode-base64
-        catppuccin.catppuccin-vsc
+        github.github-vscode-theme
         hashicorp.terraform
         hashicorp.hcl
         johnpapa.vscode-peacock
@@ -89,7 +89,7 @@
       # looks
       "editor.fontFamily" =
         "'JetBrains Mono', 'Source Code Pro', Menlo, Monaco, 'Courier New', monospace";
-      "workbench.colorTheme" = "Catppuccin Mocha";
+      "workbench.colorTheme" = "GitHub Light";
       "editor.wordWrap" = "on";
       "editor.fontLigatures" = true;
       "editor.minimap.enabled" = false; # removes minimap
@@ -102,7 +102,7 @@
       "editor.occurrencesHighlight" = false; # removes highlights occurrences (still works when you select a word)
       "editor.matchBrackets" = false; # removes the highlight of matching brackets (I use Subtle Match Brackets extension for this)
       "editor.glyphMargin" = false; # removes the space used mainly for debugging indicators
-      "explorer.openEditors.visible" = 0; # removes the open editors section at the top of the sidebar, you can see the opened files with ⌘ + ⌥ + Tab
+      "explorer.openEditors.visible" = 4; # removes the open editors section at the top of the sidebar, you can see the opened files with ⌘ + ⌥ + Tab
       "workbench.activityBar.visible" = false; # removes the activity bar (the 4 icons at the left of the screen), so now you will have to open the explorer, git, debugger and extension with shortcuts or through the Command Palette
       "workbench.editor.showIcons" = false; # removes icon from opened files in tabs
       "workbench.editor.tabCloseButton" = "off"; # removes cross icon from tabs
