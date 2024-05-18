@@ -33,6 +33,10 @@
 
         # make sure nix is in the path
         set paths = (conj $paths $E:HOME/.nix-profile/bin /nix/var/nix/profiles/default/bin /usr/local/bin /opt/homebrew/bin)
+
+        # allow other modules the ability to inject config
+        use str
+        ls ~/.config/elvish/*.elv | each {|x| if (not (str:has-suffix $x "rc.elv")) { eval (cat $x) } }
       '';
     };
   };
