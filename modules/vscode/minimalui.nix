@@ -1,9 +1,13 @@
 { pkgs, vscode-marketplace, ... }:
 
 {
-  home.packages = [ pkgs.fira-code-nerdfont pkgs.inconsolata-nerdfont ];
+  home.packages = [ pkgs.jetbrains-mono ];
 
   programs.vscode = {
+    extensions = with vscode-marketplace; [
+      akamud.vscode-theme-onedark
+    ];
+
     userSettings = {
       "breadcrumbs.enabled" = false;
       "editor.minimap.enabled" = false;
@@ -18,12 +22,14 @@
       "editor.fontSize" = 16;
       "terminal.integrated.fontSize" = 16;
 
-      "editor.fontFamily" = "FiraCode Nerd Font Mono";
+      "editor.fontFamily" = "JetBrains Mono Medium";
       "editor.fontLigatures" = true;
       "editor.padding.top" = 15;
       "editor.padding.bottom" = 15;
 
-      "window.zoomLevel" = 0.3;
+      "window.zoomLevel" = 0.5;
+
+      "workbench.colorTheme" = "Atom One Dark";
     };
   };
 }

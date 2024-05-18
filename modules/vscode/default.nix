@@ -3,8 +3,6 @@
 {
   imports = [ ./dance.nix ./minimalui.nix ];
 
-  home.packages = [ pkgs.jetbrains-mono pkgs.source-code-pro ];
-
   programs.vscode = {
     enable = true;
     package = pkgs.vscode;
