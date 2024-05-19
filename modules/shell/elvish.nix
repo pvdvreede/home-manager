@@ -30,6 +30,7 @@
         fn lz {|@a| e:lazygit $@a }
 
         set E:EDITOR = "hx"
+        set E:NIX_PROFILES = "/nix/var/nix/profiles/default $E:HOME/.nix_profile"
 
         # make sure nix is in the path
         set paths = (conj $paths $E:HOME/.nix-profile/bin /nix/var/nix/profiles/default/bin /usr/local/bin /opt/homebrew/bin)
