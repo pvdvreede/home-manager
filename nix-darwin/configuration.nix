@@ -44,11 +44,6 @@
   services.nix-daemon.enable = true;
   nix.package = pkgs.nix;
 
-  # window manager
-  services.yabai = {
-    enable = true;
-  };
-
   # make sure homebrew is pre-installed for this to work
   # TODO: is there a hook to run install command?
   homebrew = {
