@@ -1,7 +1,7 @@
 { pkgs, vscode-marketplace, ... }:
 
 {
-  imports = [ ./dance.nix ./minimalui.nix ];
+  imports = [ ./editing.nix ./dance.nix ./minimalui.nix ];
 
   programs.vscode = {
     enable = true;
@@ -40,8 +40,7 @@
           };
         };
       };
-      "editor.tabSize" = 2;
-      "files.trimTrailingWhitespace" = true;
+      "files.readonlyFromPermissions" = true;
       "terminal.integrated.profiles.osx" = {
         elvish = {
           path = "${pkgs.elvish}/bin/elvish";
@@ -56,8 +55,6 @@
       };
       "terminal.integrated.defaultProfile.osx" = "elvish";
       "terminal.integrated.defaultProfile.linux" = "elvish";
-      "files.autoSave" = "onFocusChange";
-
     };
     userTasks = { };
     keybindings = [

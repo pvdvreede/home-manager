@@ -19,9 +19,9 @@
       "window.menuBarVisibility" = "toggle";
       "workbench.editor.showTabs" = "none";
 
-      "editor.fontSize" = 16;
       "terminal.integrated.fontSize" = 16;
 
+      "editor.fontSize" = 16;
       "editor.fontFamily" = "JetBrains Mono Medium";
       "editor.fontLigatures" = true;
       "editor.padding.top" = 15;
@@ -30,6 +30,21 @@
       "window.zoomLevel" = 0.5;
 
       "workbench.colorTheme" = "Atom One Dark";
+      "workbench.colorCustomizations" = {
+        "editorOverviewRuler.border" = "#0000";
+        "editorOverviewRuler.findMatchForeground" = "#fff4";
+        "editorOverviewRuler.rangeHighlightForeground" = "#0000";
+        "editorOverviewRuler.selectionHighlightForeground" = "#0000";
+        "editorOverviewRuler.wordHighlightForeground" = "#0000";
+        "editorOverviewRuler.wordHighlightStrongForeground" = "#0000";
+        "editorOverviewRuler.modifiedForeground" = "#0000";
+        "editorOverviewRuler.addedForeground" = "#0000";
+        "editorOverviewRuler.deletedForeground" = "#0000";
+        "editorOverviewRuler.errorForeground" = "#0000";
+        "editorOverviewRuler.warningForeground" = "#0000";
+        "editorOverviewRuler.infoForeground" = "#0000";
+        "editorOverviewRuler.bracketMatchForeground" = "#0000";
+    };
     };
   };
 }
