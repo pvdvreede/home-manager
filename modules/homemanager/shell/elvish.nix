@@ -1,6 +1,10 @@
 { pkgs, ... }:
 
 {
+  home.sessionVariables = {
+    SHELL = "${pkgs.elvish}/bin/elvish";
+  };
+
   home.packages = with pkgs; [ carapace elvish ];
 
   home.file = {
@@ -30,6 +34,7 @@
         fn lz {|@a| e:lazygit $@a }
 
         set E:EDITOR = "hx"
+        set E:SHELL = ${pkgs.elvish}/bin/elvish
 
         # make sure nix is in the path
         set paths = (conj $paths $E:HOME/.nix-profile/bin /nix/var/nix/profiles/default/bin /usr/local/bin /opt/homebrew/bin)

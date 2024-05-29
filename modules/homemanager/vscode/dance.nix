@@ -12,6 +12,9 @@
           cursorStyle = "block";
           selectionBehavior = "character";
         };
+        insert = {
+          lineNumbers = "off";
+        };
       };
     };
 
@@ -34,6 +37,31 @@
               "m" = {
                 "text" = "goto matching bracket";
                 "command" = "dance.seek.enclosing";
+              };
+            };
+          };
+        };
+      }
+      {
+        key = "Ctrl+;";
+        when = "editorTextFocus && dance.mode == 'normal";
+        command = "dance.openMenu";
+        args = {
+          menu = {
+            items = {
+              r = {
+                text = "r[]";
+                command = "runCommands";
+                args = {
+                  commands = [
+                    {
+                      command = "dance.mode.insert";
+                    }
+                    {
+                      command = "dance.mode.insert";
+                    }
+                  ];
+                };
               };
             };
           };
