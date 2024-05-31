@@ -6,12 +6,12 @@
     environment = { };
     font.name = "JetBrains Mono";
     font.package = pkgs.jetbrains-mono;
-    font.size = 14;
+    font.size = 16;
     settings = {
       disable_ligatures = "never";
-      window_padding_width = 4;
+      window_padding_width = 2;
       confirm_os_window_close = -1;
-      shell = "${pkgs.elvish}/bin/elvish";
+      shell = "${pkgs.zellij}/bin/zellij";
     };
     shellIntegration.enableFishIntegration = true;
   };

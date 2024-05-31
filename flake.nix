@@ -53,7 +53,7 @@
           ./modules/zellij.nix
           ./modules/helix.nix
           ./modules/lazygit.nix
-          ./modules/alacritty.nix
+          ./modules/kitty.nix
           ./modules/macappfix.nix
           {
             home = {
