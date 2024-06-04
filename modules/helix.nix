@@ -4,7 +4,7 @@
   programs.helix = {
     enable = true;
     settings = {
-      theme = "spacebones_light";
+      theme = "pop-dark";
       editor = {
         line-number = "relative";
         mouse = true;

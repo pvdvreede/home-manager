@@ -23,6 +23,12 @@
           };
         };
         tmux = {
+          "bind \"o\"" = {
+            "LaunchOrFocusPlugin \"zellij:session-manager\"" = {
+              floating = true;
+            };
+            SwitchToMode = "normal";
+          };
           "bind \"v\"" = {
             NewPane = "Right";
             SwitchToMode = "normal";
