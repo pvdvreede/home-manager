@@ -3,7 +3,7 @@
 {
   nixpkgs.hostPlatform = "aarch64-darwin";
   nix.settings.experimental-features = "nix-command flakes";
-  environment.shells = [ pkgs.elvish ];
+  environment.shells = [ pkgs.fish pkgs.elvish ];
   system.defaults = {
     NSGlobalDomain = {
       AppleShowAllFiles = true;

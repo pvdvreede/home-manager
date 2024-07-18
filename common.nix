@@ -4,7 +4,7 @@
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowUnfreePredicate = (_: true);
 
-  home.packages = [ pkgs.tree pkgs.jetbrains-mono pkgs.source-code-pro pkgs.nil pkgs.nixpkgs-fmt ];
+  home.packages = [ pkgs.obsidian pkgs.tree pkgs.jetbrains-mono pkgs.source-code-pro pkgs.nil pkgs.nixpkgs-fmt ];
 
   # # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # # plain files is through 'home.file'.
