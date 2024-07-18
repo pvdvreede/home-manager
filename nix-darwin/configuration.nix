@@ -44,12 +44,4 @@
   services.nix-daemon.enable = true;
   nix.package = pkgs.nix;
 
-  # make sure homebrew is pre-installed for this to work
-  # TODO: is there a hook to run install command?
-  homebrew = {
-    enable = true;
-    onActivation.autoUpdate = true;
-
-    casks = [ "1password" ];
-  };
 }
