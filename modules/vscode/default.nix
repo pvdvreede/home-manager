@@ -26,8 +26,8 @@
       ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [{
         name = "remote-containers";
         publisher = "ms-vscode-remote";
-        version = "0.329.0";
-        sha256 = "6dPTOa2ZlIDF3QDsqBq78e01MSqyQVtWKVIhwhoZWfg=";
+        version = "0.379.0";
+        sha256 = "ZXHWwmZDjzdyObpBFAWIML3B8fjByBgIa6Ej5Bm0N/Y=";
       }];
     userSettings = {
       "nix.serverSettings" = {
@@ -138,4 +138,6 @@
       }
     ];
   };
+
+
 }
