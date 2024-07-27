@@ -1,6 +1,6 @@
-{ pkgs, vscode-marketplace, ... }:
+{ config, pkgs, vscode-marketplace, ... }:
 
-{
+rec {
   imports = [ ./editing.nix ./dance.nix ./minimalui.nix ];
 
   programs.vscode = {
@@ -139,5 +139,33 @@
     ];
   };
 
+  # The below 2 hooks are added to make the settings json file in vscode writable, as otherwise
+  # vscode will constantly throw errors about the settings file having errors.
 
+  # see https://github.com/nix-community/home-manager/issues/1800#issuecomment-1059960604
+
+  # We need to remove the old copied settings.json (from the last home-manager switch) at this point so that home manager
+  # does not error with 'an existing file is in the way'.
+  home.activation.ignoreAnyExistingVsCodeSettings= {
+    after = [ ];
+    before = [ "checkLinkTargets" ];
+    data = ''
+      userDir=~/.config/Code/User
+      rm -rf $userDir/settings.json
+    '';
+  };
+
+  # after the settings json is rendered out and symlinked, then we can go in
+  # and cat the settings json into a standard file in the VSCode dir.
+  home.activation.makeVsCodeSettingsMutable =
+    {
+      after = [ "writeBoundary" ];
+      before = [ ];
+      data = ''
+        userDir=~/.config/Code/User
+        mv $userDir/settings.json $userDir/settings.ln.json
+        cat $userDir/settings.ln.json | ${pkgs.jq}/bin/jq --monochrome-output > $userDir/settings.json
+        rm -rf $userDir/settings.ln.json
+      '';
+    };
 }
