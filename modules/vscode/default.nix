@@ -1,5 +1,7 @@
 { config, pkgs, vscode-marketplace, ... }:
-
+let
+  vscodeSettingsDir = if pkgs.system == "aarch64-darwin" then "$HOME/Library/Application Support/Code/User" else "~/.config/Code/User";
+in
 rec {
   imports = [ ./editing.nix ./dance.nix ./minimalui.nix ];
 
@@ -84,14 +86,14 @@ rec {
         when = "editorTextFocus && !editorReadonly";
       }
       {
-        "key" = "ctrl+shift+a";
-        "command" = "workbench.action.terminal.focusNext";
-        "when" = "terminalFocus";
+        key = "ctrl+shift+a";
+        command = "workbench.action.terminal.focusNext";
+        when = "terminalFocus";
       }
       {
-        "key" = "ctrl+shift+b";
-        "command" = "workbench.action.terminal.focusPrevious";
-        "when" = "terminalFocus";
+        key = "ctrl+shift+b";
+        command = "workbench.action.terminal.focusPrevious";
+        when = "terminalFocus";
       }
       {
         "key" = "ctrl+shift+j";
@@ -150,8 +152,8 @@ rec {
     after = [ ];
     before = [ "checkLinkTargets" ];
     data = ''
-      userDir=~/.config/Code/User
-      rm -rf $userDir/settings.json
+      userDir="${vscodeSettingsDir}"
+      rm -rf "$userDir/settings.json"
     '';
   };
 
@@ -162,10 +164,11 @@ rec {
       after = [ "writeBoundary" ];
       before = [ ];
       data = ''
-        userDir=~/.config/Code/User
-        mv $userDir/settings.json $userDir/settings.ln.json
-        cat $userDir/settings.ln.json | ${pkgs.jq}/bin/jq --monochrome-output > $userDir/settings.json
-        rm -rf $userDir/settings.ln.json
+
+        userDir="${vscodeSettingsDir}"
+        mv "$userDir/settings.json" "$userDir/settings.ln.json"
+        cat "$userDir/settings.ln.json" | ${pkgs.jq}/bin/jq --monochrome-output > "$userDir/settings.json"
+        rm -rf "$userDir/settings.ln.json"
       '';
     };
 }
