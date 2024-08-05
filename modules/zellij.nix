@@ -9,19 +9,11 @@
       pane_frames = false;
       theme = "nord";
       keybinds = {
-        "normal clear-defaults=true"= {
-          "bind \"Ctrl Space\"" = {
-            SwitchToMode = "tmux";
-          };
-          "bind \"F12\"" = {
-            SwitchToMode = "locked";
-          };
+        "normal clear-defaults=true" = {
+          "bind \"Ctrl Space\"" = { SwitchToMode = "tmux"; };
+          "bind \"F12\"" = { SwitchToMode = "locked"; };
         };
-        locked = {
-          "bind \"F12\"" = {
-            SwitchToMode = "normal";
-          };
-        };
+        locked = { "bind \"F12\"" = { SwitchToMode = "normal"; }; };
         tmux = {
           "bind \"o\"" = {
             "LaunchOrFocusPlugin \"zellij:session-manager\"" = {
@@ -37,13 +29,13 @@
             NewPane = "Down";
             SwitchToMode = "normal";
           };
-        } //
-          (builtins.foldl' (acc: i: {
+        } // (builtins.foldl' (acc: i:
+          {
             "bind \"${builtins.toString i}\"" = {
               GoToTab = i;
               SwitchToMode = "normal";
             };
-          } // acc) {} [ 1 2 3 4 5 6 ]);
+          } // acc) { } [ 1 2 3 4 5 6 ]);
       };
     };
   };

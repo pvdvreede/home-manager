@@ -4,13 +4,10 @@
   home.packages = [ pkgs.jetbrains-mono ];
 
   programs.vscode = {
-    extensions = with vscode-marketplace; [
-      akamud.vscode-theme-onedark
-    ];
+    extensions = with vscode-marketplace; [ akamud.vscode-theme-onedark ];
 
     userSettings = {
       "breadcrumbs.enabled" = false;
-
 
       "editor.fontSize" = 16;
       "editor.fontFamily" = "JetBrains Mono Medium";

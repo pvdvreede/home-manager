@@ -23,18 +23,9 @@
     };
   };
 
-  outputs =
-    { nixpkgs
-    , home-manager
-    , nix-vscode-extensions
-    , nur
-    , nix-darwin
-    , flake-utils
-    , plasma-manager
-    , ...
-    }@inputs:
-    flake-utils.lib.eachDefaultSystem
-      (system:
+  outputs = { nixpkgs, home-manager, nix-vscode-extensions, nur, nix-darwin
+    , flake-utils, plasma-manager, ... }@inputs:
+    flake-utils.lib.eachDefaultSystem (system:
       let pkgs = nixpkgs.legacyPackages.${system};
       in {
         formatter = pkgs.nixfmt;
