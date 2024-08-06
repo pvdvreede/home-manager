@@ -69,7 +69,7 @@
           ./common.nix
           ./home.nix
           ./modules/shell
-          ./modules/plasma.nix
+          ./modules/i3
           ./modules/vscode
           ./modules/zellij.nix
           ./modules/lazygit.nix

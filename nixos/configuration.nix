@@ -9,8 +9,7 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./modules/lightdm.nix
-    ./modules/kde.nix
-
+    ./modules/i3.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
