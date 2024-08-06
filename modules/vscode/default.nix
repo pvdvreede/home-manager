@@ -3,7 +3,7 @@ let
   vscodeSettingsDir = if pkgs.system == "aarch64-darwin" then
     "$HOME/Library/Application Support/Code/User"
   else
-    "~/.config/Code/User";
+    "$HOME/.config/Code/User";
 in rec {
   imports = [ ./editing.nix ./vim.nix ];
 
