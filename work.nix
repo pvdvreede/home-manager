@@ -24,6 +24,7 @@
     kubernetes-helm
     saml2aws
     step-cli
+    docker-compose
   ];
 
   programs.k9s = {

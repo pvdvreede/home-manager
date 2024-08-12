@@ -13,5 +13,17 @@
 
       "vim.statusBarColorControl" = true;
     };
+
+    keybindings = [
+      {
+        "key" = "ctrl+shift+t";
+        "command" = "workbench.action.togglePanel";
+      }
+      {
+        "key" = "ctrl+shift+n";
+        "command" = "workbench.action.terminal.new";
+        "when" = "terminalFocus";
+      }
+    ];
   };
 }
