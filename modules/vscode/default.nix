@@ -5,7 +5,7 @@ let
   else
     "$HOME/.config/Code/User";
 in rec {
-  imports = [ ./editing.nix ./theme.nix ./vim.nix ];
+  imports = [ ./editing.nix ./theme.nix ./keybindings.nix ];
 
   programs.vscode = {
     enable = true;
