@@ -75,6 +75,7 @@
           ./modules/lazygit.nix
           ./modules/alacritty.nix
           ./modules/helix.nix
+          ./modules/firefox.nix
           {
             home = {
               username = "pvdvreede";

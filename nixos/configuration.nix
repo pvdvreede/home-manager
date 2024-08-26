@@ -61,7 +61,7 @@
     curl
     git
     docker-compose
-    brave
+    firefox
   ];
 
   virtualisation.docker = { enable = true; };
