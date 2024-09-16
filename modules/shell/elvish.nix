@@ -4,6 +4,14 @@
   home.packages = with pkgs; [ carapace elvish ];
 
   home.file = {
+    starshipelv = {
+      executable = false;
+      target = "./.config/elvish/starship.elv";
+      text = ''
+        eval (starship init elvish)
+      '';
+    };
+
     rcelv = {
       executable = false;
       target = "./.config/elvish/rc.elv";
