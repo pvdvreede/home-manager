@@ -47,6 +47,9 @@
           ./modules/lazygit.nix
           ./modules/kitty.nix
           ./modules/macappfix.nix
+          ./modules/git.nix
+          ./modules/vim.nix
+          ./modules/tmux.nix
           {
             home = {
               username = "paulv";
@@ -77,6 +80,9 @@
           ./modules/alacritty.nix
           ./modules/helix.nix
           ./modules/firefox.nix
+          ./modules/git.nix
+          ./modules/vim.nix
+          ./modules/tmux.nix
           {
             home = {
               username = "pvdvreede";
@@ -96,14 +102,20 @@
       homeConfigurations.wsl = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         modules = [
-          
-            ./common.nix
-            {
+          ./modules/shell
+          ./modules/zellij.nix
+          ./modules/lazygit.nix
+          ./modules/helix.nix
+          ./modules/git.nix
+          ./modules/vim.nix
+          ./modules/tmux.nix
+          {
             home = {
               username = "nixos";
               homeDirectory = "/home/nixos";
               stateVersion = "23.11";
             };
+            programs.home-manager.enable = true;
           }
         ];
       };
