@@ -21,10 +21,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
+    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
   };
 
   outputs = { nixpkgs, home-manager, nix-vscode-extensions, nur, nix-darwin
-    , flake-utils, plasma-manager, ... }@inputs:
+    , flake-utils, plasma-manager, nixos-wsl, ... }@inputs:
     flake-utils.lib.eachDefaultSystem (system:
       let pkgs = nixpkgs.legacyPackages.${system};
       in {
@@ -92,10 +93,37 @@
 
       homeConfigurations.pvdvreede = homeConfigurations.home;
 
+      homeConfigurations.wsl = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        modules = [
+          
+            ./common.nix
+            {
+            home = {
+              username = "nixos";
+              homeDirectory = "/home/nixos";
+              stateVersion = "23.11";
+            };
+          }
+        ];
+      };
+
       nixosConfigurations.vagabond = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [ ./nixos/configuration.nix ];
         specialArgs.flake-inputs = inputs;
+      };
+
+      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          nixos-wsl.nixosModules.default
+          {
+            system.stateVersion = "24.05";
+            wsl.enable = true;
+          }
+          ./wsl/configuration.nix
+        ];
       };
 
       darwinConfigurations.work = nix-darwin.lib.darwinSystem {
