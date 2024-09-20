@@ -22,6 +22,7 @@
       inputs.home-manager.follows = "home-manager";
     };
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
+    nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = { nixpkgs, home-manager, nix-vscode-extensions, nur, nix-darwin

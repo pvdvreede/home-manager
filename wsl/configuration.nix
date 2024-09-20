@@ -10,6 +10,13 @@
     package = pkgs.nix-ld-rs;
   };
 
+  virtualisation.docker = { enable = true; };
+
+  users.users.nixos = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" "docker" ];
+  };
+
   nix = {
     package = pkgs.nixFlakes;
     extraOptions = ''
