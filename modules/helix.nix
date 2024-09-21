@@ -1,8 +1,19 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   programs.helix = {
     enable = true;
+    languages = {
+      language = [
+        {
+          name = "nix";
+          auto-format = true;
+          formatter = {
+            command = "${pkgs.alejandra}/bin/alejandra";
+          };
+        }
+      ];
+    };
     settings = {
       theme = "pop-dark";
       editor = {
@@ -42,6 +53,9 @@
       };
       keys.normal = {
         esc = [ "collapse_selection" "keep_primary_selection" ];
+        "{" = [ "goto_prev_paragraph" "collapse_selection" ];
+        "}" = [ "goto_next_paragraph" "collapse_selection" ];
+        "G" = "goto_file_end";
       };
     };
   };
