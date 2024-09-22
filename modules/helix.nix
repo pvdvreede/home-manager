@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   programs.helix = {
     enable = true;
     languages = {
@@ -36,10 +34,9 @@
           space = "all";
         };
         statusline = {
-          left = [ "spinner" "mode" ];
-          center =
-            [ "file-name" "read-only-indicator" "file-modification-indicator" ];
-          right = [ "version-control" "diagnostics" "file-type" ];
+          left = ["spinner" "mode"];
+          center = ["file-name" "read-only-indicator" "file-modification-indicator"];
+          right = ["version-control" "diagnostics" "file-type"];
           separator = "│";
           mode.normal = "NORMAL";
           mode.insert = "INSERT";
@@ -49,13 +46,14 @@
           display-messages = true;
           display-inlay-hints = true;
         };
-        file-picker = { hidden = false; };
+        file-picker = {hidden = false;};
       };
       keys.normal = {
-        esc = [ "collapse_selection" "keep_primary_selection" ];
-        "{" = [ "goto_prev_paragraph" "collapse_selection" ];
-        "}" = [ "goto_next_paragraph" "collapse_selection" ];
+        esc = ["collapse_selection" "keep_primary_selection"];
+        "{" = ["goto_prev_paragraph" "collapse_selection"];
+        "}" = ["goto_next_paragraph" "collapse_selection"];
         "G" = "goto_file_end";
+        "C-p" = "file_picker";
       };
     };
   };
