@@ -1,11 +1,14 @@
-{ config, pkgs, vscode-marketplace, ... }:
-
 {
+  config,
+  pkgs,
+  vscode-marketplace,
+  ...
+}: {
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.allowUnfreePredicate = (_: true);
+  nixpkgs.config.allowUnfreePredicate = _: true;
 
   home.packages = [
-    pkgs.obsidian
+    pkgs.devenv
     pkgs.tree
     pkgs.jetbrains-mono
     pkgs.source-code-pro
