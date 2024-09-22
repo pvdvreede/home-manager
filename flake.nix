@@ -15,7 +15,7 @@
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    flake-utils = { url = "github:numtide/flake-utils"; };
+    flake-utils = {url = "github:numtide/flake-utils";};
     plasma-manager = {
       url = "github:pjones/plasma-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -25,16 +25,24 @@
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { nixpkgs, home-manager, nix-vscode-extensions, nur, nix-darwin
-    , flake-utils, plasma-manager, nixos-wsl, ... }@inputs:
-    flake-utils.lib.eachDefaultSystem (system:
-      let pkgs = nixpkgs.legacyPackages.${system};
-      in {
-        formatter = pkgs.nixfmt;
-        devShells.default =
-          pkgs.mkShell { buildInputs = with pkgs; [ nil nixfmt ]; };
-      })
-
+  outputs = {
+    nixpkgs,
+    home-manager,
+    nix-vscode-extensions,
+    nur,
+    nix-darwin,
+    flake-utils,
+    plasma-manager,
+    nixos-wsl,
+    ...
+  } @ inputs:
+    flake-utils.lib.eachDefaultSystem (system: let
+      pkgs = nixpkgs.legacyPackages.${system};
+    in {
+      formatter = pkgs.nixfmt;
+      devShells.default =
+        pkgs.mkShell {buildInputs = with pkgs; [nil nixfmt];};
+    })
     // rec {
       homeConfigurations.work = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.aarch64-darwin;
@@ -103,13 +111,15 @@
       homeConfigurations.wsl = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         modules = [
+          ./common.nix
           ./modules/shell
           ./modules/zellij.nix
           ./modules/lazygit.nix
           ./modules/helix.nix
           ./modules/git.nix
           ./modules/vim.nix
-          ./modules/tmux.nix
+          ./modules/glazewm
+          ./modules/wezterm.nix
           {
             home = {
               username = "nixos";
@@ -119,11 +129,15 @@
             programs.home-manager.enable = true;
           }
         ];
+        extraSpecialArgs = {
+          vscode-marketplace =
+            nix-vscode-extensions.extensions.aarch64-darwin.vscode-marketplace;
+        };
       };
 
       nixosConfigurations.vagabond = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        modules = [ ./nixos/configuration.nix ];
+        modules = [./nixos/configuration.nix];
         specialArgs.flake-inputs = inputs;
       };
 
@@ -140,7 +154,7 @@
       };
 
       darwinConfigurations.work = nix-darwin.lib.darwinSystem {
-        modules = [ ./nix-darwin/configuration.nix ];
+        modules = [./nix-darwin/configuration.nix];
         specialArgs.flake-inputs = inputs;
       };
     };
