@@ -1,7 +1,18 @@
-{ pkgs, ... }:
+{pkgs, ...}: {
+  home.packages = with pkgs; [carapace elvish];
 
-{
-  home.packages = with pkgs; [ carapace elvish ];
+  programs.direnv = {
+    enable = true;
+  };
+
+  home.activation.addElvishDirEnvHook = {
+    after = ["writeBoundary"];
+    before = [];
+    data = ''
+      mkdir -p $HOME/.config/elvish/lib
+      ${pkgs.direnv}/bin/direnv hook elvish > $HOME/.config/elvish/lib/direnv.elv
+    '';
+  };
 
   home.file = {
     starshipelv = {
@@ -42,6 +53,8 @@
 
         # make sure nix is in the path
         set paths = (conj $paths $E:HOME/.nix-profile/bin /nix/var/nix/profiles/default/bin /usr/local/bin /opt/homebrew/bin)
+
+        use direnv
 
         # allow other modules the ability to inject config
         use str
