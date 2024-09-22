@@ -54,6 +54,7 @@
         "}" = ["goto_next_paragraph" "collapse_selection"];
         "G" = "goto_file_end";
         "C-p" = "file_picker";
+        "C-g" = [":new" ":insert-output ${pkgs.lazygit}/bin/lazygit" ":buffer-close!" ":redraw"];
       };
     };
   };
