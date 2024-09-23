@@ -1,7 +1,23 @@
 {pkgs, ...}: {
   programs.helix = {
     enable = true;
+    extraPackages = [
+      pkgs.yaml-language-server
+    ];
+    ignores = [
+      "node_modules"
+      ".build"
+    ];
     languages = {
+      language-server = {
+        yaml-language-server = {
+          config.yaml = {
+            validation = true;
+            schemaStore.enable = true;
+            format.enable = true;
+          };
+        };
+      };
       language = [
         {
           name = "nix";
@@ -13,7 +29,7 @@
       ];
     };
     settings = {
-      theme = "pop-dark";
+      theme = "curzon";
       editor = {
         line-number = "relative";
         mouse = true;
