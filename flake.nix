@@ -55,6 +55,7 @@
           ./modules/helix.nix
           ./modules/lazygit.nix
           ./modules/kitty.nix
+          ./modules/wezterm
           ./modules/macappfix.nix
           ./modules/git.nix
           ./modules/vim.nix
@@ -119,7 +120,7 @@
           ./modules/git.nix
           ./modules/vim.nix
           ./modules/glazewm
-          ./modules/wezterm.nix
+          ./modules/wezterm/wsl.nix
           {
             home = {
               username = "nixos";
