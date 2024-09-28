@@ -72,6 +72,10 @@
         "C-p" = "file_picker";
         "C-g" = [":new" ":insert-output ${pkgs.lazygit}/bin/lazygit" ":buffer-close!" ":redraw"];
       };
+      keys.select = {
+        "{" = ["extend_to_line_bounds" "goto_prev_paragraph"];
+        "}" = ["extend_to_line_bounds" "goto_next_paragraph"];
+      };
     };
   };
 }
