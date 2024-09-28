@@ -87,12 +87,12 @@
           ./modules/vscode
           ./modules/zellij.nix
           ./modules/lazygit.nix
-          ./modules/alacritty.nix
           ./modules/helix.nix
           ./modules/firefox.nix
           ./modules/git.nix
           ./modules/vim.nix
           ./modules/tmux.nix
+          ./modules/wezterm
           {
             home = {
               username = "pvdvreede";
