@@ -60,6 +60,7 @@
           ./modules/git.nix
           ./modules/vim.nix
           ./modules/tmux.nix
+          ./modules/yazi.nix
           {
             home = {
               username = "paulv";
@@ -93,6 +94,7 @@
           ./modules/vim.nix
           ./modules/tmux.nix
           ./modules/wezterm
+          ./modules/yazi.nix
           {
             home = {
               username = "pvdvreede";
