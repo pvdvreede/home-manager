@@ -8,7 +8,6 @@
     saml2aws
     step-cli
     docker-compose
-    (callPackage ./pkgs/aerospace.nix {})
   ];
 
   programs.k9s = {

@@ -61,6 +61,7 @@
           ./modules/vim.nix
           ./modules/tmux.nix
           ./modules/yazi.nix
+          ./modules/aerospace
           {
             home = {
               username = "paulv";
