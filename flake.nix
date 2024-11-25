@@ -54,14 +54,11 @@
           ./modules/zellij.nix
           ./modules/helix.nix
           ./modules/lazygit.nix
-          ./modules/kitty.nix
           ./modules/wezterm
           ./modules/macappfix.nix
           ./modules/git.nix
           ./modules/vim.nix
           ./modules/tmux.nix
-          ./modules/yazi.nix
-          ./modules/aerospace
           {
             home = {
               username = "paulv";

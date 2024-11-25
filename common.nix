@@ -8,7 +8,6 @@
   nixpkgs.config.allowUnfreePredicate = _: true;
 
   home.packages = [
-    pkgs.devenv
     pkgs.tree
     pkgs.jetbrains-mono
     pkgs.source-code-pro
