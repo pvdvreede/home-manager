@@ -59,6 +59,7 @@
           ./modules/git.nix
           ./modules/vim.nix
           ./modules/tmux.nix
+          ./modules/jujutsu.nix
           {
             home = {
               username = "paulv";
@@ -93,7 +94,7 @@
           ./modules/tmux.nix
           ./modules/wezterm
           ./modules/yazi.nix
-          # ./modules/jujutsu.nix
+          ./modules/jujutsu.nix
           {
             home = {
               username = "pvdvreede";
