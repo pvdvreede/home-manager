@@ -93,7 +93,7 @@
           ./modules/tmux.nix
           ./modules/wezterm
           ./modules/yazi.nix
-          ./modules/jujutsu.nix
+          # ./modules/jujutsu.nix
           {
             home = {
               username = "pvdvreede";
