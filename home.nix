@@ -5,7 +5,7 @@
 
   programs.fish.shellAliases = { vim = "hx"; };
 
-  home.packages = [ pkgs.godot_4 pkgs.obsidian pkgs.aseprite ];
+  home.packages = [ pkgs.godot_4 pkgs.aseprite ];
 }
 
 # https://discourse.nixos.org/t/how-do-you-organize-your-configuration/7306/10
