@@ -1,5 +1,5 @@
 {pkgs, ...}: {
-  home.packages = [pkgs.wezterm];
+  home.packages = [pkgs.wezterm pkgs.jetbrains-mono];
 
   home.file.weztermConfig = {
     source = pkgs.substituteAll {
