@@ -30,6 +30,9 @@ in {
         jnoortheen.nix-ide
         bierner.markdown-mermaid
         elves.elvish
+
+        # add in language extensions available for any nix dev shells
+        golang.go
       ]
       ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
         {
