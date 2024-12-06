@@ -40,9 +40,13 @@
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
+
   # Enable sound.
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    pulse.enable = true;
+  };
 
   users.users.pvdvreede = {
     isNormalUser = true;
@@ -66,7 +70,7 @@
   system.autoUpgrade.enable = false;
 
   nix = {
-    package = pkgs.nixFlakes;
+    package = pkgs.nixVersions.stable;
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
