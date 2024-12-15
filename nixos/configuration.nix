@@ -67,6 +67,9 @@
     git
     docker-compose
     firefox
+
+    # sound config
+    pavucontrol
   ];
 
   virtualisation.docker = {enable = true;};
