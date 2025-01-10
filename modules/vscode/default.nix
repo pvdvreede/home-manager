@@ -43,10 +43,12 @@ in {
         }
       ];
     userSettings = {
+      "nix.enableLanguageServer" = true;
+      "nix.serverPath" = "${pkgs.nil}/bin/nil";
       "nix.serverSettings" = {
         "nil" = {
           "diagnostics" = {"ignored" = [];};
-          "formatting" = {"command" = ["nixpkgs-fmt"];};
+          "formatting" = {"command" = ["${pkgs.alejandra}/bin/alejandra"];};
         };
       };
       "files.readonlyFromPermissions" = true;
