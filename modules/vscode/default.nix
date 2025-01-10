@@ -20,28 +20,26 @@ in {
         adamhartford.vscode-base64
         hashicorp.terraform
         hashicorp.hcl
-        johnpapa.vscode-peacock
         ms-azuretools.vscode-docker
         oderwat.indent-rainbow
         redhat.vscode-yaml
-        thenuprojectcontributors.vscode-nushell-lang
         naumovs.color-highlight
         anseki.vscode-color
         jnoortheen.nix-ide
         bierner.markdown-mermaid
         elves.elvish
-
-        # add in language extensions available for any nix dev shells
-        golang.go
-      ]
-      ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-        {
-          name = "remote-containers";
-          publisher = "ms-vscode-remote";
-          version = "0.379.0";
-          sha256 = "ZXHWwmZDjzdyObpBFAWIML3B8fjByBgIa6Ej5Bm0N/Y=";
-        }
+        ms-vscode-remote.remote-containers
       ];
+      # if issues reoccur with remote-containers extension
+      # then uncomment the below.
+      # ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+      #   {
+      #     name = "remote-containers";
+      #     publisher = "ms-vscode-remote";
+      #     version = "0.379.0";
+      #     sha256 = "ZXHWwmZDjzdyObpBFAWIML3B8fjByBgIa6Ej5Bm0N/Y=";
+      #   }
+      # ];
     userSettings = {
       "nix.enableLanguageServer" = true;
       "nix.serverPath" = "${pkgs.nil}/bin/nil";
