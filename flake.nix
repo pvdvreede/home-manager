@@ -95,6 +95,7 @@
           ./modules/wezterm
           ./modules/yazi.nix
           ./modules/jujutsu.nix
+          ./modules/qutebrowser.nix
           {
             home = {
               username = "pvdvreede";
