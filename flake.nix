@@ -76,6 +76,34 @@
 
       homeConfigurations.paulv = homeConfigurations.work;
 
+      homeConfigurations.chromeos = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+
+        modules = [
+          ./common.nix
+          ./modules/shell
+          ./modules/zellij.nix
+          ./modules/lazygit.nix
+          ./modules/helix.nix
+          ./modules/git.nix
+          ./modules/vim.nix
+          {
+            home = {
+              username = "pvdvreede";
+              homeDirectory = "/home/pvdvreede";
+              stateVersion = "23.11";
+            };
+          }
+          {
+            xdg.configFile."systemd/user/cros-garcon.service.d/override.conf".text = ''
+              [Service]
+              Environment="PATH=%h/.nix-profile/bin:/usr/local/sbin:/usr/local/bin:/usr/local/games:/usr/sbin:/usr/bin:/usr/games:/sbin:/bin"
+              Environment="XDG_DATA_DIRS=%h/.nix-profile/share:%h/.local/share:%h/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share"
+            '';
+          }
+        ];
+      };
+
       homeConfigurations.home = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         modules = [
