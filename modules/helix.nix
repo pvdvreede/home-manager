@@ -31,6 +31,7 @@
     settings = {
       theme = "curzon";
       editor = {
+        true-color = true;
         line-number = "relative";
         mouse = true;
         cursorline = true;
