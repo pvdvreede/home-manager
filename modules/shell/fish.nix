@@ -1,17 +1,19 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   programs.fzf = {
     enable = true;
     enableFishIntegration = true;
   };
 
+  programs.starship.enableFishIntegration = true;
+
   programs.fish = {
     enable = true;
-    plugins = with pkgs.fishPlugins; [{
-      name = "z";
-      src = z.src;
-    }];
+    plugins = with pkgs.fishPlugins; [
+      {
+        name = "z";
+        src = z.src;
+      }
+    ];
     functions = {
       fish_prompt = {
         body = ''
@@ -28,7 +30,6 @@
           end
         '';
       };
-
     };
     shellAliases = {
       ll = "ls -lah";
@@ -45,6 +46,8 @@
       lz = "lazygit";
     };
     interactiveShellInit = ''
+      set -gx EDITOR hx
+
       if test -e ~/.custom.fish
         source ~/.custom.fish
       end

@@ -1,5 +1,3 @@
-{ ... }:
-
-{
-  imports = [ ./elvish.nix ./starship.nix ];
+{...}: {
+  imports = [./fish.nix ./starship.nix];
 }
