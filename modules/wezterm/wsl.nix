@@ -14,9 +14,9 @@
     after = ["writeBoundary"];
     before = [];
     data = ''
-      mkdir -p /mnt/c/Users/pvdvreede/.config
-      cp -L .config/wezterm.lua /mnt/c/Users/pvdvreede/.config/wezterm.lua
-      chmod 0664  /mnt/c/Users/pvdvreede/.config/wezterm.lua
+      mkdir -p /mnt/c/Users/pvdvreede
+      cp -L .config/wezterm.lua /mnt/c/Users/pvdvreede/.wezterm.lua
+      chmod 0664  /mnt/c/Users/pvdvreede/.wezterm.lua
     '';
   };
 }
