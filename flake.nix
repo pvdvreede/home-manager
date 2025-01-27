@@ -150,7 +150,7 @@
           ./modules/helix.nix
           ./modules/git.nix
           ./modules/vim.nix
-          ./modules/glazewm
+          # ./modules/glazewm
           ./modules/wezterm/wsl.nix
           {
             home = {

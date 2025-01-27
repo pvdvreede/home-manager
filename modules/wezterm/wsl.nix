@@ -2,7 +2,8 @@
   home.file.weztermConfig = {
     source = pkgs.substituteAll {
       src = ./wezterm.lua;
-      zellij_path = "";
+      # need to do some lua table injection.
+      zellij_path = "wsl', '--cd', '~', '--', 'bash', '-c', '\"${pkgs.zellij}/bin/zellij\"";
     };
     executable = false;
     target = "/.config/wezterm.lua";
@@ -13,7 +14,9 @@
     after = ["writeBoundary"];
     before = [];
     data = ''
-      cp $HOME/.config/wezterm.lua /mnt/c/Users/pvdvreede/.wezterm.lua
+      mkdir -p /mnt/c/Users/pvdvreede/.config
+      cp -L .config/wezterm.lua /mnt/c/Users/pvdvreede/.config/wezterm.lua
+      chmod 0664  /mnt/c/Users/pvdvreede/.config/wezterm.lua
     '';
   };
 }
