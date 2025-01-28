@@ -1,8 +1,7 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   environment.systemPackages = [
     pkgs.wget
+    pkgs.coreutils # needed for vscode devcontainers
   ];
 
   programs.nix-ld = {
@@ -10,15 +9,15 @@
     package = pkgs.nix-ld-rs;
   };
 
-  virtualisation.docker = { enable = true; };
+  virtualisation.docker = {enable = true;};
 
   users.users.nixos = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" ];
+    extraGroups = ["wheel" "docker"];
   };
 
   nix = {
-    package = pkgs.nixFlakes;
+    package = pkgs.nixVersions.stable;
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
