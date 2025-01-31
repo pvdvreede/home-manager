@@ -8,6 +8,7 @@
     saml2aws
     step-cli
     docker-compose
+    obsidian
   ];
 
   programs.k9s = {
@@ -21,5 +22,4 @@
       };
     };
   };
-
 }

@@ -8,7 +8,6 @@
     pkgs.source-code-pro
     pkgs.nil
     pkgs.nixpkgs-fmt
-    pkgs.obsidian
   ];
 
   nix.package = pkgs.nix;
