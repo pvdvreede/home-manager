@@ -12,6 +12,8 @@
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
+  hardware.graphics.enable = true;
+
   services.xserver.videoDrivers = [ "amdgpu" ];
 
   fileSystems."/" = {
