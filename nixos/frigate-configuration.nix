@@ -6,6 +6,7 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./modules/frigate.nix
+    ./modules/ssh.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -38,18 +39,20 @@
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
-
   users.users.pvdvreede = {
     isNormalUser = true;
     extraGroups = ["wheel" "networkmanager"];
     initialPassword = "mustchangeme";
+    openssh.authorizedKeys.keys = [
+      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDBpNpK7ljFbEzClBHjWFcY5yLwkUxs4U6uDF4YTJKQivCO2Vt+cQ5nG4Xr++QPVmQZiGytwyRgbKAp0tIRH/1pSTLmSiZDKqNUYYhmRiSHWKjPFK9L1qcHQcAReVEI6VuVC1eaZ0Dm1kzl7aS882LAjt97ceid8rRMZt79Z+TqGgIc8K0GX+79RJYZ7u7q14aqxLyHFF5NYZYEWf2yIHvxcbt5wwy+8hlqsXUzQyiCOwwnf6PRl2qOJabkTo+zEoFqawAJJDieaDny2l572YnGMg1W0zzz3fWnOP0AAymzOSP+lcp2cKPHt9aWK2EjKI+xOv67jqIKfua5lNDiq3nrRpGcGrbCrvco0/3E1SXWbGRI1XJALF3GnlenU8Fn2g8ZfIZ1RNg/N5Br2Vv1UH8is3ijPel2iYIz+NOPqgTdCyYojkdLc8sk32xDDYWkq6aaH4Sh7QifU3pBVoEy0Vep6F6r4pXrwetI+CngCQC5NITsvC4+V3OXCJZIPU8rfaJBdB4P2RQyUakHdB/5oXT0qSw78YHmqI/rVf4x0YqEeo+6bMKwZNlj1A4uNMblnI8umsVkKp5KdfJfq12+3Yao2jHlc6dRW7k9Xbx5Bh18VydR1IkD4sycBZi4hRWHW2sLZj0NwPA81OYnz0LSX8Q7T/IRs1Sd8h9MXMtG78cWBQ== pvdvreede@gmail.com"
+    ];
   };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     # utils
-    vim
+    helix
     curl
     git
   ];
