@@ -1,6 +1,8 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [carapace elvish];
 
+  programs.tmux.shell = "${pkgs.elvish}/bin/elvish";
+
   programs.direnv = {
     enable = true;
   };

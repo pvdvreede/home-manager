@@ -145,7 +145,7 @@
         modules = [
           ./common.nix
           ./modules/shell
-          ./modules/zellij.nix
+          ./modules/tmux.nix
           ./modules/lazygit.nix
           ./modules/helix.nix
           ./modules/git.nix

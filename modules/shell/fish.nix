@@ -6,6 +6,8 @@
 
   programs.starship.enableFishIntegration = true;
 
+  programs.tmux.shell = "${pkgs.fish}/bin/fish";
+
   programs.fish = {
     enable = true;
     plugins = with pkgs.fishPlugins; [
@@ -15,12 +17,12 @@
       }
     ];
     functions = {
-      fish_prompt = {
-        body = ''
-          set_color purple;
-          echo (pwd) '>' (set_color normal);
-        '';
-      };
+      # fish_prompt = {
+      #   body = ''
+      #     set_color purple;
+      #     echo (pwd) '>' (set_color normal);
+      #   '';
+      # };
       envsource = {
         body = ''
           for line in (cat $argv | grep -v '^#')
@@ -33,7 +35,7 @@
     };
     shellAliases = {
       ll = "ls -lah";
-      fig = "docker-compose";
+      fig = "docker compose";
       gst = "git status";
       gco = "git checkout";
       ga = "git add";

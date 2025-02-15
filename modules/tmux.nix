@@ -1,23 +1,24 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   programs.tmux = {
     enable = true;
     baseIndex = 1;
     clock24 = true;
-    plugins = with pkgs.tmuxPlugins; [ catppuccin tmux-fzf ];
+    plugins = with pkgs.tmuxPlugins; [catppuccin tmux-fzf];
     disableConfirmationPrompt = true;
     terminal = "xterm-256color";
-    shell = "${pkgs.fish}/bin/fish";
     extraConfig = ''
       set -g status-position top
+
+      # make sure new panes have the same cwd
+      set-option -g default-path '#{pane_current_path}'
 
       # stop delay in esc key for helix
       set -sg escape-time 0
 
       # pneumonic for splitting windows
-      bind-key v split-window -h
-      bind-key s split-window -v
+      bind-key v split-window -h -c "#{pane_current_path}"
+      bind-key s split-window -v -c "#{pane_current_path}"
+      bind-key c new-window -c "#{pane_current_path}"
       # vim keybindings for navigation
       bind-key -r h select-pane -L
       bind-key -r j select-pane -D
