@@ -9,9 +9,6 @@
     extraConfig = ''
       set -g status-position top
 
-      # make sure new panes have the same cwd
-      set-option -g default-path '#{pane_current_path}'
-
       # stop delay in esc key for helix
       set -sg escape-time 0
 
