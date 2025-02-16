@@ -4,7 +4,7 @@
   home.file.weztermConfig = {
     source = pkgs.substituteAll {
       src = ./wezterm.lua;
-      zellij_path = "${pkgs.zellij}/bin/zellij";
+      zellij_path = "${pkgs.tmux}/bin/tmux";
     };
     target = "/.config/wezterm/wezterm.lua";
   };
