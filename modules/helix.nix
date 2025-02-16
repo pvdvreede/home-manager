@@ -2,6 +2,8 @@
   programs.helix = {
     enable = true;
     extraPackages = [
+      pkgs.docker-compose-language-service
+      pkgs.dockerfile-language-server-nodejs
       pkgs.yaml-language-server
     ];
     ignores = [
@@ -29,7 +31,6 @@
       ];
     };
     settings = {
-      theme = "curzon";
       editor = {
         true-color = true;
         line-number = "relative";
@@ -76,6 +77,14 @@
       keys.select = {
         "{" = ["extend_to_line_bounds" "goto_prev_paragraph"];
         "}" = ["extend_to_line_bounds" "goto_next_paragraph"];
+      };
+      keys.insert = {
+        "C-a" = "goto_line_start";
+        "C-e" = "goto_line_end";
+        "C-d" = ["extend_line_below" "yank" "paste_after" "collapse_selection"];
+        "C-k" = ["extend_line_below" "delete_selection"];
+        "C-up" = ["extend_line_below" "delete_selection" "move_line_up" "paste_after" "collapse_selection"];
+        "C-down" = ["extend_line_below" "delete_selection" "move_line_down" "paste_after" "collapse_selection"];
       };
     };
   };
