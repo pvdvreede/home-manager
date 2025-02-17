@@ -35,6 +35,7 @@
         true-color = true;
         line-number = "relative";
         mouse = true;
+        soft-wrap.enable = true;
         cursorline = true;
         cursor-shape = {
           insert = "bar";
