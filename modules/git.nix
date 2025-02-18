@@ -3,7 +3,7 @@
     enable = true;
     userEmail = "pvdvreede@gmail.com";
     userName = "pvdvreede";
-    ignores = ["#*" "*~" ".DS_Store" ".netrwhist" "*.swp" ".vscode/settings.json"];
+    ignores = ["#*" "*~" ".DS_Store" ".netrwhist" "*.swp" ".direnv"];
     extraConfig = {
       init = {defaultBranch = "main";};
       color = {ui = true;};

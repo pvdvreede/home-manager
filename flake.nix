@@ -144,6 +144,7 @@
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         modules = [
           ./common.nix
+          ./modules/direnv.nix
           ./modules/shell
           ./modules/tmux.nix
           ./modules/lazygit.nix

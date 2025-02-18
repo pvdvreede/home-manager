@@ -9,6 +9,7 @@
     ignores = [
       "node_modules"
       ".build"
+      ".direnv"
     ];
     languages = {
       language-server = {
