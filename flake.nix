@@ -51,7 +51,7 @@
           ./work.nix
           ./modules/shell
           ./modules/vscode
-          ./modules/zellij.nix
+          ./modules/tmux.nix
           ./modules/helix.nix
           ./modules/lazygit.nix
           ./modules/wezterm
