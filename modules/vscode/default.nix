@@ -8,39 +8,37 @@
     then "$HOME/Library/Application Support/Code/User"
     else "$HOME/.config/Code/User";
 in {
-  imports = [./editing.nix ./theme.nix ./keybindings.nix];
+  imports = [./editing.nix ./minimalui.nix ./keybindings.nix];
 
   programs.vscode = {
     enable = true;
     package = pkgs.vscode;
-    enableUpdateCheck = false;
+    profiles.default.enableUpdateCheck = false;
     mutableExtensionsDir = false;
-    extensions = with vscode-marketplace;
-      [
-        adamhartford.vscode-base64
-        hashicorp.terraform
-        hashicorp.hcl
-        ms-azuretools.vscode-docker
-        oderwat.indent-rainbow
-        redhat.vscode-yaml
-        naumovs.color-highlight
-        anseki.vscode-color
-        jnoortheen.nix-ide
-        bierner.markdown-mermaid
-        elves.elvish
-        ms-vscode-remote.remote-containers
-      ];
-      # if issues reoccur with remote-containers extension
-      # then uncomment the below.
-      # ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-      #   {
-      #     name = "remote-containers";
-      #     publisher = "ms-vscode-remote";
-      #     version = "0.379.0";
-      #     sha256 = "ZXHWwmZDjzdyObpBFAWIML3B8fjByBgIa6Ej5Bm0N/Y=";
-      #   }
-      # ];
-    userSettings = {
+    profiles.default.extensions = with vscode-marketplace; [
+      adamhartford.vscode-base64
+      hashicorp.terraform
+      hashicorp.hcl
+      ms-azuretools.vscode-docker
+      oderwat.indent-rainbow
+      redhat.vscode-yaml
+      naumovs.color-highlight
+      anseki.vscode-color
+      jnoortheen.nix-ide
+      bierner.markdown-mermaid
+      ms-vscode-remote.remote-containers
+    ];
+    # if issues reoccur with remote-containers extension
+    # then uncomment the below.
+    # ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+    #   {
+    #     name = "nix-ide";
+    #     publisher = "jnoortheen";
+    #     version = "0.3.7";
+    #     sha256 = "sha256-Z+e4s+fcpPqxG7IU2E48Jq21FPU+DHHa+VwTEXKiznw=";
+    #   }
+    # ];
+    profiles.default.userSettings = {
       "nix.enableLanguageServer" = true;
       "nix.serverPath" = "${pkgs.nil}/bin/nil";
       "nix.serverSettings" = {
@@ -51,21 +49,20 @@ in {
       };
       "files.readonlyFromPermissions" = true;
       "terminal.integrated.profiles.osx" = {
-        elvish = {
-          path = "${pkgs.elvish}/bin/elvish";
+        fish = {
+          path = "${pkgs.fish}/bin/fish";
           args = [];
         };
       };
       "terminal.integrated.profiles.linux" = {
-        elvish = {
-          path = "${pkgs.elvish}/bin/elvish";
+        fish = {
+          path = "${pkgs.fish}/bin/fish";
           args = [];
         };
       };
-      "terminal.integrated.defaultProfile.osx" = "elvish";
-      "terminal.integrated.defaultProfile.linux" = "elvish";
+      "terminal.integrated.defaultProfile.osx" = "fish";
+      "terminal.integrated.defaultProfile.linux" = "fish";
     };
-    userTasks = {};
   };
 
   # The below 2 hooks are added to make the settings json file in vscode writable, as otherwise

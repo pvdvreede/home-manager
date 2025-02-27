@@ -1,15 +1,17 @@
-{ pkgs, vscode-marketplace, ... }:
-
 {
-  home.packages = [ pkgs.jetbrains-mono ];
+  pkgs,
+  vscode-marketplace,
+  ...
+}: {
+  home.packages = [pkgs.jetbrains-mono];
 
   programs.vscode = {
-    extensions = with vscode-marketplace; [ akamud.vscode-theme-onedark ];
+    profiles.default.extensions = with vscode-marketplace; [akamud.vscode-theme-onedark];
 
-    userSettings = {
+    profiles.default.userSettings = {
       "breadcrumbs.enabled" = false;
 
-      "editor.fontSize" = 16;
+      "editor.fontSize" = 14;
       "editor.fontFamily" = "JetBrains Mono Medium";
       "editor.fontLigatures" = true;
       "editor.minimap.enabled" = false;
@@ -18,9 +20,10 @@
       "editor.scrollbar.horizontal" = "hidden";
       "editor.scrollbar.vertical" = "hidden";
 
-      "terminal.integrated.fontSize" = 16;
+      "terminal.integrated.fontSize" = 14;
 
-      "window.zoomLevel" = 0.5;
+      "window.zoomLevel" = 1;
+      "window.commandCenter" = false;
 
       "workbench.activityBar.visible" = false;
       "workbench.colorTheme" = "Atom One Dark";
@@ -42,6 +45,7 @@
       "workbench.editor.showTabs" = "none";
       "workbench.layoutControl.enabled" = false;
       "workbench.sideBar.location" = "right";
+      "workbench.activityBar.location" = "hidden";
     };
   };
 }

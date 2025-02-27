@@ -1,7 +1,5 @@
-{ vscode-marketplace, pkgs, ... }:
-
-{
-  programs.vscode = {
+{...}: {
+  programs.vscode.profiles.default = {
     keybindings = [
       {
         key = "ctrl+shift+d";
