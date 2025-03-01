@@ -10,15 +10,13 @@ pkgs.writeShellApplication {
         cmd="$1"
         # Check the number of tmux panes
         PANES=$(tmux list-panes | wc -l)
-          if [ "$PANES" -gt 1 ]; then
-            # If there's more than one pane, send the command to the second pane
-            tmux send-keys -t 2 "$cmd" Enter
-        else
+        if [ "$PANES" -eq 1 ]; then
             # If only one pane exists, split the window and run the command in the new pane
-            tmux split-window -h
-            tmux send-keys "$cmd" Enter
+            tmux split-window -h -l '30%'
+            tmux select-pane -t 1
         fi
-          # Save the executed command
+
+        tmux send-keys -t 2 "$cmd" Enter
         echo "$cmd" > "$LAST_CMD_FILE"
     }
 
@@ -30,6 +28,9 @@ pkgs.writeShellApplication {
         else
             echo "No command found to rerun."
         fi
+    elif [ "$1" = "-s" ]; then
+        shift
+        echo "$*" > "$LAST_CMD_FILE"
     else
         # Execute the provided command
         execute_command "$*"
