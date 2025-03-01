@@ -1,4 +1,8 @@
 {pkgs, ...}: {
+  home.packages = [
+    (pkgs.callPackage ../pkgs/hemux.nix {})
+  ];
+
   programs.helix = {
     enable = true;
     extraPackages = [
@@ -75,6 +79,7 @@
         "G" = "goto_file_end";
         "C-p" = "file_picker";
         "C-g" = [":new" ":insert-output ${pkgs.lazygit}/bin/lazygit" ":buffer-close!" ":redraw"];
+        "C-r" = ":sh hemux -r";
       };
       keys.select = {
         "{" = ["extend_to_line_bounds" "goto_prev_paragraph"];
