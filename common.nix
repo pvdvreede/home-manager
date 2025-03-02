@@ -4,6 +4,7 @@
 
   imports = [
     ./modules/eza.nix
+    ./modules/ghq.nix
   ];
 
   home.packages = [
