@@ -2,6 +2,10 @@
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowUnfreePredicate = _: true;
 
+  imports = [
+    ./modules/eza.nix
+  ];
+
   home.packages = [
     pkgs.tree
     pkgs.jetbrains-mono
