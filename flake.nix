@@ -40,6 +40,7 @@
       pkgs = nixpkgs.legacyPackages.${system};
     in {
       formatter = pkgs.nixfmt;
+      packages.rye = pkgs.callPackage ./pkgs/rye.nix {};
       devShells.default =
         pkgs.mkShell {buildInputs = with pkgs; [nil nixfmt];};
     })
