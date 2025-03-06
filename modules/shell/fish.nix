@@ -43,6 +43,8 @@
       gd = "git diff";
       gdca = "git diff --cached";
       gpom = "git push origin main";
+      ns = "nix search nixpkgs";
+      nsh = "nix-shell -p";
 
       hms = "home-manager switch";
       lz = "lazygit";
