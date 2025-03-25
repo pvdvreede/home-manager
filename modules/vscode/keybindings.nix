@@ -89,6 +89,24 @@
         command = "cursorWordLeft";
         when = "editorTextFocus";
       }
+
+      # make things consistent across mac/linux/windows
+      {
+        key = "ctrl+shift+p";
+        command = "workbench.action.showCommands";
+      }
+      {
+        key = "ctrl+p";
+        command = "workbench.action.quickOpen";
+      }
+      {
+        key = "ctrl+s";
+        command = "workbench.action.files.save";
+      }
+      {
+        key = "ctrl+d";
+        command = "editor.action.addSelectionToNextFindMatch";
+      }
     ];
   };
 }

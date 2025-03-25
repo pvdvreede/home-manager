@@ -1,7 +1,6 @@
-{...}:
-let leader = "ctrl+space";
-in
-{
+{...}: let
+  leader = "ctrl+space";
+in {
   programs.vscode.profiles.default = {
     keybindings = [
       # management
@@ -14,7 +13,7 @@ in
         command = "workbench.action.splitEditorDown";
       }
       {
-        key = "${leader} k";
+        key = "${leader} w";
         command = "workbench.action.closeGroup";
       }
       {
@@ -83,5 +82,5 @@ in
         when = "terminalFocus";
       }
     ];
-  }
+  };
 }

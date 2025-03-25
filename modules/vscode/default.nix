@@ -8,7 +8,7 @@
     then "$HOME/Library/Application Support/Code/User"
     else "$HOME/.config/Code/User";
 in {
-  imports = [./editing.nix ./minimalui.nix ./keybindings.nix];
+  imports = [./editing.nix ./minimalui.nix ./keybindings.nix ./tmux-bindings.nix];
 
   programs.vscode = {
     enable = true;
