@@ -151,7 +151,8 @@
           ./modules/lazygit.nix
           ./modules/helix.nix
           ./modules/git.nix
-          ./modules/vim.nix
+          # ./modules/vim.nix
+          ./modules/neovim
           # ./modules/glazewm
           ./modules/wezterm/wsl.nix
           {
