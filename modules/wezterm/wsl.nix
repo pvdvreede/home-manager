@@ -3,7 +3,7 @@
     source = pkgs.substituteAll {
       src = ./wezterm.lua;
       # need to do some lua table injection.
-      zellij_path = "wsl', '--cd', '~', '--', 'bash', '-c', '${pkgs.tmux}/bin/tmux new-session -A -s scatch";
+      zellij_path = "wsl', '--cd', '~', '--', 'bash', '-c', '${pkgs.tmux}/bin/tmux new-session -A -s scratch";
     };
     executable = false;
     target = "/.config/wezterm.lua";
