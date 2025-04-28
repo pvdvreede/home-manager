@@ -84,6 +84,7 @@
       keys.select = {
         "{" = ["extend_to_line_bounds" "goto_prev_paragraph"];
         "}" = ["extend_to_line_bounds" "goto_next_paragraph"];
+        "G" = "goto_file_end";
       };
       keys.insert = {
         "C-a" = "goto_line_start";
