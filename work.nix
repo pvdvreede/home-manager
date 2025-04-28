@@ -8,6 +8,9 @@
     saml2aws
     step-cli
     docker-compose
+    docker-client
+    podman
+    lima
     obsidian
   ];
 
