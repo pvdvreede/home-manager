@@ -4,7 +4,7 @@
   home.file.weztermConfig = {
     source = pkgs.substituteAll {
       src = ./wezterm.lua;
-      zellij_path = "${pkgs.tmux}/bin/tmux', 'new-session', '-A', '-s', 'scratch";
+      zellij_path = "${pkgs.fish}/bin/fish";
     };
     target = "/.config/wezterm/wezterm.lua";
   };
