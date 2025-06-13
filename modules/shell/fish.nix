@@ -5,6 +5,7 @@
   };
 
   programs.starship.enableFishIntegration = true;
+  programs.atuin.enableFishIntegration = true;
 
   programs.tmux.shell = "${pkgs.fish}/bin/fish";
 

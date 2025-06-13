@@ -1,3 +1,3 @@
 {...}: {
-  imports = [./fish.nix ./starship.nix];
+  imports = [./fish.nix ./starship.nix ./atuin.nix];
 }
