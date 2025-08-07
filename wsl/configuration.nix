@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   environment.systemPackages = [
     pkgs.wget
     pkgs.coreutils # needed for vscode devcontainers
@@ -9,11 +10,16 @@
     package = pkgs.nix-ld-rs;
   };
 
-  virtualisation.docker = {enable = true;};
+  virtualisation.docker = {
+    enable = true;
+  };
 
   users.users.nixos = {
     isNormalUser = true;
-    extraGroups = ["wheel" "docker"];
+    extraGroups = [
+      "wheel"
+      "docker"
+    ];
   };
 
   nix = {

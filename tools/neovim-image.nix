@@ -1,4 +1,6 @@
-{pkgs ? import <nixpkgs> {}}:
+{
+  pkgs ? import <nixpkgs> { },
+}:
 pkgs.dockerTools.buildImage {
   name = "neovim-dev";
   tag = "latest";
@@ -14,11 +16,11 @@ pkgs.dockerTools.buildImage {
 
       vimPlugins.LazyVim
       ripgrep
-      (nerdfonts.override {fonts = ["FiraCode"];})
+      (nerdfonts.override { fonts = [ "FiraCode" ]; })
       fd
       gcc
       lazygit
     ];
-    pathsToLink = ["/bin"];
+    pathsToLink = [ "/bin" ];
   };
 }
