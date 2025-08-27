@@ -27,6 +27,7 @@ in {
       jnoortheen.nix-ide
       bierner.markdown-mermaid
       ms-vscode-remote.remote-containers
+      editorconfig.editorconfig
     ];
     # if issues reoccur with remote-containers extension
     # then uncomment the below.

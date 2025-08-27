@@ -37,6 +37,8 @@
     };
     settings = {
       editor = {
+        trim-trailing-whitespace = true;
+        trim-final-newlines = true;
         true-color = true;
         line-number = "relative";
         mouse = true;
