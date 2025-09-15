@@ -1,8 +1,7 @@
-{ pkgs, vscode-marketplace, ... }: {
-    programs.vscode = {
-      extensions = with vscode-marketplace; [
-        jasew.vscode-helix-emulation
-      ];
-    };
-
+{vscode-marketplace, ...}: {
+  programs.vscode = {
+    profiles.default.extensions = with vscode-marketplace; [
+      jasew.vscode-helix-emulation
+    ];
+  };
 }
