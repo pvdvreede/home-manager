@@ -64,6 +64,8 @@ in {
       };
       "terminal.integrated.defaultProfile.osx" = "fish";
       "terminal.integrated.defaultProfile.linux" = "fish";
+      "chat.agent.enabled" = false;
+      "chat.disableAIFeatures" = true;
     };
   };
 
