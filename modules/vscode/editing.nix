@@ -6,5 +6,6 @@
     "files.insertFinalNewline" = true;
     "files.trimFinalNewlines" = true;
     "editor.lineNumbers" = "relative";
+    "editor.formatOnSave" = true;
   };
 }

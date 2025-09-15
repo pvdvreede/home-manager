@@ -8,7 +8,7 @@
     then "$HOME/Library/Application Support/Code/User"
     else "$HOME/.config/Code/User";
 in {
-  imports = [./editing.nix ./minimalui.nix ./keybindings.nix ./tmux-bindings.nix];
+  imports = [./editing.nix ./theme.nix ./keybindings.nix ./tmux-bindings.nix];
 
   programs.vscode = {
     enable = true;
@@ -28,6 +28,7 @@ in {
       bierner.markdown-mermaid
       ms-vscode-remote.remote-containers
       editorconfig.editorconfig
+      ms-azuretools.vscode-containers
     ];
     # if issues reoccur with remote-containers extension
     # then uncomment the below.

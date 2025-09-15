@@ -1,10 +1,10 @@
-{ ... }:
-
-{
+{vscode-marketplace, ...}: {
   programs.vscode = {
-    userSettings = {
-      "editor.fontSize" = 14;
-      "terminal.integrated.fontSize" = 14;
+    profiles.default.extensions = with vscode-marketplace; [akamud.vscode-theme-onedark];
+
+    profiles.default.userSettings = {
+      "editor.fontSize" = 16;
+      "terminal.integrated.fontSize" = 16;
       "window.commandCenter" = false;
       "workbench.layoutControl.enabled" = false;
       "workbench.sideBar.location" = "right";
