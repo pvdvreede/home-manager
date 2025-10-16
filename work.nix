@@ -11,7 +11,6 @@
     docker-client
     podman
     lima
-    obsidian
   ];
 
   programs.k9s = {
