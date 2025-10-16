@@ -11,19 +11,7 @@
 
   programs.fish = {
     enable = true;
-    plugins = with pkgs.fishPlugins; [
-      {
-        name = "z";
-        src = z.src;
-      }
-    ];
     functions = {
-      # fish_prompt = {
-      #   body = ''
-      #     set_color purple;
-      #     echo (pwd) '>' (set_color normal);
-      #   '';
-      # };
       envsource = {
         body = ''
           for line in (cat $argv | grep -v '^#')
