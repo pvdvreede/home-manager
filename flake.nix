@@ -23,6 +23,10 @@
     };
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
+    nu-scripts = {
+      flake = false;
+      url = "github:nushell/nu_scripts";
+    };
   };
 
   outputs = {
@@ -34,6 +38,7 @@
     flake-utils,
     plasma-manager,
     nixos-wsl,
+    nu-scripts,
     ...
   } @ inputs:
     flake-utils.lib.eachDefaultSystem (system: let
@@ -72,6 +77,7 @@
         extraSpecialArgs = {
           vscode-marketplace =
             nix-vscode-extensions.extensions.aarch64-darwin.vscode-marketplace;
+          nu-scripts = nu-scripts;
         };
       };
 
@@ -136,6 +142,7 @@
         extraSpecialArgs = {
           vscode-marketplace =
             nix-vscode-extensions.extensions.x86_64-linux.vscode-marketplace;
+          nu-scripts = nu-scripts;
         };
       };
 
@@ -167,6 +174,7 @@
         extraSpecialArgs = {
           vscode-marketplace =
             nix-vscode-extensions.extensions.aarch64-darwin.vscode-marketplace;
+          nu-scripts = nu-scripts;
         };
       };
 

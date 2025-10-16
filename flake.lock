@@ -188,6 +188,22 @@
         "type": "github"
       }
     },
+    "nu-scripts": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1760525235,
+        "narHash": "sha256-tKMLaSNniylbo9f0wdUzUZm059RPqyFQlxMtiTPIkWQ=",
+        "owner": "nushell",
+        "repo": "nu_scripts",
+        "rev": "0b97c5e1444b13db7c263bee646dea1e1ffe4ddb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nushell",
+        "repo": "nu_scripts",
+        "type": "github"
+      }
+    },
     "nur": {
       "inputs": {
         "flake-parts": "flake-parts",
@@ -237,6 +253,7 @@
         "nix-vscode-extensions": "nix-vscode-extensions",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs",
+        "nu-scripts": "nu-scripts",
         "nur": "nur",
         "plasma-manager": "plasma-manager"
       }

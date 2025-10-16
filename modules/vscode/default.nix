@@ -50,20 +50,6 @@ in {
         };
       };
       "files.readonlyFromPermissions" = true;
-      "terminal.integrated.profiles.osx" = {
-        fish = {
-          path = "${pkgs.fish}/bin/fish";
-          args = [];
-        };
-      };
-      "terminal.integrated.profiles.linux" = {
-        fish = {
-          path = "${pkgs.fish}/bin/fish";
-          args = [];
-        };
-      };
-      "terminal.integrated.defaultProfile.osx" = "fish";
-      "terminal.integrated.defaultProfile.linux" = "fish";
       "chat.agent.enabled" = false;
       "chat.disableAIFeatures" = true;
     };
