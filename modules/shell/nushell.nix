@@ -28,6 +28,7 @@
         alias hms = home-manager switch
         alias ns = nix search nixpkgs
         alias nsh = nix-shell -p
+        alias lz = lazygit
       '';
     };
   };
