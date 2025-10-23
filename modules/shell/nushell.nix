@@ -12,6 +12,9 @@
         max_results = 200;
       };
     };
+    environmentVariables = {
+      EDITOR = "hx";
+    };
     configFile = {
       text = ''
         source ${nu-scripts}/custom-completions/aws/aws-completions.nu
