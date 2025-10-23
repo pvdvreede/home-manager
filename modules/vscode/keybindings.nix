@@ -22,10 +22,6 @@
         when = "editorTextFocus && !editorReadonly";
       }
       {
-        key = "ctrl+shift+j";
-        command = "workbench.action.togglePanel";
-      }
-      {
         key = "ctrl+shift+n";
         command = "workbench.action.createTerminalEditor";
       }
