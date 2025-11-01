@@ -157,10 +157,8 @@
           ./modules/tmux.nix
           ./modules/lazygit.nix
           ./modules/helix.nix
+          ./modules/jujutsu.nix
           ./modules/git.nix
-          # ./modules/vim.nix
-          ./modules/neovim
-          # ./modules/glazewm
           {
             home = {
               username = "nixos";
