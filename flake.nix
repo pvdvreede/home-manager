@@ -161,7 +161,6 @@
           # ./modules/vim.nix
           ./modules/neovim
           # ./modules/glazewm
-          ./modules/wezterm/wsl.nix
           {
             home = {
               username = "nixos";
