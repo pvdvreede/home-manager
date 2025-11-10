@@ -3,7 +3,15 @@
   environment.systemPackages = [
     pkgs.wget
     pkgs.coreutils # needed for vscode devcontainers
+    pkgs.xorg.xinit
+    pkgs.terminator
   ];
+
+  # Graphics, Window Manager (i3), and RDP (XRDP)
+  services.xserver.enable = true;
+  services.xserver.windowManager.i3.enable = true;
+  services.xrdp.enable = true;
+  services.xrdp.openFirewall = true;
 
   programs.nix-ld = {
     enable = true;
