@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+export NIX_CONFIG="extra-experimental-features = nix-command flakes"
+git clone https://github.com/pvdvreede/home-manager ~/.config/home-manager
+
+sudo nixos-rebuild switch --flake ~/.config/home-manager
