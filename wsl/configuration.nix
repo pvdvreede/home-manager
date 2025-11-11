@@ -5,6 +5,7 @@
 
     export XDG_SESSION_TYPE=x11
     export DESKTOP_SESSION=i3
+    export DONT_PROMPT_WSL_INSTALL=yes
 
     # Ensure HOME is set (XRDP sometimes runs with a minimal env)
     if [ -z "${HOME:-}" ]; then
@@ -30,7 +31,7 @@ in {
     pkgs.wget
     pkgs.coreutils # needed for vscode devcontainers
     pkgs.xorg.xinit
-    pkgs.wezterm
+    pkgs.xterm
   ];
 
   # Graphics, Window Manager (i3), and RDP (XRDP)
@@ -41,11 +42,14 @@ in {
       # We don't need a local DM inside WSL; xrdp will launch our WM.
       # Leave DMs disabled; XRDP will call our start script.
       lightdm.enable = false;
-      sddm.enable = false;
-      gdm.enable = false;
-      # Optional: default session naming if you later decide to use a DM.
-      defaultSession = "none+i3";
     };
+  };
+
+  services.displayManager = {
+    sddm.enable = false;
+    gdm.enable = false;
+    # Optional: default session naming if you later decide to use a DM.
+    defaultSession = "none+i3";
   };
 
   services.xrdp = {
