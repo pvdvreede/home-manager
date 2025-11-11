@@ -156,6 +156,8 @@
           ./modules/shell
           ./modules/tmux.nix
           ./modules/lazygit.nix
+          ./modules/i3
+          ./modules/vscode
           ./modules/helix.nix
           ./modules/jujutsu.nix
           ./modules/git.nix
@@ -170,7 +172,7 @@
         ];
         extraSpecialArgs = {
           vscode-marketplace =
-            nix-vscode-extensions.extensions.aarch64-darwin.vscode-marketplace;
+            nix-vscode-extensions.extensions.x86_64-linux.vscode-marketplace;
           nu-scripts = nu-scripts;
         };
       };
