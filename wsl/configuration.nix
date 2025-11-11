@@ -6,6 +6,7 @@
     export XDG_SESSION_TYPE=x11
     export DESKTOP_SESSION=i3
     export DONT_PROMPT_WSL_INSTALL=yes
+    export GDK_BACKEND=x11
 
     # Ensure HOME is set (XRDP sometimes runs with a minimal env)
     if [ -z "${HOME:-}" ]; then

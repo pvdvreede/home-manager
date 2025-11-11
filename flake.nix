@@ -159,6 +159,7 @@
           ./modules/vscode
           ./modules/helix.nix
           ./modules/jujutsu.nix
+          ./modules/ghostty.nix
           ./modules/git.nix
           {
             home = {
