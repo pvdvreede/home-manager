@@ -64,6 +64,7 @@
           ./modules/macappfix.nix
           ./modules/git.nix
           ./modules/vim.nix
+          ./modules/k9s.nix
           ./modules/tmux.nix
           ./modules/jujutsu.nix
           {
@@ -160,6 +161,7 @@
           ./modules/helix.nix
           ./modules/jujutsu.nix
           ./modules/ghostty.nix
+          ./modules/k9s.nix
           ./modules/git.nix
           {
             home = {
