@@ -6,6 +6,8 @@
 
   programs.starship.enableFishIntegration = true;
   programs.atuin.enableFishIntegration = true;
+  programs.kitty.settings.enableFishIntegration = true;
+  programs.kitty.settings.shell = "${pkgs.fish}/bin/fish";
 
   programs.tmux.shell = "${pkgs.fish}/bin/fish";
 

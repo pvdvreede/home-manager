@@ -160,8 +160,7 @@
           ./modules/vscode
           ./modules/helix.nix
           ./modules/jujutsu.nix
-          ./modules/ghostty.nix
-          ./modules/k9s.nix
+          ./modules/kitty.nix
           ./modules/git.nix
           {
             home = {

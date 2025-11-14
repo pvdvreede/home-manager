@@ -42,6 +42,8 @@
 
   programs.tmux.shell = "${pkgs.nushell}/bin/nu";
 
+  programs.kitty.settings.shell = "${pkgs.nushell}/bin/nu";
+
   programs.vscode.profiles.default.userSettings = {
     "terminal.integrated.defaultProfile.osx" = "nu";
     "terminal.integrated.defaultProfile.linux" = "nu";

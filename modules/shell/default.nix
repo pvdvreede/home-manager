@@ -1,3 +1,3 @@
 {...}: {
-  imports = [./nushell.nix ./starship.nix ./atuin.nix ./zoxide.nix];
+  imports = [./fish.nix ./starship.nix ./atuin.nix ./zoxide.nix];
 }

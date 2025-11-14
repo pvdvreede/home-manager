@@ -1,18 +1,14 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   programs.kitty = {
     enable = true;
-    environment = { };
+    environment = {};
     font.name = "JetBrains Mono";
     font.package = pkgs.jetbrains-mono;
-    font.size = 16;
+    font.size = 14;
     settings = {
       disable_ligatures = "never";
       window_padding_width = 2;
       confirm_os_window_close = -1;
-      shell = "${pkgs.zellij}/bin/zellij";
     };
-    shellIntegration.enableFishIntegration = true;
   };
 }

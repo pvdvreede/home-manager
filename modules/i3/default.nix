@@ -65,6 +65,7 @@
         "${mod}+Shift+e" = "exec i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'yes' 'i3-msg exit'";
 
         "${mod}+space" = "exec --no-startup-id ${pkgs.rofi}/bin/rofi -show drun";
+        "${mod}+return" = "exec --no-startup-id ${pkgs.kitty}/bin/kitty";
       };
     };
   };
