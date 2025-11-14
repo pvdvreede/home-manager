@@ -155,6 +155,7 @@
           ./common.nix
           ./modules/direnv.nix
           ./modules/shell
+          ./modules/devcontainer.nix
           ./modules/lazygit.nix
           ./modules/i3
           ./modules/vscode
