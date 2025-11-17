@@ -60,8 +60,8 @@
           ./modules/tmux.nix
           ./modules/helix.nix
           ./modules/lazygit.nix
-          ./modules/wezterm
           ./modules/macappfix.nix
+          ./modules/kitty.nix
           ./modules/git.nix
           ./modules/vim.nix
           ./modules/k9s.nix
