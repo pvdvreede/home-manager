@@ -59,6 +59,7 @@
           ./modules/vscode
           ./modules/tmux.nix
           ./modules/helix.nix
+          ./modules/devcontainer.nix
           ./modules/lazygit.nix
           ./modules/macappfix.nix
           ./modules/kitty.nix
