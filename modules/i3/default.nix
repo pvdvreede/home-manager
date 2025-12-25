@@ -4,7 +4,7 @@
   xsession.windowManager.i3 = {
     enable = true;
     config = let
-      mod = "Mod4";
+      mod = "Mod1";
     in {
       gaps = {
         "inner" = 15;
