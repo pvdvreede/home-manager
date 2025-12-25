@@ -1,18 +1,20 @@
-{pkgs, ...}: {
+{...}: {
   programs.git = {
     enable = true;
-    userEmail = "pvdvreede@gmail.com";
-    userName = "pvdvreede";
-    ignores = ["#*" "*~" ".DS_Store" ".netrwhist" "*.swp" ".direnv"];
-    extraConfig = {
-      init = {defaultBranch = "main";};
-      color = {ui = true;};
-      push = {default = "current";};
-      branch = {autosetuprebase = "always";};
-      rebase = {autosquash = true;};
-      pull.rebase = true;
-      core.whitespace = "trailing-space";
+    settings = {
+      user.email = "pvdvreede@gmail.com";
+      user.name = "pvdvreede";
+      extraConfig = {
+        init = {defaultBranch = "main";};
+        color = {ui = true;};
+        push = {default = "current";};
+        branch = {autosetuprebase = "always";};
+        rebase = {autosquash = true;};
+        pull.rebase = true;
+        core.whitespace = "trailing-space";
+      };
     };
+    ignores = ["#*" "*~" ".DS_Store" ".netrwhist" "*.swp" ".direnv"];
   };
 
   programs.gh = {
