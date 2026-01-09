@@ -61,7 +61,7 @@ in {
 
   programs.nix-ld = {
     enable = true;
-    package = pkgs.nix-ld-rs;
+    # package = pkgs.nix-ld-rs;
   };
 
   virtualisation.docker = {
@@ -76,6 +76,8 @@ in {
       "docker"
     ];
   };
+
+  boot.binfmt.emulatedSystems = ["aarch64-linux"];
 
   nix = {
     package = pkgs.nixVersions.stable;
