@@ -68,6 +68,7 @@
           ./modules/k9s.nix
           ./modules/tmux.nix
           ./modules/jujutsu.nix
+          ./modules/gemini.nix
           {
             home = {
               username = "paulv";
