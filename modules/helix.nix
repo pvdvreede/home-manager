@@ -36,6 +36,7 @@
       ];
     };
     settings = {
+      theme = "amberwood";
       editor = {
         trim-trailing-whitespace = true;
         trim-final-newlines = true;
@@ -80,7 +81,6 @@
         "}" = ["goto_next_paragraph" "collapse_selection"];
         "G" = "goto_file_end";
         "C-p" = "file_picker";
-        "C-g" = [":new" ":insert-output ${pkgs.jjui}/bin/jjui" ":buffer-close!" ":redraw"];
         "C-r" = ":sh hemux -r";
       };
       keys.select = {
