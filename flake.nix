@@ -41,8 +41,31 @@
     nu-scripts,
     ...
   } @ inputs:
+    let
+      # Helper to get pkgs for a specific system
+      pkgsForSystem = system: nixpkgs.legacyPackages.${system};
+
+      # Generate checks for home-manager configurations
+      homeChecks = nixpkgs.lib.mapAttrs' (name: config: {
+        name = "home-manager-${name}";
+        value = config.activationPackage;
+      }) inputs.self.homeConfigurations;
+
+      # Generate checks for NixOS configurations
+      nixosChecks = nixpkgs.lib.mapAttrs' (name: config: {
+        name = "nixos-${name}";
+        value = config.config.system.build.toplevel;
+      }) inputs.self.nixosConfigurations;
+
+      # Generate checks for nix-darwin configurations
+      darwinChecks = nixpkgs.lib.mapAttrs' (name: config: {
+        name = "darwin-${name}";
+        value = config.config.system.build.toplevel;
+      }) inputs.self.darwinConfigurations;
+
+    in
     flake-utils.lib.eachDefaultSystem (system: let
-      pkgs = nixpkgs.legacyPackages.${system};
+      pkgs = pkgsForSystem system;
     in {
       formatter = pkgs.nixfmt;
       packages.rye = pkgs.callPackage ./pkgs/rye.nix {};
@@ -50,6 +73,7 @@
         pkgs.mkShell {buildInputs = with pkgs; [nil nixfmt];};
     })
     // rec {
+      inherit (inputs) self; # Needed to reference self.homeConfigurations etc.
       homeConfigurations.work = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.aarch64-darwin;
         modules = [
@@ -209,5 +233,7 @@
         modules = [./nix-darwin/configuration.nix];
         specialArgs.flake-inputs = inputs;
       };
+
+      checks = homeChecks // nixosChecks // darwinChecks;
     };
 }
