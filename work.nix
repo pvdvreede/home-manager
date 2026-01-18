@@ -8,9 +8,4 @@
     docker-client
     lima
   ];
-
-  programs.vscode.profiles.default.extensions = with vscode-marketplace; [
-    sourcegraph.amp
-    anthropic.claude-code
-  ];
 }
