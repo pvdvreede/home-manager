@@ -55,6 +55,10 @@
   # if you don't want to manage your shell through Home Manager.
   fonts.fontconfig.enable = true;
 
+  home.sessionVariables = {
+    EDITOR = "hx";
+  };
+
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 }
