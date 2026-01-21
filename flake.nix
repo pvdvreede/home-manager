@@ -40,30 +40,34 @@
     nixos-wsl,
     nu-scripts,
     ...
-  } @ inputs:
-    let
-      # Helper to get pkgs for a specific system
-      pkgsForSystem = system: nixpkgs.legacyPackages.${system};
+  } @ inputs: let
+    # Helper to get pkgs for a specific system
+    pkgsForSystem = system: nixpkgs.legacyPackages.${system};
 
-      # Generate checks for home-manager configurations
-      homeChecks = nixpkgs.lib.mapAttrs' (name: config: {
+    # Generate checks for home-manager configurations
+    homeChecks =
+      nixpkgs.lib.mapAttrs' (name: config: {
         name = "home-manager-${name}";
         value = config.activationPackage;
-      }) inputs.self.homeConfigurations;
+      })
+      inputs.self.homeConfigurations;
 
-      # Generate checks for NixOS configurations
-      nixosChecks = nixpkgs.lib.mapAttrs' (name: config: {
+    # Generate checks for NixOS configurations
+    nixosChecks =
+      nixpkgs.lib.mapAttrs' (name: config: {
         name = "nixos-${name}";
         value = config.config.system.build.toplevel;
-      }) inputs.self.nixosConfigurations;
+      })
+      inputs.self.nixosConfigurations;
 
-      # Generate checks for nix-darwin configurations
-      darwinChecks = nixpkgs.lib.mapAttrs' (name: config: {
+    # Generate checks for nix-darwin configurations
+    darwinChecks =
+      nixpkgs.lib.mapAttrs' (name: config: {
         name = "darwin-${name}";
         value = config.config.system.build.toplevel;
-      }) inputs.self.darwinConfigurations;
-
-    in
+      })
+      inputs.self.darwinConfigurations;
+  in
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = pkgsForSystem system;
     in {
@@ -189,6 +193,7 @@
           ./modules/jujutsu.nix
           ./modules/kitty.nix
           ./modules/git.nix
+          ./modules/gemini.nix
           {
             home = {
               username = "nixos";
