@@ -7,5 +7,6 @@
     docker-compose
     docker-client
     lima
+    (pkgs.callPackage ./pkgs/vibekanban.nix {})
   ];
 }

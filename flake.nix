@@ -200,6 +200,9 @@
               username = "nixos";
               homeDirectory = "/home/nixos";
               stateVersion = "24.05";
+              packages = [
+                (inputs.self.packages.x86_64-linux.vibekanban)
+              ];
             };
             programs.home-manager.enable = true;
           }
