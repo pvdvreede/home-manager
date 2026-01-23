@@ -73,6 +73,7 @@
     in {
       formatter = pkgs.nixfmt;
       packages.rye = pkgs.callPackage ./pkgs/rye.nix {};
+      packages.vibekanban = pkgs.callPackage ./pkgs/vibekanban.nix {};
       devShells.default =
         pkgs.mkShell {buildInputs = with pkgs; [nil nixfmt];};
     })
