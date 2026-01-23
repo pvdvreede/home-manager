@@ -79,169 +79,30 @@
     })
     // rec {
       inherit (inputs) self; # Needed to reference self.homeConfigurations etc.
-      homeConfigurations.work = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.aarch64-darwin;
-        modules = [
-          ./common.nix
-          ./work.nix
-          ./modules/shell
-          ./modules/vscode
-          ./modules/tmux.nix
-          ./modules/helix.nix
-          ./modules/devcontainer.nix
-          ./modules/lazygit.nix
-          ./modules/macappfix.nix
-          ./modules/kitty.nix
-          ./modules/git.nix
-          ./modules/vim.nix
-          ./modules/k9s.nix
-          ./modules/tmux.nix
-          ./modules/jujutsu.nix
-          ./modules/gemini.nix
-          {
-            home = {
-              username = "paulv";
-              homeDirectory = "/Users/paulv";
-              stateVersion = "24.05";
-            };
-          }
-        ];
-        extraSpecialArgs = {
-          vscode-marketplace =
-            nix-vscode-extensions.extensions.aarch64-darwin.vscode-marketplace;
-          nu-scripts = nu-scripts;
-        };
-      };
 
-      homeConfigurations.paulv = homeConfigurations.work;
+      # Import all home-manager configurations
+      homeConfigurations =
+        (import ./hosts/home-manager/work.nix {
+          inherit inputs home-manager nixpkgs nix-vscode-extensions nu-scripts;
+        })
+        // (import ./hosts/home-manager/chromeos.nix {
+          inherit home-manager nixpkgs;
+        })
+        // (import ./hosts/home-manager/home.nix {
+          inherit inputs home-manager nixpkgs nix-vscode-extensions nu-scripts plasma-manager;
+        })
+        // (import ./hosts/home-manager/wsl.nix {
+          inherit inputs home-manager nixpkgs nix-vscode-extensions nu-scripts;
+        });
 
-      homeConfigurations.chromeos = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.aarch64-linux;
+      # Import all NixOS configurations
+      nixosConfigurations =
+        (import ./hosts/nixos/vagabond.nix {inherit nixpkgs inputs;})
+        // (import ./hosts/nixos/frigate.nix {inherit nixpkgs inputs;})
+        // (import ./hosts/nixos/nixos.nix {inherit nixpkgs nixos-wsl;});
 
-        modules = [
-          ./common.nix
-          ./modules/shell
-          ./modules/zellij.nix
-          ./modules/lazygit.nix
-          ./modules/helix.nix
-          ./modules/git.nix
-          ./modules/vim.nix
-          {
-            home = {
-              username = "pvdvreede";
-              homeDirectory = "/home/pvdvreede";
-              stateVersion = "24.05";
-            };
-          }
-          {
-            xdg.configFile."systemd/user/cros-garcon.service.d/override.conf".text = ''
-              [Service]
-              Environment="PATH=%h/.nix-profile/bin:/usr/local/sbin:/usr/local/bin:/usr/local/games:/usr/sbin:/usr/bin:/usr/games:/sbin:/bin"
-              Environment="XDG_DATA_DIRS=%h/.nix-profile/share:%h/.local/share:%h/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share"
-            '';
-          }
-        ];
-      };
-
-      homeConfigurations.home = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        modules = [
-          plasma-manager.homeManagerModules.plasma-manager
-          ./common.nix
-          ./home.nix
-          ./modules/shell
-          ./modules/i3
-          ./modules/vscode
-          ./modules/zellij.nix
-          ./modules/lazygit.nix
-          ./modules/helix.nix
-          ./modules/firefox.nix
-          ./modules/git.nix
-          ./modules/vim.nix
-          ./modules/tmux.nix
-          ./modules/wezterm
-          ./modules/yazi.nix
-          ./modules/jujutsu.nix
-          ./modules/qutebrowser.nix
-          {
-            home = {
-              username = "pvdvreede";
-              homeDirectory = "/home/pvdvreede";
-              stateVersion = "24.05";
-            };
-          }
-        ];
-        extraSpecialArgs = {
-          vscode-marketplace =
-            nix-vscode-extensions.extensions.x86_64-linux.vscode-marketplace;
-          nu-scripts = nu-scripts;
-        };
-      };
-
-      homeConfigurations.pvdvreede = homeConfigurations.home;
-
-      homeConfigurations.wsl = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        modules = [
-          ./common.nix
-          ./modules/direnv.nix
-          ./modules/shell
-          ./modules/devcontainer.nix
-          ./modules/lazygit.nix
-          ./modules/i3
-          ./modules/vscode
-          ./modules/helix.nix
-          ./modules/jujutsu.nix
-          ./modules/kitty.nix
-          ./modules/git.nix
-          ./modules/gemini.nix
-          {
-            home = {
-              username = "nixos";
-              homeDirectory = "/home/nixos";
-              stateVersion = "24.05";
-              packages = [
-                (inputs.self.packages.x86_64-linux.vibekanban)
-              ];
-            };
-            programs.home-manager.enable = true;
-          }
-        ];
-        extraSpecialArgs = {
-          vscode-marketplace =
-            nix-vscode-extensions.extensions.x86_64-linux.vscode-marketplace;
-          nu-scripts = nu-scripts;
-        };
-      };
-
-      nixosConfigurations.vagabond = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [./nixos/configuration.nix];
-        specialArgs.flake-inputs = inputs;
-      };
-
-      nixosConfigurations.frigate = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [./nixos/frigate-configuration.nix];
-        specialArgs.flake-inputs = inputs;
-      };
-
-      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          nixos-wsl.nixosModules.default
-          {
-            system.stateVersion = "24.05";
-            wsl.enable = true;
-          }
-          ./wsl/configuration.nix
-        ];
-      };
-
-      darwinConfigurations.work = nix-darwin.lib.darwinSystem {
-        modules = [./nix-darwin/configuration.nix];
-        specialArgs.flake-inputs = inputs;
-      };
+      # Import all Darwin configurations
+      darwinConfigurations = import ./hosts/darwin/work.nix {inherit nix-darwin inputs;};
 
       checks = homeChecks // nixosChecks // darwinChecks;
     };
