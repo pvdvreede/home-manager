@@ -4,11 +4,14 @@
   nixpkgs,
   nix-vscode-extensions,
   nu-scripts,
+  pkgsForSystem,
+  commonUnfreeModule,
   ...
 }: {
   wsl = home-manager.lib.homeManagerConfiguration {
-    pkgs = nixpkgs.legacyPackages.x86_64-linux;
+    pkgs = pkgsForSystem "x86_64-linux";
     modules = [
+      commonUnfreeModule
       ../../common.nix
       ../../modules/direnv.nix
       ../../modules/shell

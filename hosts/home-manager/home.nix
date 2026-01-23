@@ -5,11 +5,14 @@
   nix-vscode-extensions,
   nu-scripts,
   plasma-manager,
+  pkgsForSystem,
+  commonUnfreeModule,
   ...
 }: {
   home = home-manager.lib.homeManagerConfiguration {
-    pkgs = nixpkgs.legacyPackages.x86_64-linux;
+    pkgs = pkgsForSystem "x86_64-linux";
     modules = [
+      commonUnfreeModule
       plasma-manager.homeManagerModules.plasma-manager
       ../../common.nix
       ../../home.nix

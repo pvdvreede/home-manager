@@ -41,8 +41,17 @@
     nu-scripts,
     ...
   } @ inputs: let
-    # Helper to get pkgs for a specific system
-    pkgsForSystem = system: nixpkgs.legacyPackages.${system};
+    # Helper to get pkgs for a specific system with unfree enabled
+    pkgsForSystem = system: import nixpkgs {
+      inherit system;
+      config.allowUnfree = true;
+    };
+
+    # Common configuration module for all home-manager configurations
+    commonUnfreeModule = {
+      nixpkgs.config.allowUnfree = true;
+      nixpkgs.config.allowUnfreePredicate = _: true;
+    };
 
     # Generate checks for home-manager configurations
     homeChecks =
@@ -83,16 +92,16 @@
       # Import all home-manager configurations
       homeConfigurations =
         (import ./hosts/home-manager/work.nix {
-          inherit inputs home-manager nixpkgs nix-vscode-extensions nu-scripts;
+          inherit inputs home-manager nixpkgs nix-vscode-extensions nu-scripts pkgsForSystem commonUnfreeModule;
         })
         // (import ./hosts/home-manager/chromeos.nix {
-          inherit home-manager nixpkgs;
+          inherit home-manager nixpkgs pkgsForSystem commonUnfreeModule;
         })
         // (import ./hosts/home-manager/home.nix {
-          inherit inputs home-manager nixpkgs nix-vscode-extensions nu-scripts plasma-manager;
+          inherit inputs home-manager nixpkgs nix-vscode-extensions nu-scripts plasma-manager pkgsForSystem commonUnfreeModule;
         })
         // (import ./hosts/home-manager/wsl.nix {
-          inherit inputs home-manager nixpkgs nix-vscode-extensions nu-scripts;
+          inherit inputs home-manager nixpkgs nix-vscode-extensions nu-scripts pkgsForSystem commonUnfreeModule;
         });
 
       # Import all NixOS configurations

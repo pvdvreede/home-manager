@@ -1,12 +1,15 @@
 {
   home-manager,
   nixpkgs,
+  pkgsForSystem,
+  commonUnfreeModule,
   ...
 }: {
   chromeos = home-manager.lib.homeManagerConfiguration {
-    pkgs = nixpkgs.legacyPackages.aarch64-linux;
+    pkgs = pkgsForSystem "aarch64-linux";
 
     modules = [
+      commonUnfreeModule
       ../../common.nix
       ../../modules/shell
       ../../modules/zellij.nix

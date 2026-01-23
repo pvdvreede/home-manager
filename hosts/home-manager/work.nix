@@ -4,11 +4,14 @@
   nixpkgs,
   nix-vscode-extensions,
   nu-scripts,
+  pkgsForSystem,
+  commonUnfreeModule,
   ...
 }: {
   work = home-manager.lib.homeManagerConfiguration {
-    pkgs = nixpkgs.legacyPackages.aarch64-darwin;
+    pkgs = pkgsForSystem "aarch64-darwin";
     modules = [
+      commonUnfreeModule
       ../../common.nix
       ../../work.nix
       ../../modules/shell
