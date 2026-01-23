@@ -1,110 +1,64 @@
 { lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, cmake
 , stdenv
-, darwin
-, pnpm
-, cacert
-, nodejs
+, fetchzip
+, autoPatchelfHook
+, unzip
 }:
 
 let
   pname = "vibekanban";
   version = "0.0.160";
+  binaryTag = "v0.0.160-20260122120345";
 
-  src = fetchFromGitHub {
-    owner = "BloopAI";
-    repo = "vibe-kanban";
-    rev = "eaecd9db693ddab0256f002b845d93e651802b00";
-    sha256 = "0a4b22c2zasmziicwqxlhpynbs6pgvq04r8vdy4crn5a2nq1hngg";
+  # Determine platform-specific values
+  platformInfo =
+    if stdenv.isLinux && stdenv.isx86_64 then {
+      platform = "linux-x64";
+      sha256 = "sha256-N8y7XJfMIX8PjdEUJ5nC5mrmLj7s3c1pnc0BvuibXHU=";
+    }
+    else if stdenv.isLinux && stdenv.isAarch64 then {
+      platform = "linux-arm64";
+      sha256 = "sha256-hEHNFLFSv8oXBa1dvHBCazbl0bjtY4ztT5yeisXWrw0=";
+    }
+    else if stdenv.isDarwin && stdenv.isx86_64 then {
+      platform = "macos-x64";
+      sha256 = "sha256-Xre7tb/qG5ltkrdsljyuooCcdqSFGtVVWE9OmX5pwVk=";
+    }
+    else if stdenv.isDarwin && stdenv.isAarch64 then {
+      platform = "macos-arm64";
+      sha256 = "sha256-TNsWvsWOe4Kxni4yke4E8c8JEDEA5dd+abXDTYU5b4g=";
+    }
+    else throw "Unsupported platform: ${stdenv.system}";
+
+  # Fetch the pre-built binary from the CDN
+  src = fetchzip {
+    url = "https://npm-cdn.vibekanban.com/binaries/${binaryTag}/${platformInfo.platform}/vibe-kanban.zip";
+    sha256 = platformInfo.sha256;
+    stripRoot = false;
   };
 
-  # Fetch pnpm deps
-  pnpmDeps = stdenv.mkDerivation {
-    pname = "${pname}-pnpm-deps";
-    inherit version src;
-    
-    nativeBuildInputs = [ pnpm cacert nodejs ];
-    
-    installPhase = ''
-      export HOME=$PWD/.home
-      mkdir -p $HOME
-      
-      pnpm config set store-dir $out
-      
-      # Install deps for the whole workspace
-      pnpm install --frozen-lockfile --ignore-scripts
-    '';
-    
-    outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
-  };
-
-  frontend = stdenv.mkDerivation {
-    pname = "${pname}-frontend";
-    inherit version src;
-
-    nativeBuildInputs = [ pnpm nodejs ];
-
-    buildPhase = ''
-      export HOME=$PWD/.home
-      mkdir -p $HOME
-      
-      pnpm config set store-dir ${pnpmDeps}
-      
-      # Copy the pnpm-lock.yaml and package.json to avoid issues with read-only source?
-      # pnpm install might want to write to node_modules.
-      # current dir is a copy of src (writable), so it's fine.
-      
-      pnpm install --offline --frozen-lockfile --ignore-scripts
-      
-      cd frontend
-      # Binaries are hoisted to root node_modules/.bin
-      export PATH="$PWD/../node_modules/.bin:$PATH"
-      
-      pnpm run build
-    '';
-
-    installPhase = ''
-      mkdir -p $out/dist
-      cp -r dist/* $out/dist
-    '';
-  };
-
-in rustPlatform.buildRustPackage {
+in stdenv.mkDerivation {
   inherit pname version src;
 
-  cargoHash = "sha256-cYa6hccUdqJeH06MzGOv3jPwpJA6AKsVupn8QWWGLEw=";
-
-  nativeBuildInputs = [
-    pkg-config
-    cmake
+  nativeBuildInputs = lib.optionals stdenv.isLinux [
+    autoPatchelfHook
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  installPhase = ''
+    runHook preInstall
 
-  preBuild = ''
-    mkdir -p frontend/dist
-    cp -r ${frontend}/dist/* frontend/dist/
-  '';
+    mkdir -p $out/bin
+    cp vibe-kanban $out/bin/vibe-kanban
+    chmod +x $out/bin/vibe-kanban
 
-  postInstall = ''
-    mv $out/bin/server $out/bin/vibe-kanban
+    runHook postInstall
   '';
 
   meta = with lib; {
-    description = "Vibe Kanban Board";
+    description = "Vibe Kanban Board - A visual project management tool";
     homepage = "https://github.com/BloopAI/vibe-kanban";
     license = licenses.mit;
     maintainers = [];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }
