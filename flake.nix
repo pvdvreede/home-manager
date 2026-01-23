@@ -101,7 +101,7 @@
             home = {
               username = "paulv";
               homeDirectory = "/Users/paulv";
-              stateVersion = "23.11";
+              stateVersion = "24.05";
             };
           }
         ];
@@ -129,7 +129,7 @@
             home = {
               username = "pvdvreede";
               homeDirectory = "/home/pvdvreede";
-              stateVersion = "23.11";
+              stateVersion = "24.05";
             };
           }
           {
@@ -166,7 +166,7 @@
             home = {
               username = "pvdvreede";
               homeDirectory = "/home/pvdvreede";
-              stateVersion = "23.11";
+              stateVersion = "24.05";
             };
           }
         ];
@@ -198,7 +198,7 @@
             home = {
               username = "nixos";
               homeDirectory = "/home/nixos";
-              stateVersion = "23.11";
+              stateVersion = "24.05";
             };
             programs.home-manager.enable = true;
           }
