@@ -30,8 +30,8 @@ in {
       editorconfig.editorconfig
       ms-azuretools.vscode-containers
       ms-vscode-remote.remote-ssh
-      google.geminicodeassist
-      anthropic.claude-code
+      # google.geminicodeassist
+      # anthropic.claude-code
     ];
     # if issues reoccur with remote-containers extension
     # then uncomment the below.

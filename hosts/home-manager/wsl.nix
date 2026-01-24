@@ -23,7 +23,7 @@
       ../../modules/jujutsu.nix
       ../../modules/kitty.nix
       ../../modules/git.nix
-      ../../modules/gemini.nix
+      ../../modules/opencode.nix
       {
         home = {
           username = "nixos";
