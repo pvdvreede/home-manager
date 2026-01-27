@@ -9,6 +9,8 @@
     rules = ''
       ## general development rules
       - when planning a change, optimise for small, easy to review changes. This means trying to split changes across multiple PRs without breaking tests or compilation.
+      - assume the use of docker and docker compose to encapsulate all project dependencies regardless of the machine its running on.
+      - give me short, concise answers and focus on showing me the code changes rather than explaining it.
     '';
 
     commands = {
@@ -140,6 +142,10 @@
         write = "allow";
         list = "allow";
         skill = "allow";
+        # Allow access to all repos cloned via ghq
+        external_directory = {
+          "~/ghq/**" = "allow";
+        };
       };
 
       # File watcher ignore patterns
