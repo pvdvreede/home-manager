@@ -20,6 +20,15 @@
         - this work is on its own branch
         - this work's branch is rebased with main
       '';
+
+      start-fresh = ''
+        # start a fresh task
+
+        lets start a fresh task:
+        - stash any changed files
+        - get main branch up-to-date with the origin/main branch
+        - create a new branch, or if the repo is jujutsu enabled, start a fresh change
+      '';
     };
 
     # Global OpenCode configuration
@@ -41,11 +50,34 @@
         diff_style = "auto";
       };
 
-      # Permissions - require approval for dangerous operations
       permission = {
-        bash = "ask";
+        bash = {
+          "*" = "ask";
+          "git *" = "allow";
+          "mkdir *" = "allow";
+          "nix *" = "allow";
+          "ls *" = "allow";
+          "find *" = "allow";
+          "grep *" = "allow";
+          "docker *" = "allow";
+          "docker-compose *" = "allow";
+          "devcontainer *" = "allow";
+          "jj *" = "allow";
+          "echo *" = "allow";
+          "limactl *" = "allow";
+          "head *" = "allow";
+          "tail *" = "allow";
+          "make *" = "allow";
+          "cat *" = "allow";
+        };
         edit = "allow";
+        grep = "allow";
+        task = "allow";
+        lsp = "allow";
+        read = "allow";
+        glob = "allow";
         write = "allow";
+        list = "allow";
         skill = "allow";
       };
 
@@ -55,6 +87,7 @@
           "node_modules/**"
           "dist/**"
           ".git/**"
+          ".jj/**"
           "target/**"
           "result/**"
         ];
