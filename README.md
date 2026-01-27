@@ -15,3 +15,10 @@ nix run nix-darwin -- switch --flake .#work
 export NIX_CONFIG="extra-experimental-features = nix-command flakes"
 nix run home-manager -- switch --flake .
 ```
+
+## NixOS
+
+```
+export NIX_CONFIG="extra-experimental-features = nix-command flakes"
+sudo nixos-rebuild switch --flake .#nixos --option eval-cache false
+```
