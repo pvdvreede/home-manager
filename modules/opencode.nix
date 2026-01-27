@@ -29,6 +29,55 @@
         - get main branch up-to-date with the origin/main branch
         - create a new branch, or if the repo is jujutsu enabled, start a fresh change
       '';
+
+      worktree = ''
+        ---
+        description: Start session in isolated git worktree
+        ---
+        Create an isolated git worktree for this session and work within it.
+        1. Generate a unique worktree name based on the current timestamp and branch: `worktree-$(date +%Y%m%d-%H%M%S)`
+        2. Create the worktree in a subdirectory: `mkdir -p .worktrees && git worktree add .worktrees/worktree-<timestamp> -b session/$ARGUMENTS` (use the argument as branch name suffix, or "work" if no argument provided)
+        3. IMPORTANT: For ALL subsequent file operations in this session, work in the new worktree directory (.worktrees/worktree-<timestamp>), NOT the original directory
+        4. Confirm the worktree was created and tell me the path and branch name
+        When the session is complete, remind me to clean up with:
+        - `git worktree remove .worktrees/worktree-<name>` (removes worktree)
+        - `git branch -d session/<branch>` (deletes branch if merged, or -D to force)
+      '';
+
+      worktree-cleanup = ''
+        ---
+        description: Clean up all git worktrees except current session
+        ---
+        Clean up all git worktrees that were created for isolated sessions, EXCEPT the one for the current session (if we're working in one).
+        Steps:
+        1. Run `git worktree list` to see all worktrees
+        2. Identify worktrees that match the pattern `.worktrees/worktree-*` (session worktrees)
+        3. Determine if we are currently working in a worktree (check if current directory contains ".worktrees/worktree-")
+        4. For each session worktree EXCEPT the current one:
+           - Run `git worktree remove <path>` to remove the worktree
+           - Run `git branch -d session/<branch>` to delete the associated branch (use -D if not merged and user confirms)
+        5. Report what was cleaned up and what was preserved
+        If $ARGUMENTS contains "all" or "force", also remove the current session's worktree (useful for final cleanup).
+        Example output:
+        - Removed worktree: .worktrees/worktree-20260127-100000 (branch: session/fix-bug)
+        - Removed worktree: .worktrees/worktree-20260126-143022 (branch: session/refactor)
+        - Preserved current: .worktrees/worktree-20260127-143022 (branch: session/new-feature)
+      '';
+
+      rebase = ''
+        ---
+        description: rebase branch and update the PR
+        ---
+        make sure that our current branch is up-to-date.
+        run these steps in a sub agent.
+        Steps:
+        1. update main branch with origin/main branch.
+        2. rebase main onto our working branch.
+        3. If there are conflicts, review and resolve all of them.
+        4. re-run tests and any pre-commit steps, if there are any failures try to fix them.
+        5. if there is a current PR for this work, force push the branch to update the PR.
+        6. if there is a current PR re-print the URL out.
+      '';
     };
 
     # Global OpenCode configuration
@@ -65,10 +114,22 @@
           "jj *" = "allow";
           "echo *" = "allow";
           "limactl *" = "allow";
+          "lima *" = "allow";
           "head *" = "allow";
           "tail *" = "allow";
           "make *" = "allow";
           "cat *" = "allow";
+          "kill *" = "allow";
+          "pkill *" = "allow";
+          "sort*" = "allow";
+          "sleep *" = "allow";
+          "sed *" = "allow";
+          "cp *" = "allow";
+          "true" = "allow";
+          "gh *" = "allow";
+          "pwd*" = "allow";
+          "date *" = "allow";
+          "file *" = "allow";
         };
         edit = "allow";
         grep = "allow";
