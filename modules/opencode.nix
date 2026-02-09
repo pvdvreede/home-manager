@@ -33,18 +33,18 @@
       '';
 
       worktree = ''
-        ---
-        description: Start session in isolated git worktree
-        ---
-        Create an isolated git worktree for this session and work within it.
-        1. Generate a unique worktree name based on the current timestamp and branch: `worktree-$(date +%Y%m%d-%H%M%S)`
-        2. Create the worktree in a subdirectory: `mkdir -p .worktrees && git worktree add .worktrees/worktree-<timestamp> -b session/$ARGUMENTS` (use the argument as branch name suffix, or "work" if no argument provided)
-        3. IMPORTANT: For ALL subsequent file operations in this session, work in the new worktree directory (.worktrees/worktree-<timestamp>), NOT the original directory
-        4. Confirm the worktree was created and tell me the path and branch name
-        When the session is complete, remind me to clean up with:
-        - `git worktree remove .worktrees/worktree-<name>` (removes worktree)
-        - `git branch -d session/<branch>` (deletes branch if merged, or -D to force)
-      '';
+          ---
+          description: Start session in isolated git worktree
+          ---
+          Create an isolated git worktree for this session and work within it.
+          1. Generate a unique worktree name based on the current timestamp and branch: `worktree-$(date +%Y%m%d-%H%M%S)`
+          2. Create the worktree in a subdirectory: `mkdir -p .worktrees && git worktree add .worktrees/worktree-<timestamp> -b session/$ARGUMENTS` (use the argument as branch name suffix, or "work" if no argument provided)
+          3. IMPORTANT: For ALL subsequent file operations in this session, work in the new worktree directory (.worktrees/worktree-<timestamp>), NOT the original directory
+          4. Confirm the worktree was created and tell me the path and branch name
+          When the session is complete, remind me to clean up with:
+          - `git worktree remove .worktrees/worktree-<name>` (removes worktree)
+          - `git branch -d session/<branch>` (deletes branch if merged, or -D to force)
+        # '';
 
       worktree-cleanup = ''
         ---
@@ -91,6 +91,21 @@
 
       # Auto-update enabled
       autoupdate = true;
+
+      provider = {
+        ollama = {
+          npm = "@ai-sdk/openai-compatible";
+          name = "ollama";
+          options = {
+            baseURL = "http://172.29.224.1:11434/v1";
+          };
+          models = {
+            "qwen3-coder:30b" = {
+              name = "qwen3-coder:30b";
+            };
+          };
+        };
+      };
 
       # TUI settings
       tui = {
