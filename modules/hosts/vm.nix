@@ -12,6 +12,15 @@
     ];
   };
 
+  flake.homeConfigurations.vm = inputs.home-manager.lib.homeManagerConfiguration {
+    modules = [
+      self.homeModules.fish
+      self.homeModules.helix
+      self.homeModules.git
+      self.homeModules.jujutsu
+    ];
+  };
+
   flake.nixosModules.vmMachine = {pkgs, ...}: {
     nixpkgs.hostPlatform = "x86_64-linux";
 
