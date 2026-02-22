@@ -5,6 +5,8 @@
     import-tree.url = "github:vic/import-tree";
     nixos-wsl.url = "github:nix-community/nixos-wsl/release-25.11";
     home-manager.url = "github:nix-community/home-manager";
+    nix-darwin.url = "github:nix-darwin/nix-darwin/master";
+    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs:

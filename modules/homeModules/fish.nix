@@ -55,6 +55,10 @@
         # Add nix profiles to PATH
         # This ensures nix-installed binaries take priority
         fish_add_path --global --prepend ~/.nix-profile/bin /nix/var/nix/profiles/default/bin
+
+        if test -e /etc/profiles/per-user/$USER/bin
+          fish_add_path --global --prepend /etc/profiles/per-user/$USER/bin
+        end
       '';
     };
   };
