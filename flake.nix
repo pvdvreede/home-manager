@@ -46,6 +46,11 @@
       import nixpkgs {
         inherit system;
         config.allowUnfree = true;
+        overlays = [
+          (self: super: {
+            context-mode = super.callPackage ./pkgs/context-mode.nix {};
+          })
+        ];
       };
 
     # Common configuration module for all home-manager configurations
@@ -83,6 +88,7 @@
     in {
       formatter = pkgs.nixfmt;
       packages.rye = pkgs.callPackage ./pkgs/rye.nix {};
+      packages.context-mode = pkgs.callPackage ./pkgs/context-mode.nix {};
       devShells.default =
         pkgs.mkShell {buildInputs = with pkgs; [nil nixfmt];};
     })

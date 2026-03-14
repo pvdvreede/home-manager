@@ -3,6 +3,9 @@
   lib,
   ...
 }: {
+  # Install context-mode package globally when opencode is enabled
+  home.packages = [ pkgs.context-mode ];
+
   programs.opencode = {
     enable = true;
 
@@ -183,6 +186,16 @@
           "result/**"
         ];
       };
+
+      # Context Mode MCP server and plugin
+      mcp = {
+        context-mode = {
+          type = "local";
+          command = ["context-mode"];
+        };
+      };
+
+      plugin = ["context-mode"];
     };
   };
 }
