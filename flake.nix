@@ -42,10 +42,11 @@
     ...
   } @ inputs: let
     # Helper to get pkgs for a specific system with unfree enabled
-    pkgsForSystem = system: import nixpkgs {
-      inherit system;
-      config.allowUnfree = true;
-    };
+    pkgsForSystem = system:
+      import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      };
 
     # Common configuration module for all home-manager configurations
     commonUnfreeModule = {
@@ -82,7 +83,6 @@
     in {
       formatter = pkgs.nixfmt;
       packages.rye = pkgs.callPackage ./pkgs/rye.nix {};
-      packages.vibekanban = pkgs.callPackage ./pkgs/vibekanban.nix {};
       devShells.default =
         pkgs.mkShell {buildInputs = with pkgs; [nil nixfmt];};
     })
