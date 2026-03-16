@@ -91,6 +91,8 @@
         self.homeModules.jujutsu
         self.homeModules.zoxide
         self.homeModules.eza
+        self.homeModules.gh
+        self.homeModules.ghq
       ];
     };
 
