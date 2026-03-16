@@ -69,8 +69,8 @@
     homebrew.enable = true;
     homebrew.casks = [
       "google-chrome"
-      "kitty"
       "tailscale-app"
+      "cmux"
     ];
 
     users.users.pvdvreede = {
@@ -94,6 +94,7 @@
         self.homeModules.gh
         self.homeModules.ghq
         self.homeModules.starship
+        self.homeModules.ghostty
       ];
     };
 
