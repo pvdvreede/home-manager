@@ -12,6 +12,8 @@
     programs.kitty.settings.enableFishIntegration = true;
     programs.kitty.settings.shell = "${pkgs.fish}/bin/fish";
 
+    programs.ghostty.settings.command = "${pkgs.fish}/bin/fish -l";
+
     programs.tmux.shell = "${pkgs.fish}/bin/fish";
 
     programs.fish = {
