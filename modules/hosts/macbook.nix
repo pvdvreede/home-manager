@@ -95,6 +95,7 @@
         self.homeModules.ghq
         self.homeModules.starship
         self.homeModules.ghostty
+        self.homeModules.opencode
       ];
     };
 
