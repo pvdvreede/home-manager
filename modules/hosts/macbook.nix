@@ -93,6 +93,7 @@
         self.homeModules.eza
         self.homeModules.gh
         self.homeModules.ghq
+        self.homeModules.starship
       ];
     };
 

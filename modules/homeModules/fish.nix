@@ -1,5 +1,7 @@
 {...}: {
   flake.homeModules.fish = {pkgs, ...}: {
+    home.packages = [pkgs.fzf];
+
     programs.fzf = {
       enable = true;
       enableFishIntegration = true;
@@ -46,18 +48,17 @@
         if test -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
           source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
         end
-      '';
-      interactiveShellInit = ''
-        if test -e ~/.custom.fish
-          source ~/.custom.fish
-        end
-
         # Add nix profiles to PATH
         # This ensures nix-installed binaries take priority
         fish_add_path --global --prepend ~/.nix-profile/bin /nix/var/nix/profiles/default/bin
 
         if test -e /etc/profiles/per-user/$USER/bin
           fish_add_path --global --prepend /etc/profiles/per-user/$USER/bin
+        end
+      '';
+      interactiveShellInit = ''
+        if test -e ~/.custom.fish
+          source ~/.custom.fish
         end
       '';
     };
