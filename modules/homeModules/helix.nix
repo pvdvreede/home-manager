@@ -33,7 +33,7 @@
         ];
       };
       settings = {
-        theme = "amberwood";
+        theme = "monokai_pro";
         editor = {
           trim-trailing-whitespace = true;
           trim-final-newlines = true;
@@ -77,8 +77,7 @@
           "{" = ["goto_prev_paragraph" "collapse_selection"];
           "}" = ["goto_next_paragraph" "collapse_selection"];
           "G" = "goto_file_end";
-          "C-p" = "file_picker";
-          "C-r" = ":sh hemux -r";
+          "C-p" = "file_picker_in_current_directory";
         };
         keys.select = {
           "{" = ["extend_to_line_bounds" "goto_prev_paragraph"];

@@ -71,6 +71,7 @@
       "google-chrome"
       "tailscale-app"
       "cmux"
+      "vlc"
     ];
 
     users.users.pvdvreede = {
