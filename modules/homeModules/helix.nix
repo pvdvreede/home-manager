@@ -1,5 +1,9 @@
 {...}: {
   flake.homeModules.helix = {pkgs, ...}: {
+    home.sessionVariables = {
+      EDITOR = "${pkgs.helix}/bin/hx";
+    };
+
     programs.helix = {
       enable = true;
       extraPackages = [
@@ -89,8 +93,8 @@
           "C-e" = "goto_line_end";
           "C-d" = ["extend_line_below" "yank" "paste_after" "collapse_selection"];
           "C-k" = ["extend_line_below" "delete_selection"];
-          "C-up" = ["extend_line_below" "delete_selection" "move_line_up" "paste_after" "collapse_selection"];
-          "C-down" = ["extend_line_below" "delete_selection" "move_line_down" "paste_after" "collapse_selection"];
+          "C-K" = ["extend_line_below" "delete_selection" "move_line_up" "paste_after" "collapse_selection"];
+          "C-J" = ["extend_line_below" "delete_selection" "move_line_down" "paste_after" "collapse_selection"];
         };
       };
     };

@@ -2,6 +2,10 @@
   flake.homeModules.fish = {pkgs, ...}: {
     home.packages = [pkgs.fzf];
 
+    home.sessionVariables = {
+      SHELL = "${pkgs.fish}/bin/fish";
+    };
+
     programs.fzf = {
       enable = true;
       enableFishIntegration = true;
@@ -10,11 +14,11 @@
     programs.starship.enableFishIntegration = true;
     programs.atuin.enableFishIntegration = true;
     programs.kitty.settings.enableFishIntegration = true;
-    programs.kitty.settings.shell = "${pkgs.fish}/bin/fish";
+    programs.kitty.settings.shell = "${pkgs.fish}/bin/fish -l";
 
     programs.ghostty.settings.command = "${pkgs.fish}/bin/fish -l";
 
-    programs.tmux.shell = "${pkgs.fish}/bin/fish";
+    programs.tmux.shell = "${pkgs.fish}/bin/fish -l";
 
     programs.fish = {
       enable = true;
@@ -44,6 +48,7 @@
 
         hms = "home-manager switch";
         lz = "lazygit";
+        ju = "jjui";
       };
       shellInit = ''
         # Source nix-daemon for multi-user installations (NixOS, WSL)
