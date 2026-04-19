@@ -70,8 +70,8 @@
     homebrew.casks = [
       "google-chrome"
       "tailscale-app"
-      "cmux"
       "vlc"
+      "ghostty"
     ];
 
     users.users.pvdvreede = {
