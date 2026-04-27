@@ -2,6 +2,7 @@
   flake.homeModules.git = {pkgs, ...}: {
     programs.git = {
       enable = true;
+      signing.format = null;
       settings = {
         user.email = "pvdvreede@gmail.com";
         user.name = "pvdvreede";

@@ -3,25 +3,19 @@
     programs.opencode = {
       enable = true;
 
+      tui = {
+        scroll_speed = 3;
+        scroll_acceleration = {
+          enabled = true;
+        };
+        diff_style = "auto";
+        theme = "catppuccin-frappe";
+      };
+
       settings = {
-        "$schema" = "https://opencode.ai/config.json";
-
-        # Theme
-        theme = "opencode";
-
-        # Auto-update enabled
         autoupdate = true;
 
         provider = {};
-
-        # TUI settings
-        tui = {
-          scroll_speed = 3;
-          scroll_acceleration = {
-            enabled = true;
-          };
-          diff_style = "auto";
-        };
 
         permission = {
           bash = {
