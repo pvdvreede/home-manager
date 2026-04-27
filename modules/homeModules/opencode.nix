@@ -12,27 +12,7 @@
         # Auto-update enabled
         autoupdate = true;
 
-        provider = {
-          lm-studio = {
-            npm = "@ai-sdk/openai-compatible";
-            options = {
-              baseURL = "http://localhost:1234/v1";
-            };
-            model = "qwen/qwen3-coder-next";
-          };
-          ollama = {
-            npm = "@ai-sdk/openai-compatible";
-            name = "ollama";
-            options = {
-              baseURL = "http://localhost:11434/v1";
-            };
-            models = {
-              "qwen3-coder:30b" = {
-                name = "qwen3-coder:30b";
-              };
-            };
-          };
-        };
+        provider = {};
 
         # TUI settings
         tui = {
