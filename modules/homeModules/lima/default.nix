@@ -12,6 +12,10 @@
       (pkgs.formats.yaml {}).generate "lima-podman.yaml"
       (lib.recursiveUpdate (import ./_vms/base.nix)
         (import ./_vms/podman.nix));
+    limaDebianYaml =
+      (pkgs.formats.yaml {}).generate "lima-debian.yaml"
+      (lib.recursiveUpdate (import ./_vms/base.nix)
+        (import ./_vms/debian.nix));
   in {
     home.packages = with pkgs; [
       lima
@@ -25,5 +29,6 @@
 
     home.file.".lima/docker/lima.yaml".source = limaDockerYaml;
     home.file.".lima/podman/lima.yaml".source = limaPodmanYaml;
+    home.file.".lima/debian/lima.yaml".source = limaDebianYaml;
   };
 }
