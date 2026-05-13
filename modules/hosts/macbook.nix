@@ -71,7 +71,7 @@
       "google-chrome"
       "tailscale-app"
       "vlc"
-      "ghostty"
+      "kitty"
     ];
 
     users.users.pvdvreede = {
@@ -95,7 +95,7 @@
         self.homeModules.gh
         self.homeModules.ghq
         self.homeModules.starship
-        self.homeModules.ghostty
+        self.homeModules.kitty
         self.homeModules.opencode
         self.homeModules.lima
       ];
