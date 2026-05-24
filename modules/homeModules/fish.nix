@@ -18,7 +18,7 @@
 
     programs.ghostty.settings.command = "${pkgs.fish}/bin/fish -l";
 
-    programs.tmux.shell = "${pkgs.fish}/bin/fish -l";
+    programs.tmux.shell = "${pkgs.fish}/bin/fish";
 
     programs.fish = {
       enable = true;
