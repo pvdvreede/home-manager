@@ -13,9 +13,29 @@
       };
 
       settings = {
-        autoupdate = true;
+        autoupdate = false;
 
-        provider = {};
+        provider = {
+          lmstudio = {
+            npm = "@ai-sdk/openai-compatible";
+            name = "LM Studio";
+            options = {
+              baseURL = "http://127.0.0.1:1234/v1";
+              apiKey = "lmstudio";
+            };
+            models = {
+              "qwen/qwen3-coder-next" = {
+                name = "Qwen3 Coder Next";
+              };
+              "qwen/qwen3.6-35b-a3b" = {
+                name = "Qwen3.6";
+              };
+              "google/gemma-4-31b-qat" = {
+                name = "Gemma 4";
+              };
+            };
+          };
+        };
 
         permission = {
           bash = {
