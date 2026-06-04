@@ -99,6 +99,7 @@
         self.homeModules.opencode
         self.homeModules.lima
         self.homeModules.tmux
+        self.homeModules.neovim
       ];
     };
 
