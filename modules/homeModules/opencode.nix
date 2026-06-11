@@ -46,6 +46,7 @@
             "wc*" = "allow";
             "xargs *" = "allow";
             "nix *" = "allow";
+            "nix-env *" = "allow";
             "ls *" = "allow";
             "find *" = "allow";
             "grep *" = "allow";
@@ -77,6 +78,7 @@
             "pwd*" = "allow";
             "date *" = "allow";
             "file *" = "allow";
+            "cut *" = "allow";
           };
           edit = "allow";
           grep = "allow";
