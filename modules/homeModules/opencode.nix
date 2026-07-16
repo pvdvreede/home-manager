@@ -79,6 +79,7 @@
             "date *" = "allow";
             "file *" = "allow";
             "cut *" = "allow";
+            "herdr *" = "allow";
           };
           edit = "allow";
           grep = "allow";
