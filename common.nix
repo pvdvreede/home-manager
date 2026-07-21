@@ -11,17 +11,7 @@
     pkgs.tree
     pkgs.jetbrains-mono
     pkgs.source-code-pro
-    pkgs.nil
-    pkgs.nixpkgs-fmt
   ];
-
-  nix.package = pkgs.nix;
-  nix.settings = {
-    extra-experimental-features = "nix-command flakes";
-  };
-  nix.gc = {
-    automatic = true;
-  };
 
   # # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # # plain files is through 'home.file'.

@@ -15,8 +15,6 @@
     environment.shells = [pkgs.fish];
     system.primaryUser = "pvdvreede";
     nixpkgs.hostPlatform = "aarch64-darwin";
-    nix.settings.experimental-features = "nix-command flakes";
-    nix.package = pkgs.nix;
 
     system.defaults = {
       NSGlobalDomain = {
@@ -99,10 +97,9 @@
         self.homeModules.opencode
         self.homeModules.lima
         self.homeModules.herdr
+        self.homeModules.nix
       ];
     };
-
-    nix.settings.trusted-users = ["root" "pvdvreede"];
 
     home-manager.useUserPackages = true;
     home-manager.backupFileExtension = "bak";

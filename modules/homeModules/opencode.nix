@@ -14,6 +14,7 @@
 
       settings = {
         autoupdate = false;
+        lsp = true;
 
         provider = {
           lmstudio = {
