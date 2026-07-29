@@ -98,6 +98,7 @@
         self.homeModules.lima
         self.homeModules.herdr
         self.homeModules.nix
+        self.homeModules.devenv
       ];
     };
 

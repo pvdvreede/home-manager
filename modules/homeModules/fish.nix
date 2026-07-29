@@ -15,6 +15,7 @@
     programs.atuin.enableFishIntegration = true;
     programs.kitty.settings.enableFishIntegration = true;
     programs.kitty.settings.shell = "${pkgs.fish}/bin/fish -l";
+    programs.devenv.enableFishIntegration = true;
 
     programs.ghostty.settings.command = "${pkgs.fish}/bin/fish -l";
 
