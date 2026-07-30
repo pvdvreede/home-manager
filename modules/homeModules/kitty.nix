@@ -18,6 +18,10 @@
         "ctrl+shift+n" = "new_tab_with_cwd";
         "ctrl+shift+h" = "previous_tab";
         "ctrl+shift+l" = "next_tab";
+        "super+enter" = "new_window_with_cwd";
+        "ctrl+shift+p" = "command_palette";
+        "ctrl+h" = "previous_window";
+        "ctrl+l" = "next_window";
       };
     };
   };
