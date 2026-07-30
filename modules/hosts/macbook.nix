@@ -16,6 +16,8 @@
     system.primaryUser = "pvdvreede";
     nixpkgs.hostPlatform = "aarch64-darwin";
 
+    nix.settings.trusted-users = ["root" "pvdvreede"];
+
     system.defaults = {
       NSGlobalDomain = {
         AppleShowAllFiles = true;

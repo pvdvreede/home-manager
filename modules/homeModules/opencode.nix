@@ -46,6 +46,7 @@
             "dirname*" = "allow";
             "wc*" = "allow";
             "xargs *" = "allow";
+            "devenv *" = "allow";
             "nix *" = "allow";
             "nix-env *" = "allow";
             "ls *" = "allow";

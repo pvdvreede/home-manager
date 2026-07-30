@@ -15,6 +15,7 @@
         "node_modules"
         ".build"
         ".direnv"
+        ".devenv"
       ];
       languages = {
         language-server = {
