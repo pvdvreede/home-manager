@@ -97,6 +97,7 @@
         self.homeModules.starship
         self.homeModules.kitty
         self.homeModules.opencode
+        self.homeModules.pi-coding-agent
         self.homeModules.lima
         self.homeModules.herdr
         self.homeModules.nix
