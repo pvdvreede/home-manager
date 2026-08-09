@@ -1,0 +1,29 @@
+# Herdr configuration
+# See https://herdr.dev/docs/configuration/ for available options
+onboarding = false
+
+[keys]
+prefix = "ctrl+space"
+
+# split panes (tmux pneumonics)
+split_horizontal = "prefix+v"
+split_vertical = "prefix+s"
+
+# new tab
+new_tab = "prefix+c"
+
+# vim-style pane navigation
+focus_pane_left = "prefix+h"
+focus_pane_down = "prefix+j"
+focus_pane_up = "prefix+k"
+focus_pane_right = "prefix+l"
+
+new_workspace = "prefix+shift+w"
+navigate_workspace_up = "ctrl+k"
+navigate_workspace_down = "ctrl+j"
+
+[ui]
+mouse_capture = true
+
+[update]
+channel = "stable"

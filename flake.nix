@@ -1,124 +1,116 @@
 {
-  description = "Home Manager configuration of pvdvreede";
-
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nix-vscode-extensions = {
-      url = "github:nix-community/nix-vscode-extensions";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nix-darwin = {
-      url = "github:LnL7/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    flake-utils = {url = "github:numtide/flake-utils";};
-    plasma-manager = {
-      url = "github:pjones/plasma-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-    };
-    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
-    nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
-    nu-scripts = {
-      flake = false;
-      url = "github:nushell/nu_scripts";
-    };
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    import-tree.url = "github:vic/import-tree";
+    nixos-wsl.url = "github:nix-community/nixos-wsl/release-25.11";
+    home-manager.url = "github:nix-community/home-manager";
+    nix-darwin.url = "github:nix-darwin/nix-darwin/master";
+    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+    herdr.url = "github:ogulcancelik/herdr";
+    herdr.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = {
-    nixpkgs,
-    home-manager,
-    nix-vscode-extensions,
-    nur,
-    nix-darwin,
-    flake-utils,
-    plasma-manager,
-    nixos-wsl,
-    nu-scripts,
-    ...
-  } @ inputs: let
-    # Helper to get pkgs for a specific system with unfree enabled
-    pkgsForSystem = system:
-      import nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-        overlays = [
-          (self: super: {
-            context-mode = super.callPackage ./pkgs/context-mode.nix {};
-          })
-        ];
+  outputs = inputs:
+    inputs.flake-parts.lib.mkFlake {
+      inherit inputs;
+    }
+    ({
+      config,
+      lib,
+      withSystem,
+      moduleWithSystem,
+      ...
+    }: {
+      # Define your systems list here at the top level of the mkFlake configuration
+      systems = [
+        "x86_64-linux"
+        "aarch64-darwin"
+      ];
+
+      # Import your modules using import-tree
+      imports = [
+        # Example of loading all flake-parts modules from a directory tree
+        (inputs.import-tree ./modules)
+        # You can add more imports here
+        inputs.home-manager.flakeModules.home-manager
+      ];
+
+      perSystem = {
+        pkgs,
+        system,
+        ...
+      }: let
+        flakeUrl = "github:pvdvreede/home-manager";
+
+        runtimeInputs = [
+          inputs.home-manager.packages.${system}.default
+        ]
+        ++ lib.optional (pkgs.stdenv.hostPlatform.isDarwin)
+          inputs.nix-darwin.packages.${system}.default;
+
+        mkInstallApp = {
+          host,
+          tool,
+        }: let
+          script = pkgs.writeShellApplication {
+            name = "install-${host}";
+            inherit runtimeInputs;
+            text = ''
+              set -euo pipefail
+              flake_url="''${DOTFILES_FLAKE_URL:-${flakeUrl}}"
+              exec ${tool} switch --flake "$flake_url#${host}" "$@"
+            '';
+          };
+        in {
+          type = "app";
+          program = "${script}/bin/install-${host}";
+        };
+
+        defaultScript = pkgs.writeShellApplication {
+          name = "install-default";
+          inherit runtimeInputs;
+          text = ''
+            set -euo pipefail
+            flake_url="''${DOTFILES_FLAKE_URL:-${flakeUrl}}"
+            host="$(hostname | tr '[:upper:]' '[:lower:]')"
+            case "$host" in
+              pauls-mbp* | macbook*)
+                exec darwin-rebuild switch --flake "$flake_url#macbook" "$@"
+                ;;
+              desktop*)
+                exec home-manager switch --flake "$flake_url#desktop" "$@"
+                ;;
+              vm*)
+                exec home-manager switch --flake "$flake_url#vm" "$@"
+                ;;
+              *)
+                echo "Unknown host: $host" >&2
+                echo "Known hosts: macbook, desktop, vm" >&2
+                exit 1
+                ;;
+            esac
+          '';
+        };
+      in {
+        apps = {
+          default = {
+            type = "app";
+            program = "${defaultScript}/bin/install-default";
+          };
+          macbook = mkInstallApp {
+            host = "macbook";
+            tool = "darwin-rebuild";
+          };
+          desktop = mkInstallApp {
+            host = "desktop";
+            tool = "home-manager";
+          };
+          vm = mkInstallApp {
+            host = "vm";
+            tool = "home-manager";
+          };
+        };
       };
-
-    # Common configuration module for all home-manager configurations
-    commonUnfreeModule = {
-      nixpkgs.config.allowUnfree = true;
-      nixpkgs.config.allowUnfreePredicate = _: true;
-    };
-
-    # Generate checks for home-manager configurations
-    homeChecks =
-      nixpkgs.lib.mapAttrs' (name: config: {
-        name = "home-manager-${name}";
-        value = config.activationPackage;
-      })
-      inputs.self.homeConfigurations;
-
-    # Generate checks for NixOS configurations
-    nixosChecks =
-      nixpkgs.lib.mapAttrs' (name: config: {
-        name = "nixos-${name}";
-        value = config.config.system.build.toplevel;
-      })
-      inputs.self.nixosConfigurations;
-
-    # Generate checks for nix-darwin configurations
-    darwinChecks =
-      nixpkgs.lib.mapAttrs' (name: config: {
-        name = "darwin-${name}";
-        value = config.config.system.build.toplevel;
-      })
-      inputs.self.darwinConfigurations;
-  in
-    flake-utils.lib.eachDefaultSystem (system: let
-      pkgs = pkgsForSystem system;
-    in {
-      formatter = pkgs.nixfmt;
-      packages.rye = pkgs.callPackage ./pkgs/rye.nix {};
-      packages.context-mode = pkgs.callPackage ./pkgs/context-mode.nix {};
-      devShells.default =
-        pkgs.mkShell {buildInputs = with pkgs; [nil nixfmt];};
-    })
-    // rec {
-      inherit (inputs) self; # Needed to reference self.homeConfigurations etc.
-
-      # Import all home-manager configurations
-      homeConfigurations =
-        (import ./hosts/home-manager/work.nix {
-          inherit inputs home-manager nixpkgs nix-vscode-extensions nu-scripts pkgsForSystem commonUnfreeModule;
-        })
-        // (import ./hosts/home-manager/chromeos.nix {
-          inherit home-manager nixpkgs pkgsForSystem commonUnfreeModule;
-        })
-        // (import ./hosts/home-manager/home.nix {
-          inherit inputs home-manager nixpkgs nix-vscode-extensions nu-scripts plasma-manager pkgsForSystem commonUnfreeModule;
-        })
-        // (import ./hosts/home-manager/wsl.nix {
-          inherit inputs home-manager nixpkgs nix-vscode-extensions nu-scripts pkgsForSystem commonUnfreeModule;
-        });
-
-      # Import all NixOS configurations
-      nixosConfigurations =
-        (import ./hosts/nixos/vagabond.nix {inherit nixpkgs inputs;})
-        // (import ./hosts/nixos/frigate.nix {inherit nixpkgs inputs;})
-        // (import ./hosts/nixos/nixos.nix {inherit nixpkgs nixos-wsl;});
-
-      # Import all Darwin configurations
-      darwinConfigurations = import ./hosts/darwin/work.nix {inherit nix-darwin inputs;};
-
-      checks = homeChecks // nixosChecks // darwinChecks;
-    };
+    });
 }
