@@ -92,9 +92,9 @@
           write = "allow";
           list = "allow";
           skill = "allow";
-          # Allow access to all repos cloned via ghq
           external_directory = {
             "~/ghq/**" = "allow";
+            "/tmp/**" = "allow";
           };
         };
 
