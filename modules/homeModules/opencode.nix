@@ -82,6 +82,9 @@
             "file *" = "allow";
             "cut *" = "allow";
             "herdr *" = "allow";
+            "which *" = "allow";
+            "du *" = "allow";
+            "rg *" = "allow";
           };
           edit = "allow";
           grep = "allow";
