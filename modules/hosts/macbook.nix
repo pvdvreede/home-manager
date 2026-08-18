@@ -67,10 +67,11 @@
     system.startup.chime = false;
 
     homebrew.enable = true;
+    homebrew.onActivation.cleanup = "none";
+    homebrew.onActivation.autoUpdate = false;
     homebrew.casks = [
       "google-chrome"
       "tailscale-app"
-      "vlc"
       "kitty"
     ];
 
@@ -97,9 +98,7 @@
         self.homeModules.starship
         self.homeModules.kitty
         self.homeModules.opencode
-        self.homeModules.pi-coding-agent
         self.homeModules.lima
-        self.homeModules.herdr
         self.homeModules.nix
         self.homeModules.devenv
       ];

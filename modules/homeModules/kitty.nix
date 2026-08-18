@@ -10,8 +10,8 @@
     active_tab_font_style = "bold";
 
     # Inactive tab: Dark slate background with muted text
-    inactive_tab_foreground = "#5C6370";
-    inactive_tab_background = "#1E222A";
+    inactive_tab_foreground = "#A8A8A8";
+    inactive_tab_background = "#6E6E6E";
     inactive_tab_font_style = "normal";
 
     # Tab bar background fill
