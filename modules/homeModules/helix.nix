@@ -4,6 +4,10 @@
       EDITOR = "${pkgs.helix}/bin/hx";
     };
 
+    programs.fish.interactiveShellInit = ''
+      set -gx EDITOR ${pkgs.helix}/bin/hx
+    '';
+
     programs.helix = {
       enable = true;
       extraPackages = [
