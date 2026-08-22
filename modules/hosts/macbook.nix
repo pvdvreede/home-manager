@@ -7,7 +7,26 @@
     modules = [
       inputs.home-manager.darwinModules.home-manager
       self.darwinModules.macbook
+      self.darwinModules.wm
     ];
+  };
+
+  flake.darwinModules.wm = {...}: {
+    homebrew.taps = [
+      {
+        name = "FelixKratz/formulae";
+        trusted = true;
+      }
+    ];
+    homebrew.casks = [
+      "nikitabobko/tap/aerospace"
+    ];
+    homebrew.brews = [
+      "felixkratz/formulae/borders"
+    ];
+    home-manager.users.pvdvreede = {
+      imports = [self.homeModules.aerospace];
+    };
   };
 
   flake.darwinModules.macbook = {pkgs, ...}: {
