@@ -98,6 +98,7 @@
           external_directory = {
             "~/ghq/**" = "allow";
             "/tmp/**" = "allow";
+            "/nix/store/**" = "allow";
           };
         };
 
