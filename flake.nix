@@ -3,7 +3,8 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:vic/import-tree";
-    nixos-wsl.url = "github:nix-community/nixos-wsl/release-25.11";
+    nixos-wsl.url = "github:nix-community/nixos-wsl";
+    nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
@@ -65,6 +66,7 @@
         in {
           type = "app";
           program = "${script}/bin/install-${host}";
+          meta.description = "Install the ${host} configuration with ${tool}";
         };
 
         defaultScript = pkgs.writeShellApplication {
@@ -97,6 +99,7 @@
           default = {
             type = "app";
             program = "${defaultScript}/bin/install-default";
+            meta.description = "Install the configuration for the current host";
           };
           macbook = mkInstallApp {
             host = "macbook";

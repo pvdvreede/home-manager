@@ -21,11 +21,11 @@ in {
   flake.homeModules.kitty = {pkgs, ...}: {
     programs.kitty = {
       enable = true;
-      package = null;
+      # package = null;
       environment = {};
       font.name = "JetBrains Mono";
       font.package = pkgs.jetbrains-mono;
-      font.size = 16;
+      font.size = 14;
       settings =
         {
           allow_remote_control = "yes";
@@ -36,7 +36,7 @@ in {
           tab_bar_edge = "top";
           scrollback_lines = 10000;
           tab_bar_style = "powerline";
-          window_margin_width = 5;
+          window_margin_width = 3;
           window_border_width = "3pt";
           cursor_trail = 300;
           cursor_trail_decay = "0.4 0.6";
