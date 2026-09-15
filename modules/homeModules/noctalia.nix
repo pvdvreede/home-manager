@@ -33,6 +33,7 @@
           scale = 1.0;
           shadow = false;
           start = [
+            "launcher"
             "sysmon"
           ];
           thickness = 25;
@@ -199,14 +200,13 @@
         };
 
         theme = {
-          mode = "dark";
-          source = "builtin";
-          builtin = "Catppuccin";
-          community_palette = "One Dark Two";
+          mode = "light";
+          source = "wallpaper";
           wallpaper_scheme = "m3-tonal-spot";
         };
 
         wallpaper = {
+          directory = "~/Pictures/Wallpapers";
           default = {
             path = "${pkgs.noctalia}/share/noctalia/assets/noctalia-wallpaper.png";
           };
@@ -217,6 +217,10 @@
 
         widget.media = {
           enabled = false;
+        };
+
+        widget.launcher = {
+          glyph = "brand-denodo";
         };
       };
     };
