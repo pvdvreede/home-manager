@@ -92,6 +92,7 @@
       "google-chrome"
       "tailscale-app"
       "kitty"
+      "visual-studio-code"
     ];
 
     users.users.pvdvreede = {
@@ -120,6 +121,7 @@
         self.homeModules.lima
         self.homeModules.nix
         self.homeModules.devenv
+        self.homeModules.vscode
       ];
     };
 
