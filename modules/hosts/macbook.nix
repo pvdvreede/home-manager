@@ -36,6 +36,7 @@
     nixpkgs.hostPlatform = "aarch64-darwin";
 
     nix.settings.trusted-users = ["root" "pvdvreede"];
+    nixpkgs.config.allowUnfree = true;
 
     system.defaults = {
       NSGlobalDomain = {
@@ -122,6 +123,7 @@
         self.homeModules.nix
         self.homeModules.devenv
         self.homeModules.vscode
+        self.homeModules.antigravity
       ];
     };
 
