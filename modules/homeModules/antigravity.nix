@@ -11,7 +11,20 @@
           "command(jj)"
           "command(nix)"
           "command(python)"
+          "command(python3)"
           "command(ls)"
+          "command(ll)"
+          "command(find)"
+          "command(devenv)"
+          "command(tree)"
+          "command(mkdir)"
+          "command(yq)"
+          "command(jq)"
+          "command(curl)"
+          "command(cat)"
+          "command(tail)"
+          "command(head)"
+          "command(cp)"
         ];
       };
     };

@@ -85,6 +85,11 @@
             "which *" = "allow";
             "du *" = "allow";
             "rg *" = "allow";
+            "printf *" = "allow";
+            "uname *" = "allow";
+            "python3 *" = "allow";
+            "python *" = "allow";
+            "timeout *" = "allow";
           };
           edit = "allow";
           grep = "allow";
