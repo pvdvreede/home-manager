@@ -22,6 +22,9 @@
       alt-k = "focus up"
       alt-l = "focus right"
 
+      alt-s = "split horizontal"
+      alt-v = "split vertical"
+
       # See: https://nikitabobko.github.io/AeroSpace/commands#move
       alt-shift-h = "move left"
       alt-shift-j = "move down"

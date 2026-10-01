@@ -12,20 +12,11 @@
   };
 
   flake.darwinModules.wm = {...}: {
-    homebrew.taps = [
-      {
-        name = "FelixKratz/formulae";
-        trusted = true;
-      }
-    ];
     homebrew.casks = [
-      "nikitabobko/tap/aerospace"
-    ];
-    homebrew.brews = [
-      "felixkratz/formulae/borders"
+      "omniwm"
     ];
     home-manager.users.pvdvreede = {
-      imports = [self.homeModules.aerospace];
+      imports = [self.homeModules.omniwm];
     };
   };
 
