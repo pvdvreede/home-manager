@@ -85,6 +85,7 @@
       "tailscale-app"
       "kitty"
       "visual-studio-code"
+      "zed"
     ];
 
     users.users.pvdvreede = {
@@ -114,6 +115,7 @@
         self.homeModules.nix
         self.homeModules.devenv
         self.homeModules.vscode
+        self.homeModules.zed-editor
         self.homeModules.antigravity
       ];
     };
