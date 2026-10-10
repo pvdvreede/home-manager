@@ -117,6 +117,7 @@
         self.homeModules.vscode
         self.homeModules.zed-editor
         self.homeModules.antigravity
+        self.homeModules.pi-coding-agent
       ];
     };
 
