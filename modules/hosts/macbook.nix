@@ -108,6 +108,7 @@
         self.homeModules.eza
         self.homeModules.gh
         self.homeModules.ghq
+        self.homeModules.wt
         self.homeModules.starship
         self.homeModules.kitty
         self.homeModules.opencode
