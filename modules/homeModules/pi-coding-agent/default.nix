@@ -54,6 +54,7 @@
           # "npm:pi-web-access"
           "npm:pi-web-search"
           "npm:@juicesharp/rpiv-ask-user-question"
+          "npm:billion-context-pi"
         ];
 
         # Locally authored extensions, owned by Nix. Includes
