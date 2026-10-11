@@ -167,14 +167,19 @@ export default function (pi: ExtensionAPI) {
 		},
 		renderResult(result, { expanded, isPartial }, theme, ctx) {
 			const output = textOf(result);
-			const exitMatch = output.match(/exit code: (\d+)/);
+			// Pi's bash tool throws on failure, appending "Command exited with code N"
+			// and setting ctx.isError. Fall back to isError when no exit code is present
+			// (e.g. timeouts/aborts) so failures are never shown as success.
+			const exitMatch = output.match(/exited with code (\d+)/);
 			const exitCode = exitMatch ? parseInt(exitMatch[1], 10) : null;
-			const ok = exitCode === null || exitCode === 0;
+			const ok = exitCode !== null ? exitCode === 0 : !ctx.isError;
 			const dot = marker(theme, ctx, isPartial, ok);
 			if (isPartial) return new Text(dot + theme.fg("warning", "running..."), 0, 0);
 			const lineCount = output.split("\n").filter((l) => l.trim()).length;
 			let text = dot;
-			text += ok ? theme.fg("success", "done") : theme.fg("error", `exit ${exitCode}`);
+			text += ok
+				? theme.fg("success", "done")
+				: theme.fg("error", exitCode !== null ? `exit ${exitCode}` : "failed");
 			text += theme.fg("dim", ` (${lineCount} lines)`);
 			if (expanded) text += preview(output, theme);
 			return new Text(text, 0, 0);
