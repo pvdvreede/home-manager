@@ -25,6 +25,45 @@
     # system prompt. Distinct from AGENTS.md, and a project
     # .pi/APPEND_SYSTEM.md overrides this file outright (no concatenation).
     appendSystemPrompt = ./append-system-prompt.md;
+
+    # ---- Thinking-block theme ---------------------------------------------
+    # Pi renders BOTH the expanded thinking text and the collapsed
+    # "Thinking..." label with the single `thinkingText` theme colour, and
+    # paints the per-level thinking indicator with the `thinking*` border
+    # colours (see assistant-message.js). Both default to a near-body grey,
+    # so thinking is hard to tell apart from normal output. Tint them cyan so
+    # thinking is unmistakable in either state.
+    #
+    # `mdQuote`/`mdQuoteBorder` are also cyan: the `thinking-border` extension
+    # wraps expanded thinking in a markdown blockquote (the only way to get a
+    # border), and blockquote content is restyled away from `thinkingText` to
+    # `mdQuote`/`mdQuoteBorder`.
+    #
+    # The theme schema requires the full palette, so start from pi's built-in
+    # dark theme (read from the installed package) and override only these
+    # colours. NOTE: the read path is internal to pi's package layout; if a pi
+    # update moves it, this read fails at eval time.
+    builtinDarkTheme = builtins.fromJSON (builtins.readFile "${pkgs.pi-coding-agent}/lib/node_modules/pi-monorepo/dist/modes/interactive/theme/dark.json");
+    thinkingThemeName = "pvdv";
+    thinkingTheme =
+      builtinDarkTheme
+      // {
+        name = thinkingThemeName;
+        colors =
+          builtinDarkTheme.colors
+          // {
+            thinkingText = "okhsl(200 70% 72%)";
+            thinkingOff = "okhsl(200 25% 55%)";
+            thinkingMinimal = "okhsl(200 40% 58%)";
+            thinkingLow = "okhsl(200 55% 62%)";
+            thinkingMedium = "okhsl(200 65% 66%)";
+            thinkingHigh = "okhsl(200 75% 70%)";
+            thinkingXhigh = "okhsl(200 85% 74%)";
+            thinkingMax = "okhsl(200 95% 78%)";
+            mdQuote = "okhsl(200 45% 70%)";
+            mdQuoteBorder = "okhsl(200 70% 72%)";
+          };
+      };
   in {
     programs.pi-coding-agent = {
       enable = true;
@@ -43,8 +82,12 @@
         defaultThinkingLevel = "low";
 
         # Hide thinking blocks in the transcript by default (`ctrl+t` still
-        # toggles them back on at runtime).
+        # toggles them back on at runtime). The collapsed label still uses the
+        # themed `thinkingText` colour, so it stays visually distinct.
         hideThinkingBlock = true;
+
+        # Custom cyan-tinted thinking theme, written to the themes dir below.
+        theme = thinkingThemeName;
 
         # Extensions distributed as npm/git packages. Pi installs these into
         # <configDir>/npm using an explicit `--prefix`, so no writable global
@@ -73,6 +116,10 @@
     # in-place are lost on the next `home-manager switch`.
     home.file = {
       ".pi/agent/APPEND_SYSTEM.md".source = appendSystemPrompt;
+
+      # Custom theme for the `theme` setting above. Pi derives the filename
+      # from the theme name, hence `thinkingThemeName` in both.
+      ".pi/agent/themes/${thinkingThemeName}.json".text = builtins.toJSON thinkingTheme;
     };
   };
 }
