@@ -54,13 +54,10 @@
           # "npm:pi-web-access"
           "npm:pi-web-search"
           "npm:@juicesharp/rpiv-ask-user-question"
-          "npm:billion-context-pi"
+          "npm:billion-context"
         ];
 
-        # Locally authored extensions, owned by Nix. Includes
-        # extensions/bash-default-timeout.ts, which injects a 60s `timeout` on
-        # every bash call that does not specify one (Pi has no built-in
-        # default, so an omitted timeout arms no timer at all).
+        # Locally authored extensions, owned by Nix.
         inherit extensions;
       };
 

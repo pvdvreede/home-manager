@@ -20,7 +20,7 @@
  * derive the frame from wall-clock time (same pattern as Pi's bash renderer).
  */
 
-import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import type { ExtensionAPI, Theme } from "@earendil-works/pi-coding-agent";
 import {
 	createBashTool,
 	createEditTool,
@@ -46,8 +46,6 @@ interface RenderCtx {
 	state: SpinState;
 	isError?: boolean;
 }
-
-type Theme = { fg: (slot: string, s: string) => string };
 
 /**
  * Status marker: animated spinner while running, else a green (success) or red
@@ -209,7 +207,7 @@ export default function (pi: ExtensionAPI) {
 			const dot = marker(theme, ctx, isPartial, !errored);
 			if (isPartial) return new Text(dot + theme.fg("warning", "editing..."), 0, 0);
 			if (errored) return new Text(dot + theme.fg("error", output.split("\n")[0] || "failed"), 0, 0);
-			const diff = result.details?.diff as string | undefined;
+			const diff = (result.details as { diff?: string } | undefined)?.diff;
 			if (!diff) return new Text(dot + theme.fg("success", "applied"), 0, 0);
 			const diffLines = diff.split("\n");
 			let add = 0;
@@ -263,39 +261,71 @@ export default function (pi: ExtensionAPI) {
 	});
 
 	// --- find / grep / ls: generic "N results" summary ----------------------
-	for (const name of ["find", "grep", "ls"] as const) {
-		const original = getBuiltInTools(process.cwd())[name];
-		pi.registerTool({
-			name,
-			label: name,
-			description: original.description,
-			parameters: original.parameters,
-			async execute(toolCallId, params, signal, onUpdate, ctx) {
-				return getBuiltInTools(ctx.cwd)[name].execute(toolCallId, params, signal, onUpdate);
-			},
-			renderCall(args, theme) {
-				const parts = Object.entries(args)
-					.filter(([, v]) => v !== undefined && v !== null && v !== "")
-					.map(([k, v]) => `${k}=${typeof v === "string" ? shortenPath(v) : v}`);
-				return new Text(
-					theme.fg("toolTitle", theme.bold(`${name} `)) + theme.fg("accent", parts.join(" ")),
-					0,
-					0,
-				);
-			},
-			renderResult(result, { expanded, isPartial }, theme, ctx) {
-				const dot = marker(theme, ctx, isPartial);
-				if (isPartial) return new Text(dot + theme.fg("warning", "searching..."), 0, 0);
-				const output = textOf(result);
-				const trimmed = output.trim();
-				if (!trimmed || /^no (matches|results|files)/i.test(trimmed)) {
-					return new Text(dot + theme.fg("dim", "no results"), 0, 0);
-				}
-				const lineCount = trimmed.split("\n").length;
-				let text = dot + theme.fg("success", `${lineCount} results`);
-				if (expanded) text += preview(output, theme);
-				return new Text(text, 0, 0);
-			},
-		});
+	const tools = getBuiltInTools(process.cwd());
+
+	pi.registerTool({
+		name: "find",
+		label: "find",
+		description: tools.find.description,
+		parameters: tools.find.parameters,
+		async execute(toolCallId, params, signal, onUpdate, ctx) {
+			return getBuiltInTools(ctx.cwd).find.execute(toolCallId, params, signal, onUpdate);
+		},
+		renderCall: (args, theme) => renderSearchCall("find", args, theme),
+		renderResult: renderSearchResult,
+	});
+
+	pi.registerTool({
+		name: "grep",
+		label: "grep",
+		description: tools.grep.description,
+		parameters: tools.grep.parameters,
+		async execute(toolCallId, params, signal, onUpdate, ctx) {
+			return getBuiltInTools(ctx.cwd).grep.execute(toolCallId, params, signal, onUpdate);
+		},
+		renderCall: (args, theme) => renderSearchCall("grep", args, theme),
+		renderResult: renderSearchResult,
+	});
+
+	pi.registerTool({
+		name: "ls",
+		label: "ls",
+		description: tools.ls.description,
+		parameters: tools.ls.parameters,
+		async execute(toolCallId, params, signal, onUpdate, ctx) {
+			return getBuiltInTools(ctx.cwd).ls.execute(toolCallId, params, signal, onUpdate);
+		},
+		renderCall: (args, theme) => renderSearchCall("ls", args, theme),
+		renderResult: renderSearchResult,
+	});
+}
+
+function renderSearchCall(name: string, args: Record<string, unknown>, theme: Theme): Text {
+	const parts = Object.entries(args)
+		.filter(([, v]) => v !== undefined && v !== null && v !== "")
+		.map(([k, v]) => `${k}=${typeof v === "string" ? shortenPath(v) : v}`);
+	return new Text(
+		theme.fg("toolTitle", theme.bold(`${name} `)) + theme.fg("accent", parts.join(" ")),
+		0,
+		0,
+	);
+}
+
+function renderSearchResult(
+	result: { content: Array<{ type: string; text?: string }> },
+	{ expanded, isPartial }: { expanded: boolean; isPartial: boolean },
+	theme: Theme,
+	ctx: { invalidate: () => void; state: SpinState; isError?: boolean },
+): Text {
+	const dot = marker(theme, ctx, isPartial);
+	if (isPartial) return new Text(dot + theme.fg("warning", "searching..."), 0, 0);
+	const output = textOf(result);
+	const trimmed = output.trim();
+	if (!trimmed || /^no (matches|results|files)/i.test(trimmed)) {
+		return new Text(dot + theme.fg("dim", "no results"), 0, 0);
 	}
+	const lineCount = trimmed.split("\n").length;
+	let text = dot + theme.fg("success", `${lineCount} results`);
+	if (expanded) text += preview(output, theme);
+	return new Text(text, 0, 0);
 }
