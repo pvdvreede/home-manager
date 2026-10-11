@@ -11,6 +11,8 @@
       enableFishIntegration = true;
     };
 
+    programs.worktrunk.enableFishIntegration = true;
+
     programs.starship.enableFishIntegration = true;
     programs.atuin.enableFishIntegration = true;
     programs.kitty.settings.enableFishIntegration = true;

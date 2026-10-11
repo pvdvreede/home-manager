@@ -1,5 +1,11 @@
 {...}: {
   flake.homeModules.wt = {pkgs, ...}: {
-    home.packages = [pkgs.wtp];
+    programs.worktrunk = {
+      enable = true;
+      settings = {
+        skip-shell-integration-prompt = true;
+        worktree-path = "~/worktrees/{{ repo }}/{{ branch | sanitize }}";
+      };
+    };
   };
 }
