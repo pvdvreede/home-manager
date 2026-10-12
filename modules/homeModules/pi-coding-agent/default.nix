@@ -113,13 +113,19 @@
 
         # Extensions distributed as npm/git packages. Pi installs these into
         # <configDir>/npm using an explicit `--prefix`, so no writable global
-        # npm prefix (and no npmCommand wrapper) is needed. Pin versions
-        # (`npm:name@x.y.z`) for reproducible installs.
+        # npm prefix (and no npmCommand wrapper) is needed.
+        #
+        # Exact versions (`npm:name@x.y.z`) are pinned: pi's
+        # checkForAvailableUpdates() skips pinned sources (see
+        # `parsed.pinned` in package-manager.js), so pinning suppresses the
+        # "Package Updates Available" notice without having to set PI_OFFLINE
+        # — which would also disable model-catalog refresh. Bump these by hand
+        # when you want newer extensions.
         packages = [
           # "npm:pi-web-access"
-          "npm:pi-web-search"
-          "npm:@juicesharp/rpiv-ask-user-question"
-          "npm:billion-context"
+          "npm:pi-web-search@1.7.0"
+          "npm:@juicesharp/rpiv-ask-user-question@2.12.0"
+          "npm:billion-context@0.1.195"
         ];
 
         # Locally authored extensions, owned by Nix.
@@ -141,6 +147,14 @@
       # written inline or referenced as "$OPENCODE_API_KEY" etc.
     };
 
+    # Nix owns the `pi` package and its lifecycle here, so suppress pi's own
+    # "new version available" notice — `pi update` is not how this install is
+    # managed. PI_SKIP_VERSION_CHECK only skips the pi.dev latest-version
+    # request; it does NOT affect model-catalog refresh. The extension
+    # "Package Updates Available" notice is suppressed separately by pinning
+    # the `packages` list above, so PI_OFFLINE (which would also disable model
+    # refresh) is deliberately NOT set here.
+
     # The module has no `appendSystemPrompt` option, so wire the file up by
     # hand. Like settings.json this is a Nix-store symlink, so edits made
     # in-place are lost on the next `home-manager switch`.
@@ -151,5 +165,7 @@
       # from the theme name, hence `thinkingThemeName` in both.
       ".pi/agent/themes/${thinkingThemeName}.json".text = builtins.toJSON thinkingTheme;
     };
+
+    home.sessionVariables.PI_SKIP_VERSION_CHECK = "1";
   };
 }
