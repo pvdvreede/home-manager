@@ -102,6 +102,7 @@
         self.homeModules.opencode
         self.homeModules.nix
         self.homeModules.devenv
+        self.homeModules.direnv
         self.homeModules.niri
         self.homeModules.noctalia
         self.homeModules.idle

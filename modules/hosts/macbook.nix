@@ -115,6 +115,7 @@
         self.homeModules.lima
         self.homeModules.nix
         self.homeModules.devenv
+        self.homeModules.direnv
         self.homeModules.vscode
         self.homeModules.zed-editor
         self.homeModules.antigravity
