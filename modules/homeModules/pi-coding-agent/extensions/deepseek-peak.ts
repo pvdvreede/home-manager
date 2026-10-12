@@ -3,7 +3,8 @@
  *
  * When the active model is served by DeepSeek, the built-in footer is replaced
  * with one that renders a green "off-peak" or red "peak" badge (plus a countdown
- * to the next switch) immediately to the left of the provider/model name.
+ * to the next switch and the local time the period ends) immediately to the left
+ * of the provider/model name.
  *
  * Peak billing is anchored to UTC: 01:00-04:00 and 06:00-10:00 UTC, Monday-Friday
  * (Beijing time), excluding Chinese public holidays and weekends (off-peak in
@@ -97,6 +98,19 @@ export function formatCountdown(date: Date): string {
 	return formatHM(m);
 }
 
+/** Local wall-clock instant the current period ends at: "14:00", "Mon 09:00", "03-01 14:00". */
+export function formatEndLocal(date: Date): string {
+	const next = nextPriceChange(date);
+	if (!next) return "";
+	const clock = `${String(next.getHours()).padStart(2, "0")}:${String(next.getMinutes()).padStart(2, "0")}`;
+	const dayStart = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+	const dayDiff = Math.round((dayStart(next) - dayStart(date)) / (24 * H));
+	if (dayDiff === 0) return clock;
+	if (dayDiff === 1) return `${["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][next.getDay()]} ${clock}`;
+	const mmdd = `${String(next.getMonth() + 1).padStart(2, "0")}-${String(next.getDate()).padStart(2, "0")}`;
+	return `${mmdd} ${clock}`;
+}
+
 function formatTokens(count: number): string {
 	if (count < 1000) return count.toString();
 	if (count < 10000) return `${(count / 1000).toFixed(1)}k`;
@@ -170,8 +184,10 @@ function armPeakPause(ctx: ExtensionContext): void {
 function badge(theme: { fg: (color: any, text: string) => string }, now: Date): string {
 	const offPeak = isOffPeak(now);
 	const cd = formatCountdown(now);
+	const end = formatEndLocal(now);
 	const label = offPeak ? "off-peak" : "peak";
-	return theme.fg(offPeak ? "success" : "error", cd ? `${label} ${cd}` : label);
+	const suffix = end ? ` (until ${end})` : "";
+	return theme.fg(offPeak ? "success" : "error", cd ? `${label} ${cd}${suffix}` : label);
 }
 
 function renderFooter(
