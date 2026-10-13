@@ -125,6 +125,47 @@ function sanitizeStatusText(text: string): string {
 let currentCtx: ExtensionContext | undefined;
 let currentTui: { requestRender(): void } | undefined;
 
+// --- automatic peak pause ---------------------------------------------------
+
+/**
+ * A run that starts off-peak is aborted the moment DeepSeek flips to peak
+ * pricing, so it never accrues peak-billed tokens. Runs started during peak are
+ * left alone (the user chose to pay peak), and only DeepSeek models are guarded.
+ * Resuming is manual: the notification tells the user the run was paused, and
+ * the footer badge shows when the next off-peak window begins.
+ */
+let pauseTimer: ReturnType<typeof setTimeout> | undefined;
+
+function clearPauseTimer(): void {
+	if (pauseTimer !== undefined) {
+		clearTimeout(pauseTimer);
+		pauseTimer = undefined;
+	}
+}
+
+function armPeakPause(ctx: ExtensionContext): void {
+	clearPauseTimer();
+	if ((ctx.model as any)?.provider !== "deepseek") return;
+	const start = new Date();
+	if (!isOffPeak(start)) return; // only runs that begin off-peak
+	const next = nextPriceChange(start);
+	if (!next) return;
+	if (isOffPeak(new Date(next.getTime() + 1))) return; // next change returns to off-peak
+	const delay = next.getTime() - start.getTime();
+	if (delay <= 0) return;
+	pauseTimer = setTimeout(() => {
+		pauseTimer = undefined;
+		if (ctx.isIdle()) return; // run already finished
+		if ((ctx.model as any)?.provider !== "deepseek") return; // switched models
+		ctx.abort();
+		applyFooter(ctx);
+		ctx.ui.notify(
+			"DeepSeek peak pricing started — paused the run to avoid peak billing. Resume after off-peak returns.",
+			"warning",
+		);
+	}, delay);
+}
+
 /** Badge text/color for the current instant (green off-peak, red peak). */
 function badge(theme: { fg: (color: any, text: string) => string }, now: Date): string {
 	const offPeak = isOffPeak(now);
@@ -263,11 +304,19 @@ export default function (pi: ExtensionAPI) {
 		applyFooter(ctx);
 	});
 
+	// Arm the peak-boundary pause when a run starts.
+	pi.on("agent_start", async (_event, ctx) => {
+		currentCtx = ctx;
+		armPeakPause(ctx);
+	});
+
 	pi.on("model_select", async (_event, ctx) => {
 		applyFooter(ctx);
 	});
 
-	// Refresh the badge each time the agent finishes a task.
+	// Refresh the badge each time the agent finishes a task. The pause timer is
+	// deliberately left armed: a retry or compaction may still be running, and the
+	// timer no-ops if the agent is idle when it fires.
 	pi.on("agent_end", async (_event, ctx) => {
 		currentCtx = ctx;
 		currentTui?.requestRender();
@@ -279,6 +328,7 @@ export default function (pi: ExtensionAPI) {
 	});
 
 	pi.on("session_shutdown", async () => {
+		clearPauseTimer();
 		currentTui = undefined;
 	});
 }
