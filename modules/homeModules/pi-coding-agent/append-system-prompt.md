@@ -23,3 +23,10 @@
 - Fail fast, if you're unsure of something, just tell the user and stop.
 - If a request is not simple and requires extra work, ask the user, do NOT start working
   on workarounds and hacks without express permission.
+
+# Development
+
+- Prefer no code comments, unless expressly requested it needs a TODO, or there is some
+  quirk that would not otherwise be understood.
+- jj is the preferred vcs provider, so check if its present in any repo before falling
+  back to git commands.
