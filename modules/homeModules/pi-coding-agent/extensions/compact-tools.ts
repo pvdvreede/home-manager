@@ -29,11 +29,15 @@ import {
 	createLsTool,
 	createReadTool,
 	createWriteTool,
+	generateDiffString,
 } from "@earendil-works/pi-coding-agent";
 import { Text } from "@earendil-works/pi-tui";
+import { readFile } from "node:fs/promises";
+import { join, resolve } from "node:path";
 import { homedir } from "os";
 
 const PREVIEW_LINES = 20;
+const MAX_DIFF_LINES = 60;
 const FRAMES = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
 const FRAME_MS = 80;
 
@@ -89,6 +93,60 @@ function preview(output: string, theme: Theme): string {
 		text += `\n${theme.fg("muted", `... ${lines.length - PREVIEW_LINES} more lines`)}`;
 	}
 	return text;
+}
+
+/**
+ * Pi's edit and write tools emit a line-numbered unified diff with one line per
+ * change: `+N content`, `-N content`, ` N content`, and ` ...` for skipped runs.
+ */
+function colorDiffLine(line: string, theme: Theme): string {
+	if (line.startsWith("+")) return theme.fg("success", line);
+	if (line.startsWith("-")) return theme.fg("error", line);
+	return theme.fg("dim", line);
+}
+
+function diffStats(diff: string): { add: number; del: number } {
+	let add = 0;
+	let del = 0;
+	for (const line of diff.split("\n")) {
+		if (line.startsWith("+")) add++;
+		else if (line.startsWith("-")) del++;
+	}
+	return { add, del };
+}
+
+/** Render a diff capped at MAX_DIFF_LINES, prefixed with a leading newline. */
+function renderDiffLines(diff: string, theme: Theme): string {
+	const lines = diff.split("\n");
+	const shown = lines.slice(0, MAX_DIFF_LINES);
+	let text = shown.map((line) => `\n${colorDiffLine(line, theme)}`).join("");
+	if (lines.length > MAX_DIFF_LINES) {
+		text += `\n${theme.fg("muted", `⋯ ${lines.length - MAX_DIFF_LINES} more diff lines`)}`;
+	}
+	return text;
+}
+
+/**
+ * Mirror the path normalization Pi's write tool applies (Unicode spaces to ASCII,
+ * strip a leading "@", expand "~"): the preview must read the same file the tool
+ * overwrites. `resolveToCwd`/`normalizePath` are not public exports, so this is local.
+ */
+function resolveWritePath(cwd: string, path: string): string {
+	const normalized = path.replace(/[\u00a0\u2000-\u200a\u202f\u205f\u3000]/g, " ").replace(/^@/, "");
+	let resolved = normalized;
+	if (normalized === "~") resolved = homedir();
+	else if (normalized.startsWith("~/")) resolved = join(homedir(), normalized.slice(2));
+	// resolve() lets an absolute path win over cwd, matching resolveToCwd.
+	return resolve(cwd, resolved);
+}
+
+/** Previous contents for the write diff; "" when unreadable (e.g. new file). */
+async function readBefore(cwd: string, path: string): Promise<string> {
+	try {
+		return await readFile(resolveWritePath(cwd, path), "utf8");
+	} catch {
+		return "";
+	}
 }
 
 // Built-in tool instances are cwd-dependent; cache per directory.
@@ -207,27 +265,15 @@ export default function (pi: ExtensionAPI) {
 			const dot = marker(theme, ctx, isPartial, !errored);
 			if (isPartial) return new Text(dot + theme.fg("warning", "editing..."), 0, 0);
 			if (errored) return new Text(dot + theme.fg("error", output.split("\n")[0] || "failed"), 0, 0);
-			const diff = (result.details as { diff?: string } | undefined)?.diff;
+			const details = result.details as { diff?: string; firstChangedLine?: number } | undefined;
+			const diff = details?.diff;
 			if (!diff) return new Text(dot + theme.fg("success", "applied"), 0, 0);
-			const diffLines = diff.split("\n");
-			let add = 0;
-			let del = 0;
-			for (const line of diffLines) {
-				if (line.startsWith("+") && !line.startsWith("+++")) add++;
-				else if (line.startsWith("-") && !line.startsWith("---")) del++;
-			}
+			const { add, del } = diffStats(diff);
 			let text = dot + theme.fg("success", `+${add}`) + theme.fg("dim", "/") + theme.fg("error", `-${del}`);
-			if (expanded) {
-				const shown = diffLines.slice(0, PREVIEW_LINES);
-				for (const line of shown) {
-					if (line.startsWith("+") && !line.startsWith("+++")) text += `\n${theme.fg("success", line)}`;
-					else if (line.startsWith("-") && !line.startsWith("---")) text += `\n${theme.fg("error", line)}`;
-					else text += `\n${theme.fg("dim", line)}`;
-				}
-				if (diffLines.length > PREVIEW_LINES) {
-					text += `\n${theme.fg("muted", `... ${diffLines.length - PREVIEW_LINES} more diff lines`)}`;
-				}
+			if (typeof details?.firstChangedLine === "number") {
+				text += theme.fg("dim", ` @ L${details.firstChangedLine}`);
 			}
+			if (expanded) text += renderDiffLines(diff, theme);
 			return new Text(text, 0, 0);
 		},
 	});
@@ -239,7 +285,11 @@ export default function (pi: ExtensionAPI) {
 		description: getBuiltInTools(process.cwd()).write.description,
 		parameters: getBuiltInTools(process.cwd()).write.parameters,
 		async execute(toolCallId, params, signal, onUpdate, ctx) {
-			return getBuiltInTools(ctx.cwd).write.execute(toolCallId, params, signal, onUpdate);
+			const before = await readBefore(ctx.cwd, params.path);
+			const result = await getBuiltInTools(ctx.cwd).write.execute(toolCallId, params, signal, onUpdate);
+			if (result.isError) return result;
+			const { diff, firstChangedLine } = generateDiffString(before, String(params.content ?? ""));
+			return { ...result, details: { ...(result.details ?? {}), diff, firstChangedLine } };
 		},
 		renderCall(args, theme, ctx) {
 			let text = theme.fg("toolTitle", theme.bold("write "));
@@ -250,13 +300,20 @@ export default function (pi: ExtensionAPI) {
 			if (ctx.expanded && content) text += preview(content, theme);
 			return new Text(text, 0, 0);
 		},
-		renderResult(result, { isPartial }, theme, ctx) {
+		renderResult(result, { expanded, isPartial }, theme, ctx) {
 			const output = textOf(result);
 			const errored = output.startsWith("Error") || ctx.isError === true;
 			const dot = marker(theme, ctx, isPartial, !errored);
 			if (isPartial) return new Text(dot + theme.fg("warning", "writing..."), 0, 0);
 			if (errored) return new Text(dot + theme.fg("error", output.split("\n")[0] || "failed"), 0, 0);
-			return new Text(dot + theme.fg("success", "written"), 0, 0);
+			const diff = (result.details as { diff?: string } | undefined)?.diff;
+			if (!diff) return new Text(dot + theme.fg("success", "written"), 0, 0);
+			const { add, del } = diffStats(diff);
+			let text = dot + theme.fg("success", `+${add}`);
+			// del === 0 means the file did not previously exist (or was pure appends).
+			if (del > 0) text += theme.fg("dim", "/") + theme.fg("error", `-${del}`);
+			if (expanded) text += renderDiffLines(diff, theme);
+			return new Text(text, 0, 0);
 		},
 	});
 
