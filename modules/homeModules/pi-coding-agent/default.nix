@@ -20,6 +20,28 @@
         (builtins.readDir extensionsDir)
       )
     );
+    # Skills authored here and owned by Home Manager. Each direct child of
+    # ./skills must be a directory containing SKILL.md. Like extensions, they
+    # are copied into the Nix store and listed by absolute path in settings.json
+    # (settings.skills); Pi loads them in place. Keeping .md data files out of
+    # the Nix parser is fine: import-tree only imports modules/**/*.nix.
+    skillsDir = ./skills;
+    skills = map (name: skillsDir + "/${name}") (
+      builtins.attrNames (
+        lib.filterAttrs (name: type: type == "directory") (builtins.readDir skillsDir)
+      )
+    );
+    # Prompt templates authored here and owned by Home Manager. Each direct child
+    # of ./prompts must be a Markdown file; its filename becomes the `/` command
+    # (e.g. factory.md -> /factory). Listed by absolute store path in
+    # settings.prompts, same mechanism as skills.
+    promptsDir = ./prompts;
+    prompts = map (name: promptsDir + "/${name}") (
+      builtins.attrNames (
+        lib.filterAttrs (name: type: type == "regular" && lib.hasSuffix ".md" name) (builtins.readDir promptsDir)
+      )
+    );
+
     # System-prompt append (the SYSTEM_APPEND mechanism): Pi reads
     # <configDir>/APPEND_SYSTEM.md and appends it verbatim to its built-in
     # system prompt. Distinct from AGENTS.md, and a project
@@ -102,6 +124,14 @@
 
         # Locally authored extensions, owned by Nix.
         inherit extensions;
+
+        # Locally authored skills, owned by Nix. Each entry is a directory
+        # containing SKILL.md (see ./skills/plan-stages).
+        inherit skills;
+
+        # Locally authored prompt templates, owned by Nix. Each entry is a
+        # Markdown file whose filename is the `/` command (see ./prompts/factory.md).
+        inherit prompts;
       };
 
       # NOTE: `models` is intentionally left unset so Home Manager does not own
