@@ -11,6 +11,7 @@
       self.nixosModules.niri
       self.nixosModules.xps-13
       self.nixosModules.power-management
+      self.nixosModules.media-keys
       self.nixosModules.docker
       self.nixosModules.greet
     ];
