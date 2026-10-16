@@ -49,5 +49,6 @@
 
   # May help if FFmpeg/VAAPI/QSV init fails (esp. on Arc with i915):
   hardware.enableRedistributableFirmware = true;
-  boot.kernelParams = ["mem_sleep_default=deep" "i915.enable_guc=3"];
+  # mem_sleep_default is set in modules/nixosModules/power-management.nix.
+  boot.kernelParams = ["i915.enable_guc=3"];
 }

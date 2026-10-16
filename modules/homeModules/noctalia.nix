@@ -1,5 +1,7 @@
 {...}: {
   flake.homeModules.noctalia = {pkgs, ...}: {
+    powerIdle.lockCommand = "${pkgs.noctalia}/bin/noctalia msg session lock";
+
     programs.noctalia = {
       enable = true;
       package = pkgs.noctalia;
@@ -79,6 +81,10 @@
           enabled = false;
         };
 
+        # Idle handling (screen-off / lock / suspend / hibernate) is owned by
+        # modules/homeModules/idle.nix (power actions via
+        # nixosModules.power-management). Keep Noctalia's own idle behaviors
+        # disabled so the two don't double-fire.
         idle = {
           behavior_order = [
             "lock"
@@ -88,12 +94,12 @@
           behavior = {
             lock = {
               action = "lock";
-              enabled = true;
+              enabled = false;
               timeout = 360.0;
             };
             screen-off = {
               action = "screen_off";
-              enabled = true;
+              enabled = false;
               timeout = 120.0;
             };
             lock-and-suspend = {

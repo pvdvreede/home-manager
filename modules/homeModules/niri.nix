@@ -1,5 +1,8 @@
 {...}: {
   flake.homeModules.niri = {pkgs, ...}: {
+    powerIdle.screenOffCommand = "${pkgs.niri}/bin/niri msg action power-off-monitors";
+    powerIdle.screenOffResumeCommand = "${pkgs.niri}/bin/niri msg action power-on-monitors";
+
     wayland.windowManager.niri = {
       enable = true;
       package = pkgs.niri;
