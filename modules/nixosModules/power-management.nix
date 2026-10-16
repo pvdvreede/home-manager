@@ -29,7 +29,11 @@
       case "''${1:-}" in
         on-ac) on_ac ;;
         idle-suspend)
-          if on_ac; then exec ${pkgs.systemd}/bin/systemctl suspend; fi ;;
+          # On AC: s2idle first (USB keyboard wakes it), then logind
+          # auto-hibernates after HibernateDelaySec. That also covers the
+          # "started on AC, unplugged while asleep" case -- it still lands in
+          # hibernation instead of draining in s2idle.
+          if on_ac; then exec ${pkgs.systemd}/bin/systemctl suspend-then-hibernate; fi ;;
         idle-hibernate)
           if on_ac; then :; else exec ${pkgs.systemd}/bin/systemctl hibernate; fi ;;
         *)
@@ -110,7 +114,10 @@
     systemd.sleep.settings.Sleep = {
       SuspendState = "mem";
       AllowHibernation = "yes";
-      AllowSuspendThenHibernate = "no";
+      # Suspend first, then hibernate automatically after HibernateDelaySec.
+      # Resuming normally (e.g. USB keyboard) before then cancels the timer.
+      AllowSuspendThenHibernate = "yes";
+      HibernateDelaySec = "10min";
     };
   };
 }
