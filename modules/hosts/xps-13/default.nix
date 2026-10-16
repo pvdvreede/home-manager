@@ -102,6 +102,7 @@
         self.homeModules.devenv
         self.homeModules.niri
         self.homeModules.noctalia
+        self.homeModules.pi-coding-agent
       ];
     };
 

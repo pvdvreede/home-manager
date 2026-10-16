@@ -46,22 +46,22 @@
         gestures.hot-corners.top-left = {};
 
         binds = {
-          "Mod+Return" = {
+          "Alt+Return" = {
             _props.hotkey-overlay-title = "Terminal";
             spawn = ["kitty" "-e" "fish"];
           };
 
-          "Mod+Shift+O".open-overview = {};
+          "Alt+Shift+O".open-overview = {};
 
           "Mod+Shift+E" = {
             quit = {};
           };
 
-          "Mod+S" = {
+          "Alt+S" = {
             consume-window-into-column = {};
           };
 
-          "Mod+Shift+S" = {
+          "Alt+Shift+S" = {
             expel-window-from-column = {};
           };
 
@@ -74,22 +74,22 @@
           };
 
           "Mod+Q" = {close-window = {};};
-          "Mod+F" = {maximize-column = {};};
-          "Mod+Shift+F" = {fullscreen-window = {};};
-          "Mod+Shift+Space" = {toggle-window-floating = {};};
+          "Alt+F" = {maximize-column = {};};
+          "Alt+Shift+F" = {fullscreen-window = {};};
+          "Alt+Shift+Space" = {toggle-window-floating = {};};
 
-          "Mod+H".focus-column-left = {};
-          "Mod+L".focus-column-right = {};
-          "Mod+K".focus-window-or-workspace-up = {};
-          "Mod+J".focus-window-or-workspace-down = {};
+          "Alt+H".focus-column-left = {};
+          "Alt+L".focus-column-right = {};
+          "Alt+K".focus-window-or-workspace-up = {};
+          "Alt+J".focus-window-or-workspace-down = {};
 
-          "Mod+1".focus-workspace = 1;
-          "Mod+2".focus-workspace = 2;
-          "Mod+3".focus-workspace = 3;
+          "Alt+1".focus-workspace = 1;
+          "Alt+2".focus-workspace = 2;
+          "Alt+3".focus-workspace = 3;
 
-          "Mod+Shift+1".move-window-to-workspace = 1;
-          "Mod+Shift+2".move-window-to-workspace = 2;
-          "Mod+Shift+3".move-window-to-workspace = 3;
+          "Alt+Shift+1".move-window-to-workspace = 1;
+          "Alt+Shift+2".move-window-to-workspace = 2;
+          "Alt+Shift+3".move-window-to-workspace = 3;
         };
       };
     };
