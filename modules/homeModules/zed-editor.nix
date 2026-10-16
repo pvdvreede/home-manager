@@ -1,11 +1,19 @@
 {...}: {
-  flake.homeModules.zed-editor = {pkgs, ...}: {
+  flake.homeModules.zed-editor = {
+    pkgs,
+    lib,
+    ...
+  }: {
     programs.zed-editor = {
       enable = true;
-      package = null;
+      package = lib.mkIf pkgs.stdenv.isDarwin null;
       defaultEditor = false;
       extensions = [
         "nix"
+        "toml"
+        "dockerfile"
+        "terraform"
+        "elixir"
       ];
       userSettings = {
         buffer_font_size = 16;
