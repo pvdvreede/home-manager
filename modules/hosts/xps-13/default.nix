@@ -110,6 +110,7 @@
         self.homeModules.niri
         self.homeModules.noctalia
         self.homeModules.idle
+        self.homeModules.power-state
         self.homeModules.pi-coding-agent
         self.homeModules.zed-editor
       ];

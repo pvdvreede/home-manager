@@ -14,39 +14,69 @@
       # `online`. The XPS 13 charges over USB-C, whose supply has type "USB",
       # so a mains-only check would miss it and wrongly hibernate while plugged
       # in.
+      # Use shell builtins (no cat) so this works under a systemd unit's
+      # minimal PATH as well as from the session.
       on_ac() {
         for supply in /sys/class/power_supply/*; do
           [ -r "$supply/type" ] || continue
-          case "$(cat "$supply/type")" in
+          local ty; ty="$(<"$supply/type")"
+          case "$ty" in
             Mains | USB) ;;
             *) continue ;;
           esac
-          [ "$(cat "$supply/online" 2>/dev/null || echo 0)" = "1" ] && return 0
+          local on=0
+          [ -r "$supply/online" ] && on="$(<"$supply/online")"
+          [ "$on" = "1" ] && return 0
         done
         return 1
       }
 
+      # Report the currently selected /sys/power/mem_sleep mode (the value
+      # between [ ]).
+      current_mem_sleep() {
+        local line; read -r line < /sys/power/mem_sleep
+        line="''${line#*[}"
+        line="''${line%%]*}"
+        printf '%s' "$line"
+      }
+      # Idempotent: only write when the requested mode differs, and only accept
+      # the modes this firmware exposes.
+      set_mem_sleep() {
+        case "$1" in
+          s2idle | deep) ;;
+          *) echo "bad mem_sleep mode: $1" >&2; exit 2 ;;
+        esac
+        [ "$(current_mem_sleep)" = "$1" ] || echo "$1" > /sys/power/mem_sleep
+      }
+
       case "''${1:-}" in
         on-ac) on_ac ;;
+        set-mem-sleep)
+          # Battery => deep (S3); AC => s2idle (matches the firmware's S0 wake
+          # path so a USB keyboard can wake it).
+          if on_ac; then set_mem_sleep s2idle; else set_mem_sleep deep; fi ;;
         idle-suspend)
           # On AC: s2idle first (USB keyboard wakes it), then logind
           # auto-hibernates after HibernateDelaySec. That also covers the
           # "started on AC, unplugged while asleep" case -- it still lands in
           # hibernation instead of draining in s2idle.
           if on_ac; then exec ${pkgs.systemd}/bin/systemctl suspend-then-hibernate; fi ;;
-        idle-hibernate)
-          if on_ac; then :; else exec ${pkgs.systemd}/bin/systemctl hibernate; fi ;;
+        idle-suspend-battery)
+          # On battery: suspend to RAM (mem_sleep is deep, see set-mem-sleep).
+          if on_ac; then :; else exec ${pkgs.systemd}/bin/systemctl suspend; fi ;;
         *)
-          echo "usage: laptop-power {on-ac|idle-suspend|idle-hibernate}" >&2
+          echo "usage: laptop-power {on-ac|set-mem-sleep|idle-suspend|idle-suspend-battery}" >&2
           exit 2 ;;
       esac
     '';
   in {
     # This XPS 9370's firmware gives xHCI a _PRW that only advertises wake from
     # S0 (`XHC  S0  *enabled` in /proc/acpi/wakeup), so a USB keyboard cannot
-    # wake the machine from S3/deep. Use suspend-to-idle instead: it matches the
-    # firmware's S0 wake path and is only ever reached on AC (the session layer
-    # suspends on AC idle; on battery we hibernate to disk).
+    # wake the machine from S3/deep. On AC we therefore use suspend-to-idle
+    # (s2idle), matching the firmware's S0 wake path. On battery we use S3/deep
+    # instead, accepting that only the lid (LID0 S3) or power button (PBTN S3)
+    # can wake it. The mode is selected at runtime by mem-sleep-mode.service;
+    # this kernel param is just the deterministic AC-friendly boot default.
     boot.kernelParams = ["mem_sleep_default=s2idle"];
 
     environment.systemPackages = [laptop-power];
@@ -54,21 +84,44 @@
     services.logind = {
       enable = true;
       settings.Login = {
-        # Battery: lid close => hibernate (suspend-to-disk, near-zero power).
-        HandleLidSwitch = "hibernate";
-        # On AC with no external display: ignore the lid.
+        # Battery, no external display: lid close => suspend to RAM. The mode
+        # is deep on battery and s2idle on AC (selected by mem-sleep-mode).
+        HandleLidSwitch = "suspend";
+        # On AC with no external display: ignore the lid (precedence: this
+        # short-circuits HandleLidSwitch, so AC lid-close does nothing).
         HandleLidSwitchExternalPower = "ignore";
         # Docked / external display attached: ignore the lid. logind checks
         # "docked" (docking station OR >1 display) BEFORE external power, so
         # this is what makes clamshell + dock work.
         HandleLidSwitchDocked = "ignore";
+        # Honour the compositor/shell "lock before sleep" delay inhibitor
+        # instead of suspending immediately (logind defaults to ignoring it).
+        LidSwitchIgnoreInhibited = "no";
         KillUserProcesses = false;
       };
     };
 
     services.power-profiles-daemon.enable = false;
     services.thermald.enable = true;
-    services.upower.enable = true;
+    services.upower = {
+      enable = true;
+      # Safety net: if the machine is awake and drains to critical, hibernate
+      # (instead of the default HybridSleep), even though idle now suspends to
+      # deep on battery. Only fires while awake.
+      criticalPowerAction = "Hibernate";
+    };
+
+    # Select /sys/power/mem_sleep by power source: deep on battery, s2idle on
+    # AC. Re-runs at boot (multi-user.target) and on every power-supply
+    # add/change uevent below, so it follows plug/unplug live.
+    systemd.services.mem-sleep-mode = {
+      description = "Select /sys/power/mem_sleep by power source (deep on battery, s2idle on AC)";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${laptop-power}/bin/laptop-power set-mem-sleep";
+      };
+      wantedBy = ["multi-user.target"];
+    };
 
     services.tlp = {
       enable = true;
@@ -109,6 +162,11 @@
       # explicitly to be order-independent.
       ACTION=="add", SUBSYSTEM=="pci", DRIVERS=="xhci_hcd", ATTR{power/wakeup}="enabled"
       ACTION=="add", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", IMPORT{builtin}="usb_id", ENV{ID_USB_INTERFACES}=="*:03????:*", ATTR{power/wakeup}="enabled"
+
+      # Select mem_sleep on plug/unplug. Restrict to supplies with type
+      # Mains/USB so battery capacity uevents don't spam the service; TAG+="systemd"
+      # is required for SYSTEMD_WANTS to be honoured.
+      ACTION=="add|change", SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_TYPE}=="Mains|USB", TAG+="systemd", ENV{SYSTEMD_WANTS}+="mem-sleep-mode.service"
     '';
 
     systemd.sleep.settings.Sleep = {

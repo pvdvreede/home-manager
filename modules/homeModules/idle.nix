@@ -51,11 +51,12 @@
           timeout = 360;
           command = config.powerIdle.lockCommand;
         }
-        # Battery: hibernate (suspend to disk) after 10 minutes idle.
-        # laptop-power no-ops when on AC.
+        # Battery: suspend to RAM (S3/deep; mem_sleep is chosen by
+        # nixosModules.power-management according to AC/battery) after 10 min
+        # idle. laptop-power no-ops when on AC.
         {
           timeout = 600;
-          command = "/run/current-system/sw/bin/laptop-power idle-hibernate";
+          command = "/run/current-system/sw/bin/laptop-power idle-suspend-battery";
         }
         # On AC: suspend to RAM after 20 minutes idle.
         # laptop-power no-ops when on battery.
