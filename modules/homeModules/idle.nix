@@ -7,7 +7,7 @@
   # any compositor implementing ext-idle-notify-v1 (niri, sway, hyprland, ...).
   #
   # Split of responsibilities:
-  #   - power *policy* (suspend decision, AC vs battery sleep mode) lives in
+  #   - power *policy* (suspend decision, idle timing) lives in
   #     nixosModules.power-management and is reached through the
   #     `laptop-power` helper at /run/current-system/sw/bin/laptop-power.
   #   - screen-off / lock are compositor/shell-specific "cosmetics" and are
