@@ -6,7 +6,7 @@
   }: {
     programs.zed-editor = {
       enable = true;
-      package = lib.mkIf pkgs.stdenv.isDarwin null;
+      package = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin null;
       defaultEditor = false;
       extensions = [
         "nix"

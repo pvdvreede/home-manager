@@ -127,6 +127,7 @@
           "npm:@juicesharp/rpiv-ask-user-question@2.13.9"
           "npm:billion-context@0.1.199"
           "npm:pi-subagents@0.79.0"
+          "npm:pi-file-diff@0.1.8"
         ];
 
         # Locally authored extensions, owned by Nix.

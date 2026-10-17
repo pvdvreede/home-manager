@@ -42,7 +42,7 @@
         ];
       };
       settings = {
-        theme = "monokai_pro";
+        theme = "solarized_dark";
         editor = {
           trim-trailing-whitespace = true;
           trim-final-newlines = true;
