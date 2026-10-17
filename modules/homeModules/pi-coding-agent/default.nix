@@ -124,9 +124,9 @@
         packages = [
           # "npm:pi-web-access"
           "npm:pi-web-search@1.7.0"
-          "npm:@juicesharp/rpiv-ask-user-question@2.12.0"
-          "npm:billion-context@0.1.195"
-          "npm:pi-subagents@0.78.0"
+          "npm:@juicesharp/rpiv-ask-user-question@2.13.9"
+          "npm:billion-context@0.1.199"
+          "npm:pi-subagents@0.79.0"
         ];
 
         # Locally authored extensions, owned by Nix.
