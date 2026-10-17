@@ -83,6 +83,8 @@
 
           "Alt+H".focus-column-left = {};
           "Alt+L".focus-column-right = {};
+          "Alt+Shift+H".move-column-left = {};
+          "Alt+Shift+L".move-column-right = {};
           "Alt+K".focus-window-or-workspace-up = {};
           "Alt+J".focus-window-or-workspace-down = {};
 
