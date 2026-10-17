@@ -120,6 +120,13 @@
         Type = "oneshot";
         ExecStart = "${laptop-power}/bin/laptop-power set-mem-sleep";
       };
+      # At boot the firmware/ucsi PD stack emits a burst of power_supply
+      # add/change events (AC + three ucsi sources), each pulling this unit in
+      # via SYSTEMD_WANTS. That exceeds systemd's default 5-starts/10s and left
+      # the unit in `failed (start-limit-hit)`, so later plug/unplug events were
+      # rejected until the limit expired. The run is idempotent and cheap, so
+      # disable rate limiting entirely.
+      unitConfig.StartLimitIntervalSec = 0;
       wantedBy = ["multi-user.target"];
     };
 
