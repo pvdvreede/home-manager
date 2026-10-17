@@ -81,7 +81,7 @@
           enabled = false;
         };
 
-        # Idle handling (screen-off / lock / suspend / hibernate) is owned by
+        # Idle handling (screen-off / lock / suspend) is owned by
         # modules/homeModules/idle.nix (power actions via
         # nixosModules.power-management). Keep Noctalia's own idle behaviors
         # disabled so the two don't double-fire.

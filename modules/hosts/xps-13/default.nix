@@ -39,12 +39,6 @@
 
     boot.initrd.luks.devices."luks-124d9bac-d0d1-43cc-a080-049599cc4a28".device = "/dev/disk/by-uuid/124d9bac-d0d1-43cc-a080-049599cc4a28";
 
-    # Resume from hibernate via the LUKS-encrypted swap device (host-specific:
-    # must match swapDevices in ./_hardware-configuration.nix). Must be the
-    # decrypted /dev/mapper path (same device `swapon` uses), not the raw LUKS
-    # partition UUID. Both root and swap LUKS volumes are unlocked in stage-1
-    # initrd, so the swap mapper exists before systemd-hibernate-resume runs.
-    boot.resumeDevice = "/dev/mapper/luks-124d9bac-d0d1-43cc-a080-049599cc4a28";
     networking.hostName = "xps-13"; # Define your hostname.
     # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 

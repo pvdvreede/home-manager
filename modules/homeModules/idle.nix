@@ -7,7 +7,7 @@
   # any compositor implementing ext-idle-notify-v1 (niri, sway, hyprland, ...).
   #
   # Split of responsibilities:
-  #   - power *policy* (suspend/hibernate decision, AC vs battery) lives in
+  #   - power *policy* (suspend decision, AC vs battery sleep mode) lives in
   #     nixosModules.power-management and is reached through the
   #     `laptop-power` helper at /run/current-system/sw/bin/laptop-power.
   #   - screen-off / lock are compositor/shell-specific "cosmetics" and are
@@ -51,15 +51,8 @@
           timeout = 360;
           command = config.powerIdle.lockCommand;
         }
-        # Battery: suspend to RAM (S3/deep; mem_sleep is chosen by
-        # nixosModules.power-management according to AC/battery) after 10 min
-        # idle. laptop-power no-ops when on AC.
-        {
-          timeout = 600;
-          command = "/run/current-system/sw/bin/laptop-power idle-suspend-battery";
-        }
-        # On AC: suspend to RAM after 20 minutes idle.
-        # laptop-power no-ops when on battery.
+        # Suspend to RAM after 20 min idle (s2idle on AC, S3 on battery; the
+        # mode is selected by nixosModules.power-management).
         {
           timeout = 1200;
           command = "/run/current-system/sw/bin/laptop-power idle-suspend";

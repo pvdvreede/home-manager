@@ -12,7 +12,7 @@
 
       # "On AC" if any mains supply or USB-C power-delivery source reports
       # `online`. The XPS 13 charges over USB-C, whose supply has type "USB",
-      # so a mains-only check would miss it and wrongly hibernate while plugged
+      # so a mains-only check would miss it and wrongly pick S3 while plugged
       # in.
       # Use shell builtins (no cat) so this works under a systemd unit's
       # minimal PATH as well as from the session.
@@ -56,16 +56,11 @@
           # path so a USB keyboard can wake it).
           if on_ac; then set_mem_sleep s2idle; else set_mem_sleep deep; fi ;;
         idle-suspend)
-          # On AC: s2idle first (USB keyboard wakes it), then logind
-          # auto-hibernates after HibernateDelaySec. That also covers the
-          # "started on AC, unplugged while asleep" case -- it still lands in
-          # hibernation instead of draining in s2idle.
-          if on_ac; then exec ${pkgs.systemd}/bin/systemctl suspend-then-hibernate; fi ;;
-        idle-suspend-battery)
-          # On battery: suspend to RAM (mem_sleep is deep, see set-mem-sleep).
-          if on_ac; then :; else exec ${pkgs.systemd}/bin/systemctl suspend; fi ;;
+          # Suspend to RAM. The low-level mode (s2idle on AC, deep/S3 on
+          # battery) is already set by set-mem-sleep.
+          exec ${pkgs.systemd}/bin/systemctl suspend ;;
         *)
-          echo "usage: laptop-power {on-ac|set-mem-sleep|idle-suspend|idle-suspend-battery}" >&2
+          echo "usage: laptop-power {on-ac|set-mem-sleep|idle-suspend}" >&2
           exit 2 ;;
       esac
     '';
@@ -105,10 +100,9 @@
     services.thermald.enable = true;
     services.upower = {
       enable = true;
-      # Safety net: if the machine is awake and drains to critical, hibernate
-      # (instead of the default HybridSleep), even though idle now suspends to
-      # deep on battery. Only fires while awake.
-      criticalPowerAction = "Hibernate";
+      # Hibernation is disabled, so the only safe critical action is to
+      # power off. Only fires while awake.
+      criticalPowerAction = "PowerOff";
     };
 
     # Select /sys/power/mem_sleep by power source: deep on battery, s2idle on
@@ -178,11 +172,10 @@
 
     systemd.sleep.settings.Sleep = {
       SuspendState = "mem";
-      AllowHibernation = "yes";
-      # Suspend first, then hibernate automatically after HibernateDelaySec.
-      # Resuming normally (e.g. USB keyboard) before then cancels the timer.
-      AllowSuspendThenHibernate = "yes";
-      HibernateDelaySec = "10min";
+      # Hibernation is disabled entirely; suspend to RAM only.
+      AllowHibernation = "no";
+      AllowSuspendThenHibernate = "no";
+      AllowHybridSleep = "no";
     };
   };
 }
