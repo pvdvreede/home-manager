@@ -165,30 +165,22 @@
     home.file = {
       ".pi/agent/APPEND_SYSTEM.md".source = appendSystemPrompt;
 
+      # pi-file-diff config. `ignore` lists directory *names* (case-insensitive,
+      # matched anywhere in the tree); `exclude` would take explicit paths.
+      # Keep VCS/tooling noise out of the task-end diff receipts.
+      ".pi/agent/file-diff.json".text = builtins.toJSON {
+        ignore = [
+          ".jj"
+          ".git"
+          "node_modules"
+          "result"
+          "billion-context"
+        ];
+      };
+
       # Custom theme for the `theme` setting above. Pi derives the filename
       # from the theme name, hence `thinkingThemeName` in both.
       ".pi/agent/themes/${thinkingThemeName}.json".text = builtins.toJSON thinkingTheme;
-
-      # Herdr's Pi integration. Upstream installs this with
-      # `herdr integration install pi`; vendored here so it stays declarative.
-      # Pi auto-discovers ~/.pi/agent/extensions/, so this file is deliberately
-      # NOT listed in `settings.extensions` above (that would load it twice).
-      #
-      # The file embeds `HERDR_INTEGRATION_VERSION=<n>`, which
-      # `herdr integration status` compares against the Herdr build. After a
-      # herdr update, if status reports it outdated, re-vendor by installing to a
-      # scratch HOME and copying the file back:
-      #   HOME=$(mktemp -d) && mkdir -p "$HOME/.pi/agent"
-      #   HOME="$HOME" herdr integration install pi
-      #   cp "$HOME/.pi/agent/extensions/herdr-agent-state.ts" \
-      #      modules/homeModules/pi-coding-agent/herdr/herdr-agent-state.ts
-      # (In-place install is impossible: this path is a read-only store symlink.)
-      #
-      # LOCAL PATCH: the vendored file uses `source = "pidev:pi"` instead of the
-      # upstream `"herdr:pi"`. herdr ignores reports from a built-in integration
-      # source unless the reporter owns the pane's tty, so a pi nested inside
-      # `devenv shell` never registered. Re-apply after re-vendoring.
-      ".pi/agent/extensions/herdr-agent-state.ts".source = ./herdr/herdr-agent-state.ts;
     };
 
     home.sessionVariables.PI_SKIP_VERSION_CHECK = "1";
