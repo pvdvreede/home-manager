@@ -108,6 +108,8 @@
         self.homeModules.vscode
         self.homeModules.zed-editor
         self.homeModules.pi-coding-agent
+        self.homeModules.awscli
+        self.homeModules.granted
       ];
 
       programs.pi-coding-agent.settings = {
