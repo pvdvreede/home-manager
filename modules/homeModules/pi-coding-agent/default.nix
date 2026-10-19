@@ -31,61 +31,12 @@
         lib.filterAttrs (name: type: type == "directory") (builtins.readDir skillsDir)
       )
     );
-    # Prompt templates authored here and owned by Home Manager. Each direct child
-    # of ./prompts must be a Markdown file; its filename becomes the `/` command
-    # (e.g. factory.md -> /factory). Listed by absolute store path in
-    # settings.prompts, same mechanism as skills.
-    promptsDir = ./prompts;
-    prompts = map (name: promptsDir + "/${name}") (
-      builtins.attrNames (
-        lib.filterAttrs (name: type: type == "regular" && lib.hasSuffix ".md" name) (builtins.readDir promptsDir)
-      )
-    );
 
     # System-prompt append (the SYSTEM_APPEND mechanism): Pi reads
     # <configDir>/APPEND_SYSTEM.md and appends it verbatim to its built-in
     # system prompt. Distinct from AGENTS.md, and a project
     # .pi/APPEND_SYSTEM.md overrides this file outright (no concatenation).
     appendSystemPrompt = ./append-system-prompt.md;
-
-    # ---- Thinking-block theme ---------------------------------------------
-    # Pi renders BOTH the expanded thinking text and the collapsed
-    # "Thinking..." label with the single `thinkingText` theme colour, and
-    # paints the per-level thinking indicator with the `thinking*` border
-    # colours (see assistant-message.js). Both default to a near-body grey,
-    # so thinking is hard to tell apart from normal output. Tint them cyan so
-    # thinking is unmistakable in either state.
-    #
-    # `mdQuote`/`mdQuoteBorder` are also cyan: the `thinking-border` extension
-    # wraps expanded thinking in a markdown blockquote (the only way to get a
-    # border), and blockquote content is restyled away from `thinkingText` to
-    # `mdQuote`/`mdQuoteBorder`.
-    #
-    # The theme schema requires the full palette, so start from pi's built-in
-    # dark theme (read from the installed package) and override only these
-    # colours. NOTE: the read path is internal to pi's package layout; if a pi
-    # update moves it, this read fails at eval time.
-    builtinDarkTheme = builtins.fromJSON (builtins.readFile "${pkgs.pi-coding-agent}/lib/node_modules/pi-monorepo/dist/modes/interactive/theme/dark.json");
-    thinkingThemeName = "pvdv";
-    thinkingTheme =
-      builtinDarkTheme
-      // {
-        name = thinkingThemeName;
-        colors =
-          builtinDarkTheme.colors
-          // {
-            thinkingText = "okhsl(200 70% 72%)";
-            thinkingOff = "okhsl(200 25% 55%)";
-            thinkingMinimal = "okhsl(200 40% 58%)";
-            thinkingLow = "okhsl(200 55% 62%)";
-            thinkingMedium = "okhsl(200 65% 66%)";
-            thinkingHigh = "okhsl(200 75% 70%)";
-            thinkingXhigh = "okhsl(200 85% 74%)";
-            thinkingMax = "okhsl(200 95% 78%)";
-            mdQuote = "okhsl(200 45% 70%)";
-            mdQuoteBorder = "okhsl(200 70% 72%)";
-          };
-      };
   in {
     programs.pi-coding-agent = {
       enable = true;
@@ -109,9 +60,6 @@
         # toggles them back on at runtime). The collapsed label still uses the
         # themed `thinkingText` colour, so it stays visually distinct.
         hideThinkingBlock = true;
-
-        # Custom cyan-tinted thinking theme, written to the themes dir below.
-        theme = thinkingThemeName;
 
         # Extensions distributed as npm/git packages. Pi installs these into
         # <configDir>/npm using an explicit `--prefix`, so no writable global
@@ -138,10 +86,6 @@
         # Locally authored skills, owned by Nix. Each entry is a directory
         # containing SKILL.md (see ./skills/plan-stages).
         inherit skills;
-
-        # Locally authored prompt templates, owned by Nix. Each entry is a
-        # Markdown file whose filename is the `/` command (see ./prompts/factory.md).
-        inherit prompts;
       };
 
       # NOTE: `models` is intentionally left unset so Home Manager does not own
@@ -177,10 +121,6 @@
           "billion-context"
         ];
       };
-
-      # Custom theme for the `theme` setting above. Pi derives the filename
-      # from the theme name, hence `thinkingThemeName` in both.
-      ".pi/agent/themes/${thinkingThemeName}.json".text = builtins.toJSON thinkingTheme;
     };
 
     home.sessionVariables.PI_SKIP_VERSION_CHECK = "1";

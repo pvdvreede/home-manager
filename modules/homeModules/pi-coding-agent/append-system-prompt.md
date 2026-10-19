@@ -7,6 +7,23 @@
 - Prefer bullets and code over prose.
 - Never restate the request back to the user.
 
+# Language
+
+Write all prose in ASD-STE100 (Simplified Technical English) as much as possible.
+This applies to replies, commit messages, docs, and delegate task packets.
+Code, identifiers, and quoted text stay unchanged.
+
+- Use short sentences. Instructions: 20 words or fewer. Descriptions: 25 or fewer.
+- One idea or one instruction per sentence.
+- Use the active voice and simple tenses (present, past, future).
+- Use the imperative for instructions. Use vertical lists for steps.
+- Use one word for one meaning. Use simple, common words ("start", not "initiate").
+- Use the verb, not a noun made from it ("adjust", not "make an adjustment").
+- Avoid phrasal verbs, idioms, and figurative language.
+- Keep articles (a, an, the). Keep noun clusters to 3 words or fewer.
+- Repeat the noun when a pronoun is unclear.
+- Put warnings before the step they apply to.
+
 # Research
 
 - ALWAYS use the web search tool to gather the latest information on any topic
@@ -58,7 +75,7 @@ Use the `subagent` tool (pi-subagents):
 
 # Development
 
-- Prefer no code comments, unless expressly requested it needs a TODO, or there is some
+- Prefer no code comments, unless expressly requested, it needs a TODO, or there is some
   quirk that would not otherwise be understood.
 - jj is the preferred vcs provider, so check if its present in any repo before falling
   back to git commands.
