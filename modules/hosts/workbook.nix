@@ -109,6 +109,11 @@
         self.homeModules.zed-editor
         self.homeModules.pi-coding-agent
       ];
+
+      programs.pi-coding-agent.settings = {
+        defaultProvider = "anthropic";
+        defaultModel = "claude-sonnet-5-5";
+      };
     };
 
     home-manager.useUserPackages = true;

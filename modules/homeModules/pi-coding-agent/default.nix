@@ -97,10 +97,12 @@
 
       # Settings (~/.pi/agent/settings.json)
       settings = {
-        # Default startup model and thinking level. The DeepSeek API key lives
-        # in ~/.pi/agent/auth.json or models.json (see note below), not here.
-        defaultProvider = "deepseek";
-        defaultModel = "deepseek-flash";
+        # Default startup provider and thinking level. The DeepSeek API key
+        # lives in ~/.pi/agent/auth.json or models.json (see note below), not
+        # here. `defaultProvider` and `defaultModel` are `mkDefault`/per-host
+        # (see modules/hosts/*) so each machine can choose its own startup
+        # model without fighting these values.
+        defaultProvider = lib.mkDefault "deepseek";
         defaultThinkingLevel = "low";
 
         # Hide thinking blocks in the transcript by default (`ctrl+t` still
