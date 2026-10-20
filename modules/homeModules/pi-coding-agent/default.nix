@@ -54,6 +54,7 @@
         # (see modules/hosts/*) so each machine can choose its own startup
         # model without fighting these values.
         defaultProvider = lib.mkDefault "deepseek";
+        defaultModel = lib.mkDefault "deepseek-flash";
         defaultThinkingLevel = "low";
 
         # Hide thinking blocks in the transcript by default (`ctrl+t` still

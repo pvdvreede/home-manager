@@ -122,8 +122,6 @@
         self.homeModules.pi-coding-agent
         self.homeModules.herdr
       ];
-
-      programs.pi-coding-agent.settings.defaultModel = "deepseek-flash";
     };
 
     home-manager.useUserPackages = true;
