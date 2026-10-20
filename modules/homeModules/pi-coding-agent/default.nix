@@ -119,6 +119,9 @@
           "node_modules"
           "result"
           "billion-context"
+          ".devbox"
+          ".devenv"
+          "*.lock"
         ];
       };
     };

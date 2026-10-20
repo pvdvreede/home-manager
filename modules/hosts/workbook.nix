@@ -10,7 +10,6 @@
     ];
   };
 
-
   flake.darwinModules.workbook = {pkgs, ...}: {
     system.stateVersion = 6;
     environment.shells = [pkgs.fish];
@@ -77,7 +76,6 @@
       "zed"
     ];
 
-
     users.users."paul.vandevreede" = {
       name = "paul.vandevreede";
       home = "/Users/paul.vandevreede";
@@ -87,6 +85,8 @@
       home.username = "paul.vandevreede";
       home.stateVersion = "24.11";
       home.homeDirectory = "/Users/paul.vandevreede";
+
+      home.packages = [pkgs.devbox];
 
       targets.darwin.copyApps.enableChecks = false;
       imports = [
@@ -114,7 +114,7 @@
 
       programs.pi-coding-agent.settings = {
         defaultProvider = "anthropic";
-        defaultModel = "claude-sonnet-5-5";
+        defaultModel = "claude-opus-5-5";
       };
     };
 

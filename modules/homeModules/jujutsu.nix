@@ -1,5 +1,5 @@
 {...}: {
-  flake.homeModules.jujutsu = {pkgs, ...}: {
+  flake.homeModules.jujutsu = {...}: {
     programs.jujutsu = {
       enable = true;
       settings = {
@@ -13,6 +13,9 @@
       };
     };
 
-    home.packages = [pkgs.jjui];
+    programs.jjui = {
+      enable = true;
+      settings.revisions.revset = "all()";
+    };
   };
 }
