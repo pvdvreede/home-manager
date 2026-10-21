@@ -94,7 +94,7 @@
 
         # Battery health.
         START_CHARGE_THRESH_BAT0 = 50;
-        STOP_CHARGE_THRESH_BAT0 = 90;
+        STOP_CHARGE_THRESH_BAT0 = 100;
 
         # Keep USB controllers armed on AC so a docked/attached keyboard can
         # wake the machine; allow power saving on battery.
