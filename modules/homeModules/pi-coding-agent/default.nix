@@ -75,8 +75,8 @@
         packages = [
           "npm:pi-web-search@1.7.0"
           "npm:@juicesharp/rpiv-ask-user-question@2.15.0"
-          "npm:billion-context@0.1.208"
-          "npm:pi-subagents@0.83.0"
+          "npm:billion-context@0.1.209"
+          "npm:pi-subagents@0.84.0"
           "npm:pi-file-diff@0.1.8"
         ];
 
