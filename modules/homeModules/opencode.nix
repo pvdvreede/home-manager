@@ -3,24 +3,31 @@
     programs.opencode = {
       enable = true;
 
-      tui = {
-        scroll_speed = 3;
-        scroll_acceleration = {
-          enabled = true;
+      cli = {
+        theme = {
+          name = "catppuccin-frappe";
+          mode = "system";
         };
-        diff_style = "auto";
-        theme = "catppuccin-frappe";
+        scroll = {
+          speed = 3;
+          acceleration = true;
+        };
+        diffs.view = "auto";
+      };
+
+      validateFiles = {
+        config = true;
+        cli = true;
       };
 
       settings = {
-        autoupdate = false;
-        lsp = true;
+        update = "disable";
 
-        provider = {
+        providers = {
           lmstudio = {
-            npm = "@ai-sdk/openai-compatible";
             name = "LM Studio";
-            options = {
+            package = "@opencode/ai/providers/openai-compatible";
+            settings = {
               baseURL = "http://127.0.0.1:1234/v1";
               apiKey = "lmstudio";
             };
@@ -38,74 +45,303 @@
           };
         };
 
-        permission = {
-          bash = {
-            "*" = "ask";
-            "git *" = "allow";
-            "mkdir *" = "allow";
-            "dirname*" = "allow";
-            "wc*" = "allow";
-            "xargs *" = "allow";
-            "devenv *" = "allow";
-            "nix *" = "allow";
-            "nix-env *" = "allow";
-            "ls *" = "allow";
-            "find *" = "allow";
-            "grep *" = "allow";
-            "docker *" = "allow";
-            "docker-compose *" = "allow";
-            "test *" = "allow";
-            "devcontainer *" = "allow";
-            "source *" = "allow";
-            "just *" = "allow";
-            "jj *" = "allow";
-            "echo *" = "allow";
-            "limactl *" = "allow";
-            "diff *" = "allow";
-            "yq*" = "allow";
-            "jq*" = "allow";
-            "lima *" = "allow";
-            "head*" = "allow";
-            "tail*" = "allow";
-            "make *" = "allow";
-            "cat *" = "allow";
-            "kill *" = "allow";
-            "pkill *" = "allow";
-            "sort*" = "allow";
-            "sleep *" = "allow";
-            "sed *" = "allow";
-            "cp *" = "allow";
-            "true" = "allow";
-            "gh *" = "allow";
-            "pwd*" = "allow";
-            "date *" = "allow";
-            "file *" = "allow";
-            "cut *" = "allow";
-            "herdr *" = "allow";
-            "which *" = "allow";
-            "du *" = "allow";
-            "rg *" = "allow";
-            "printf *" = "allow";
-            "uname *" = "allow";
-            "python3 *" = "allow";
-            "python *" = "allow";
-            "timeout *" = "allow";
-          };
-          edit = "allow";
-          grep = "allow";
-          task = "allow";
-          lsp = "allow";
-          read = "allow";
-          glob = "allow";
-          write = "allow";
-          list = "allow";
-          skill = "allow";
-          external_directory = {
-            "~/ghq/**" = "allow";
-            "/tmp/**" = "allow";
-            "/nix/store/**" = "allow";
-          };
-        };
+        permissions = [
+          {
+            action = "shell";
+            resource = "*";
+            effect = "ask";
+          }
+          {
+            action = "shell";
+            resource = "git *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "mkdir *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "dirname*";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "wc*";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "xargs *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "devenv *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "nix *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "nix-env *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "ls *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "find *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "grep *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "docker *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "docker-compose *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "test *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "devcontainer *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "source *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "just *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "jj *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "echo *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "limactl *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "diff *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "yq*";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "jq*";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "lima *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "head*";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "tail*";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "make *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "cat *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "kill *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "pkill *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "sort*";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "sleep *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "sed *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "cp *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "true";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "gh *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "pwd*";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "date *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "file *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "cut *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "herdr *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "which *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "du *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "rg *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "printf *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "uname *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "python3 *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "python *";
+            effect = "allow";
+          }
+          {
+            action = "shell";
+            resource = "timeout *";
+            effect = "allow";
+          }
+          {
+            action = "read";
+            resource = "*";
+            effect = "allow";
+          }
+          {
+            action = "edit";
+            resource = "*";
+            effect = "allow";
+          }
+          {
+            action = "glob";
+            resource = "*";
+            effect = "allow";
+          }
+          {
+            action = "grep";
+            resource = "*";
+            effect = "allow";
+          }
+          {
+            action = "subagent";
+            resource = "*";
+            effect = "allow";
+          }
+          {
+            action = "skill";
+            resource = "*";
+            effect = "allow";
+          }
+          {
+            action = "external_directory";
+            resource = "~/ghq/*";
+            effect = "allow";
+          }
+          {
+            action = "external_directory";
+            resource = "/tmp/*";
+            effect = "allow";
+          }
+          {
+            action = "external_directory";
+            resource = "/nix/store/*";
+            effect = "allow";
+          }
+        ];
 
         # File watcher ignore patterns
         watcher = {
