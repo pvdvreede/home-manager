@@ -22,7 +22,9 @@ in {
     pkgs,
     lib,
     ...
-  }: {
+  }: let
+    isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
+  in {
     programs.kitty = {
       enable = true;
       package = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin null;
@@ -45,7 +47,10 @@ in {
           cursor_trail = 300;
           cursor_trail_decay = "0.4 0.6";
           scrollback_pager = "sh -c \"${pkgs.ansifilter}/bin/ansifilter | ${pkgs.helix}/bin/hx\"";
-          hide_window_decorations = "titlebar-only";
+          hide_window_decorations =
+            if isDarwin
+            then "no"
+            else "yes";
         }
         // navySlateTheme;
       keybindings = {
