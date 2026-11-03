@@ -18,10 +18,14 @@
     tab_bar_background = "#181A1F";
   };
 in {
-  flake.homeModules.kitty = {pkgs, ...}: {
+  flake.homeModules.kitty = {
+    pkgs,
+    lib,
+    ...
+  }: {
     programs.kitty = {
       enable = true;
-      # package = null;
+      package = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin null;
       environment = {};
       font.name = "JetBrains Mono";
       font.package = pkgs.jetbrains-mono;

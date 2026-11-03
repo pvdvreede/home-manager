@@ -115,6 +115,7 @@
       programs.pi-coding-agent.settings = {
         defaultProvider = "anthropic";
         defaultModel = "claude-opus-5-5";
+        defaultThinkingLevel = "medium";
       };
     };
 

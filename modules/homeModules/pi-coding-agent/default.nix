@@ -2,6 +2,7 @@
   flake.homeModules.pi-coding-agent = {
     pkgs,
     lib,
+    config,
     ...
   }: let
     # Extensions authored here and owned by Home Manager. Drop `.ts`/`.js` files
@@ -55,7 +56,10 @@
         # model without fighting these values.
         defaultProvider = lib.mkDefault "deepseek";
         defaultModel = lib.mkDefault "deepseek-flash";
-        defaultThinkingLevel = "low";
+        defaultThinkingLevel = lib.mkDefault "low";
+
+        # Fail stalled provider streams fast so retry starts sooner.
+        httpIdleTimeoutMs = 15000;
 
         # Hide thinking blocks in the transcript by default (`ctrl+t` still
         # toggles them back on at runtime). The collapsed label still uses the
@@ -81,7 +85,10 @@
         ];
 
         # Locally authored extensions, owned by Nix.
-        inherit extensions;
+        # Upstream example: `/debug-provider [on|off]` shows raw provider events.
+        extensions =
+          extensions
+          ++ ["${config.programs.pi-coding-agent.package}/lib/node_modules/pi-monorepo/examples/extensions/debug-provider.ts"];
 
         # Locally authored skills, owned by Nix. Each entry is a directory
         # containing SKILL.md (see ./skills/plan-stages).
