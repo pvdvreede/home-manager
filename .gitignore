@@ -1,3 +1,5 @@
 *.swp
 result
 templates/*/flake.lock
+modules/homeModules/herdr-app/files/mods/*/jsconfig.json
+modules/homeModules/herdr-app/files/mods/*/gpui-kit.d.ts
