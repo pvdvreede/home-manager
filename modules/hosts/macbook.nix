@@ -120,6 +120,7 @@
         self.homeModules.zed-editor
         self.homeModules.antigravity
         self.homeModules.pi-coding-agent
+        self.homeModules.oh-my-pi
         self.homeModules.zerostack
         self.homeModules.herdr
         self.homeModules.herdr-app
