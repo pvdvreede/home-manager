@@ -19,6 +19,11 @@
         rev = "v0.3.1";
         subdir = "mods/git-graph";
       };
+      github = {
+        url = "https://github.com/mrolafsson/herdr-github";
+        rev = "v0.11.0";
+        subdir = "app/mods/github";
+      };
     };
 
     # Local mods committed in this repo (clones of shipped mods with edits).
