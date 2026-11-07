@@ -86,6 +86,7 @@
       "kitty"
       "visual-studio-code"
       "zed"
+      "herdr-app"
     ];
 
     users.users.pvdvreede = {

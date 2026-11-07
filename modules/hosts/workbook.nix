@@ -74,6 +74,7 @@
       "kitty"
       "visual-studio-code"
       "zed"
+      "herdr-app"
     ];
 
     users.users."paul.vandevreede" = {
@@ -108,8 +109,10 @@
         self.homeModules.vscode
         self.homeModules.zed-editor
         self.homeModules.pi-coding-agent
+        self.homeModules.oh-my-pi
         self.homeModules.awscli
         self.homeModules.granted
+        self.homeModules.herdr-app
       ];
 
       programs.pi-coding-agent.settings = {
