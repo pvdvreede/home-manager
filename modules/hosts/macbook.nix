@@ -122,6 +122,7 @@
         self.homeModules.pi-coding-agent
         self.homeModules.zerostack
         self.homeModules.herdr
+        self.homeModules.herdr-app
       ];
     };
 
