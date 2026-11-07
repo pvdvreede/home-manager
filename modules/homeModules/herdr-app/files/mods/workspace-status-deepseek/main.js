@@ -4,8 +4,99 @@ import { spaces, agents, theme, run, window, keys, appHome, readTextFile } from 
 
 const BALANCE_URL = "https://api.deepseek.com/user/balance";
 const KEY_FILE = "deepseek.key";
-const POLL_MS = 5 * 60 * 1000;
+const POLL_MS = 2 * 60 * 1000;
 const SYMBOL = { USD: "$", CNY: "\u00a5" };
+
+const H = 3600_000; // one hour in ms
+
+/** Peak windows in UTC hours [start, end), applied on Beijing weekdays. */
+const PEAK_WINDOWS = [
+  [1, 4],
+  [6, 10],
+];
+
+/**
+ * Chinese public holidays (official State Council dates) are off-peak in full.
+ * Make-up workdays (调休) need no entry: they always land on a Sat/Sun, which is
+ * off-peak anyway, so only weekday holidays can change a decision.
+ * Refresh once a year when the State Council publishes the next year's dates.
+ */
+const CHINA_HOLIDAY_RANGES = [
+  ["2026-01-01", "2026-01-03"], // New Year
+  ["2026-02-15", "2026-02-23"], // Spring Festival
+  ["2026-04-04", "2026-04-06"], // Ching Ming
+  ["2026-05-01", "2026-05-05"], // Labour Day
+  ["2026-06-19", "2026-06-21"], // Dragon Boat
+  ["2026-09-25", "2026-09-27"], // Mid-Autumn
+  ["2026-10-01", "2026-10-07"], // National Day
+];
+
+// Beijing calendar-day keys ("YYYY-MM-DD"), expanded once at load (UTC math, no DST).
+const HOLIDAY_DAYS = new Set();
+for (const [from, to] of CHINA_HOLIDAY_RANGES) {
+  const end = Date.parse(`${to}T00:00:00Z`);
+  for (let t = Date.parse(`${from}T00:00:00Z`); t <= end; t += 24 * H) {
+    HOLIDAY_DAYS.add(new Date(t).toISOString().slice(0, 10));
+  }
+}
+
+/** True when DeepSeek bills off-peak at `date`. */
+function isOffPeak(date) {
+  const bj = new Date(date.getTime() + 8 * H); // Beijing time (UTC+8)
+  const dow = bj.getUTCDay();
+  if (dow === 0 || dow === 6) return true; // Beijing weekend
+  if (HOLIDAY_DAYS.has(bj.toISOString().slice(0, 10))) return true;
+  const h = date.getUTCHours();
+  return !PEAK_WINDOWS.some(([start, end]) => h >= start && h < end);
+}
+
+/** First instant where the peak/off-peak state flips, or null if none within the scan window. */
+function nextPriceChange(date) {
+  const now = date.getTime();
+  const day = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+  const state = isOffPeak(date);
+  const candidates = [];
+  // Spring Festival is ~9.5 contiguous off-peak days, so scan three weeks ahead.
+  for (let i = 0; i < 21; i++) {
+    const d = day + i * 24 * H;
+    for (const h of [1, 4, 6, 10]) candidates.push(d + h * H);
+    candidates.push(d - 8 * H); // Beijing midnight (holiday boundaries)
+  }
+  for (const t of candidates.sort((a, b) => a - b)) {
+    if (t > now && isOffPeak(new Date(t + 1)) !== state) return new Date(t);
+  }
+  return null;
+}
+
+function formatHM(m) {
+  if (m <= 0) return "";
+  if (m < 60) return `${m}m`;
+  const h = Math.floor(m / 60);
+  const min = m % 60;
+  return min === 0 ? `${h}h` : `${h}h${String(min).padStart(2, "0")}m`;
+}
+
+/** Time until the next switch: "8d22h", "27h", "1h30m", "45m". */
+function formatCountdown(date) {
+  const next = nextPriceChange(date);
+  if (!next) return "";
+  const m = Math.ceil((next.getTime() - date.getTime()) / 60000);
+  if (m >= 48 * 60) return `${Math.floor(m / 1440)}d${formatHM(m % 1440)}`;
+  return formatHM(m);
+}
+
+/** Local wall-clock instant the current period ends at: "14:00", "Mon 09:00", "03-01 14:00". */
+function formatEndLocal(date) {
+  const next = nextPriceChange(date);
+  if (!next) return "";
+  const clock = `${String(next.getHours()).padStart(2, "0")}:${String(next.getMinutes()).padStart(2, "0")}`;
+  const dayStart = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+  const dayDiff = Math.round((dayStart(next) - dayStart(date)) / (24 * H));
+  if (dayDiff === 0) return clock;
+  if (dayDiff === 1) return `${["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][next.getDay()]} ${clock}`;
+  const mmdd = `${String(next.getMonth() + 1).padStart(2, "0")}-${String(next.getDate()).padStart(2, "0")}`;
+  return `${mmdd} ${clock}`;
+}
 
 export default class WorkspaceStatusDeepSeek extends View {
   // The palette key as actually bound, not a hardcoded one; without a
@@ -27,6 +118,9 @@ export default class WorkspaceStatusDeepSeek extends View {
     this.error = null;
     this.busy = false;
     cx.timer.every(POLL_MS, (cx) => this.refresh(cx));
+    // Re-render every minute so the peak/off-peak countdown stays live without
+    // re-fetching the balance (which the 5-minute poll already owns).
+    cx.timer.every(60_000, (cx) => cx.notify());
     this.refresh(cx);
   }
 
@@ -87,6 +181,20 @@ export default class WorkspaceStatusDeepSeek extends View {
     ].join("\n");
   }
 
+  // Green "off-peak" / red "peak" badge, plus the countdown to the next switch
+  // and the local time the current period ends. Rendered to the left of the
+  // spend. `ansi2` is the palette's green; `blocked` is the app's error red
+  // (`done` is blue in every theme, so it can't carry the off-peak colour).
+  billingBadge(t) {
+    const now = new Date();
+    const offPeak = isOffPeak(now);
+    const cd = formatCountdown(now);
+    const end = formatEndLocal(now);
+    const label = offPeak ? "off-peak" : "peak";
+    const suffix = end ? ` (until ${end})` : "";
+    return div().text_color(offPeak ? t.ansi2 : t.blocked).child(cd ? `${label} ${cd}${suffix}` : label);
+  }
+
   // Nothing to show without the key file: no label, no poll, no fetch.
   meter(t) {
     if (!this.info && !this.error) return null;
@@ -101,6 +209,7 @@ export default class WorkspaceStatusDeepSeek extends View {
       .cursor_pointer()
       .on_click((_e, cx) => this.refresh(cx))
       .tooltip(this.detail())
+      .child(this.billingBadge(t))
       .child(div().text_color(this.error ? t.dim : color).child(this.error ? "DeepSeek: ?" : `DeepSeek remaining: ${money}`));
   }
 
