@@ -35,6 +35,18 @@
     # Mods this module used to copy in under another name. Removed on activation
     # so a rename does not leave a stale copy in ~/.config/herdr-app/mods.
     staleLocal = ["tabs-deepseek"];
+
+    # Appended to pi's system prompt (see APPEND_SYSTEM.md below).
+    piPromptAppend = ''
+      # herdr-app
+
+      - Your terminal runs herdr-app when the environment variable
+        `HC_TERMINAL_ID` is set.
+      - Then read `~/.config/herdr-app/AGENTS.md` before you interact with
+        herdr-app. That file gives the config layout and the `herdr-app do`
+        commands.
+      - Do not read that file when `HC_TERMINAL_ID` is not set.
+    '';
   in {
     # The herdr-app desktop app keeps its whole UI as plain files in
     # $XDG_CONFIG_HOME/herdr-app (JSON, see ~/.config/herdr-app/AGENTS.md).
@@ -110,6 +122,18 @@
         run rm -rf ${lib.escapeShellArg "${homeDir}/.config/herdr-app/mods/${name}"}
       '')
       staleLocal
+    );
+
+    # pi appends ~/.pi/agent/APPEND_SYSTEM.md to its system prompt. The
+    # pi-coding-agent module links that file to its own prompt file, so force
+    # the link to a combined file here instead. Nothing is added when pi is
+    # not installed.
+    home.file.".pi/agent/APPEND_SYSTEM.md".source = lib.mkIf (config.programs.pi-coding-agent.enable or false) (
+      lib.mkForce (pkgs.writeText "APPEND_SYSTEM.md" (
+        builtins.readFile ../pi-coding-agent/append-system-prompt.md
+        + "\n"
+        + piPromptAppend
+      ))
     );
 
     xdg.configFile = {
