@@ -136,7 +136,13 @@
       ))
     );
 
+    # herdr-core picks the shell for new terminals (and for keep recovery)
+    # from this file, not from $SHELL. Without it the core starts the macOS
+    # login shell, which is zsh here.
     xdg.configFile = {
+      "herdr-core/config.toml".text = ''
+        shell = ["${pkgs.fish}/bin/fish", "-l"]
+      '';
       "herdr-app/settings.json".source = ./files/settings.json;
       "herdr-app/keys.json".source = ./files/keys.json;
       "herdr-app/layouts/personal.json".source = ./files/layouts/personal.json;
