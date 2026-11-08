@@ -27,7 +27,14 @@
     };
 
     # Local mods committed in this repo (clones of shipped mods with edits).
-    local = ["tabs-deepseek"];
+    # `tabs-panels` is the shipped `tabs` mod plus Git/GitHub panel toggles;
+    # `workspace-status-deepseek` is `workspace-status` plus the DeepSeek
+    # balance/billing segment.
+    local = ["tabs-panels" "workspace-status-deepseek"];
+
+    # Mods this module used to copy in under another name. Removed on activation
+    # so a rename does not leave a stale copy in ~/.config/herdr-app/mods.
+    staleLocal = ["tabs-deepseek"];
   in {
     # The herdr-app desktop app keeps its whole UI as plain files in
     # $XDG_CONFIG_HOME/herdr-app (JSON, see ~/.config/herdr-app/AGENTS.md).
@@ -50,10 +57,12 @@
     # file do not persist. That affects settings.json (zoom, theme, font,
     # option_as_alt) and keys.json. Edit files/ here and switch instead.
     #
-    # Mods and layouts added below are copied in whole by an activation script,
-    # never linked. A mod's `./module.js` import is checked against the mod's own
+    # Local mods added below are copied in whole by an activation script, never
+    # linked: a mod's `./module.js` import is checked against the mod's own
     # folder, and a symlink resolves to /nix/store, so the app refuses it
     # (`module './graph.js' resolves outside the application directory`).
+    # layouts/personal.json is linked like the other layouts: a layout is JSON
+    # with no module resolution, so a symlink is fine.
     #
     # Check a copied mod after switching:
     #
@@ -96,16 +105,19 @@
         run chmod -R u+w ${destArg}
       '')
       local
+      # Old local-mod names, removed after the current ones are in place.
+      + lib.concatMapStrings (name: ''
+        run rm -rf ${lib.escapeShellArg "${homeDir}/.config/herdr-app/mods/${name}"}
+      '')
+      staleLocal
     );
 
     xdg.configFile = {
       "herdr-app/settings.json".source = ./files/settings.json;
       "herdr-app/keys.json".source = ./files/keys.json;
-      "herdr-app/layouts/main-deepseek.json".source = ./files/layouts/main-deepseek.json;
+      "herdr-app/layouts/personal.json".source = ./files/layouts/personal.json;
       "herdr-app/themes/atom-one-dark.json".source = ./files/themes/atom-one-dark.json;
       "herdr-app/themes/win98.json".source = ./files/themes/win98.json;
-      "herdr-app/mods/workspace-status-deepseek/mod.json".source = ./files/mods/workspace-status-deepseek/mod.json;
-      "herdr-app/mods/workspace-status-deepseek/main.js".source = ./files/mods/workspace-status-deepseek/main.js;
     };
   };
 }

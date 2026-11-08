@@ -1,6 +1,6 @@
 import { View, div, svg, image } from "gpui-kit";
 import { h_flex } from "gpui-base";
-import { spaces, panes, run, openOverlay, theme, window, shared, layout, settings } from "herdr";
+import { spaces, panes, run, openOverlay, theme, window, layout, settings } from "herdr";
 
 function find(node, id) {
   if (node?.id === id) return node;
@@ -10,6 +10,18 @@ function find(node, id) {
   }
   return null;
 }
+
+// Panels this tab bar toggles and selects in the layout's "panel-body" stack.
+// The list is local on purpose: shared("workspace.panels") is read-only cockpit
+// state that only ever names the shipped Files/Changes pair, so a clone that
+// adds panels cannot extend it. Keep in step with layouts/personal.json.
+const PANELS = [
+  ["files", "Files", "mods/files/file.svg"],
+  ["changes", "Changes", "mods/changes/changes.svg"],
+  ["graph", "Git", "mods/git-graph/icons/graph.svg"],
+  ["github", "GitHub", "mods/github/icons/pr.svg"],
+];
+const ENABLED = PANELS.map(([id]) => id);
 
 export default class Tabs extends View {
   init() {
@@ -77,8 +89,7 @@ export default class Tabs extends View {
       ? Math.max(10, (root.traffic_lights[0] + 64) / settings().zoom - (sidebar?.hidden ? 0 : sidebar?.size?.px ?? 0))
       : 10;
     const panel = find(root, "panel"), body = find(root, "panel-body");
-    const enabled = [...(shared("workspace.panels") ?? ["files", "changes"]), "graph", "github"];
-    this.syncPanel(space, panel, body, enabled);
+    this.syncPanel(space, panel, body, ENABLED);
     const panelButton = (id, label, icon) => {
       const on = panel && !panel.hidden && body?.active === id;
       return h_flex().id(`panel-${id}`).h(26).px(8).gap(5).flex_none().items_center().rounded(6)
@@ -94,12 +105,9 @@ export default class Tabs extends View {
       .on_scroll_wheel(e => { if (Math.abs(e.delta.y) >= 1) run(e.delta.y > 0 ? "tab.prev" : "tab.next"); })
       .child(h_flex().id("tab-scroll").flex_1().min_w(0).h_full().items_center().gap(3).overflow_x_scrollbar().children(shown.map(item)))
       .child(button("tab-new", "+", () => openOverlay({ mod: "new-menu", kind: "popup", width: 250, height: 512 })))
-      .when(enabled.includes("files"), el => el.child(panelButton("files", "Files", "mods/files/file.svg")))
-      .when(enabled.includes("changes"), el => el.child(panelButton("changes", "Changes", "mods/changes/changes.svg")))
-      .child(panelButton("graph", "Git", "mods/git-graph/icons/graph.svg"))
-      .child(panelButton("github", "GitHub", "mods/github/icons/pr.svg"))
-      .when(w?.buttons, el => el.child(button("minimize", w.platform === "windows" ? svg("mods/tabs-deepseek/win-min.svg").size(16) : "−", () => run("window.minimize")))
-        .child(button("maximize", w.platform === "windows" ? svg(`mods/tabs-deepseek/${w.maximized ? "win-restore" : "win-max"}.svg`).size(16) : "□", () => run("window.maximize")))
-        .child(button("close-window", w.platform === "windows" ? svg("mods/tabs-deepseek/win-close.svg").size(16) : svg("mods/pane/close.svg").size(13), () => run("window.close"))));
+      .children(PANELS.map(([id, label, icon]) => panelButton(id, label, icon)))
+      .when(w?.buttons, el => el.child(button("minimize", w.platform === "windows" ? svg("mods/tabs-panels/win-min.svg").size(16) : "−", () => run("window.minimize")))
+        .child(button("maximize", w.platform === "windows" ? svg(`mods/tabs-panels/${w.maximized ? "win-restore" : "win-max"}.svg`).size(16) : "□", () => run("window.maximize")))
+        .child(button("close-window", w.platform === "windows" ? svg("mods/tabs-panels/win-close.svg").size(16) : svg("mods/pane/close.svg").size(13), () => run("window.close"))));
   }
 }
