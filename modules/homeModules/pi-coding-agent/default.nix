@@ -59,7 +59,8 @@
         defaultThinkingLevel = lib.mkDefault "low";
 
         # Fail stalled provider streams fast so retry starts sooner.
-        httpIdleTimeoutMs = 15000;
+        httpIdleTimeoutMs = 20000;
+        retry.maxRetries = 8;
 
         # Hide thinking blocks in the transcript by default (`ctrl+t` still
         # toggles them back on at runtime). The collapsed label still uses the
