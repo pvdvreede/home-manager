@@ -69,7 +69,8 @@
 
     homebrew.enable = true;
     homebrew.onActivation.cleanup = "none";
-    homebrew.onActivation.autoUpdate = false;
+    homebrew.onActivation.autoUpdate = true;
+    homebrew.onActivation.upgrade = true;
     homebrew.casks = [
       "kitty"
       "visual-studio-code"

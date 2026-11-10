@@ -79,7 +79,8 @@
 
     homebrew.enable = true;
     homebrew.onActivation.cleanup = "none";
-    homebrew.onActivation.autoUpdate = false;
+    homebrew.onActivation.autoUpdate = true;
+    homebrew.onActivation.upgrade = true;
     homebrew.casks = [
       "google-chrome"
       "tailscale-app"
