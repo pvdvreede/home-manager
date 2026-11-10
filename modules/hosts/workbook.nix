@@ -13,6 +13,8 @@
   flake.darwinModules.workbook = {pkgs, ...}: {
     system.stateVersion = 6;
     environment.shells = [pkgs.fish];
+    programs.fish.enable = true;
+    users.knownUsers = ["paul.vandevreede"];
     system.primaryUser = "paul.vandevreede";
     nixpkgs.hostPlatform = "aarch64-darwin";
 
@@ -81,6 +83,9 @@
     users.users."paul.vandevreede" = {
       name = "paul.vandevreede";
       home = "/Users/paul.vandevreede";
+      uid = 502;
+      shell = pkgs.fish;
+      isHidden = false;
     };
 
     home-manager.users."paul.vandevreede" = {

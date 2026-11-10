@@ -23,6 +23,8 @@
   flake.darwinModules.macbook = {pkgs, ...}: {
     system.stateVersion = 6;
     environment.shells = [pkgs.fish];
+    programs.fish.enable = true;
+    users.knownUsers = ["pvdvreede"];
     system.primaryUser = "pvdvreede";
     nixpkgs.hostPlatform = "aarch64-darwin";
 
@@ -93,6 +95,9 @@
     users.users.pvdvreede = {
       name = "pvdvreede";
       home = "/Users/pvdvreede";
+      uid = 501;
+      shell = pkgs.fish;
+      isHidden = false;
     };
 
     home-manager.users.pvdvreede = {
