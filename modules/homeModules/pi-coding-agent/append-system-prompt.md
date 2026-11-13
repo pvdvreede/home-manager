@@ -79,3 +79,4 @@ Use the `subagent` tool (pi-subagents):
   quirk that would not otherwise be understood.
 - jj is the preferred vcs provider, so check if its present in any repo before falling
   back to git commands.
+- Before you create a PR, always rebase the branch onto `origin/main`.
