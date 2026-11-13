@@ -102,6 +102,7 @@
         self.homeModules.helix
         self.homeModules.git
         self.homeModules.jujutsu
+        self.homeModules.lazygit
         self.homeModules.zoxide
         self.homeModules.eza
         self.homeModules.gh
@@ -116,7 +117,6 @@
         self.homeModules.vscode
         self.homeModules.zed-editor
         self.homeModules.pi-coding-agent
-        self.homeModules.oh-my-pi
         self.homeModules.awscli
         self.homeModules.granted
         self.homeModules.herdr-app

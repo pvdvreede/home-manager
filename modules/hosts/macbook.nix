@@ -112,6 +112,7 @@
         self.homeModules.helix
         self.homeModules.git
         self.homeModules.jujutsu
+        self.homeModules.lazygit
         self.homeModules.zoxide
         self.homeModules.eza
         self.homeModules.gh
