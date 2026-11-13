@@ -90,6 +90,7 @@
       "visual-studio-code"
       "zed"
       "herdr-app"
+      "t3-code"
     ];
 
     users.users.pvdvreede = {
@@ -131,6 +132,7 @@
         self.homeModules.zerostack
         self.homeModules.herdr
         self.homeModules.herdr-app
+        self.homeModules.t3-code
       ];
     };
 

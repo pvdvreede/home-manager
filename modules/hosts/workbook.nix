@@ -78,6 +78,7 @@
       "visual-studio-code"
       "zed"
       "herdr-app"
+      "t3-code"
     ];
 
     users.users."paul.vandevreede" = {
@@ -119,6 +120,7 @@
         self.homeModules.awscli
         self.homeModules.granted
         self.homeModules.herdr-app
+        self.homeModules.t3-code
       ];
 
       programs.pi-coding-agent.settings = {
