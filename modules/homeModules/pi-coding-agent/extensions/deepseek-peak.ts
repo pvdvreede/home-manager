@@ -139,6 +139,87 @@ function sanitizeStatusText(text: string): string {
 let currentCtx: ExtensionContext | undefined;
 let currentTui: { requestRender(): void } | undefined;
 
+// --- DeepSeek balance -------------------------------------------------------
+
+/**
+ * Remaining account balance, shown to the right of the peak badge. The key is
+ * resolved through pi's own credential store (auth.json / models.json), so the
+ * extension never needs its own copy of DEEPSEEK_API_KEY.
+ */
+const BALANCE_URL = "https://api.deepseek.com/user/balance";
+const BALANCE_REFRESH_MS = 60_000;
+const BALANCE_TIMEOUT_MS = 8_000;
+
+let balanceText: string | undefined;
+let balanceTimer: ReturnType<typeof setInterval> | undefined;
+let balanceController: AbortController | undefined;
+
+function currencySymbol(currency: string): string {
+	if (currency === "USD") return "$";
+	if (currency === "CNY") return "\u00a5";
+	return currency ? `${currency} ` : "";
+}
+
+function formatBalance(payload: any): string | undefined {
+	const infos: any[] = Array.isArray(payload?.balance_infos) ? payload.balance_infos : [];
+	const info = infos.find((i) => i?.currency === "USD") ?? infos[0];
+	const total = Number(info?.total_balance);
+	if (!info || !Number.isFinite(total)) return undefined;
+	return `bal ${currencySymbol(String(info.currency ?? ""))}${total.toFixed(2)}`;
+}
+
+async function refreshBalance(ctx: ExtensionContext): Promise<void> {
+	if ((ctx.model as any)?.provider !== "deepseek") return;
+	let apiKey: string | undefined;
+	try {
+		apiKey = await ctx.modelRegistry.getApiKeyForProvider("deepseek");
+	} catch {
+		return;
+	}
+	if (!apiKey) return;
+
+	balanceController?.abort();
+	const controller = new AbortController();
+	balanceController = controller;
+	const timeout = setTimeout(() => controller.abort(), BALANCE_TIMEOUT_MS);
+	try {
+		const res = await fetch(BALANCE_URL, {
+			headers: { Authorization: `Bearer ${apiKey}`, Accept: "application/json" },
+			signal: controller.signal,
+		});
+		if (!res.ok) return;
+		const text = formatBalance(await res.json());
+		if (!text || text === balanceText) return;
+		balanceText = text;
+		currentTui?.requestRender();
+	} catch {
+		// Keep the last known balance; a failed poll is not worth a notification.
+	} finally {
+		clearTimeout(timeout);
+		if (balanceController === controller) balanceController = undefined;
+	}
+}
+
+function stopBalanceRefresh(): void {
+	if (balanceTimer !== undefined) {
+		clearInterval(balanceTimer);
+		balanceTimer = undefined;
+	}
+	balanceController?.abort();
+	balanceController = undefined;
+}
+
+function startBalanceRefresh(ctx: ExtensionContext): void {
+	stopBalanceRefresh();
+	if ((ctx.model as any)?.provider !== "deepseek") {
+		balanceText = undefined;
+		return;
+	}
+	void refreshBalance(ctx);
+	balanceTimer = setInterval(() => void refreshBalance(ctx), BALANCE_REFRESH_MS);
+	(balanceTimer as any).unref?.();
+}
+
 // --- automatic peak pause ---------------------------------------------------
 
 /**
@@ -256,23 +337,27 @@ function renderFooter(
 	if (footerData.getAvailableProviderCount() > 1 && model) {
 		right = `(${model.provider}) ${right}`;
 	}
-	let badgeText = "";
-	if (model?.provider === "deepseek") badgeText = badge(theme, new Date());
-	const badgeWidth = badgeText ? visibleWidth(badgeText) + 1 : 0;
-	const rightWidth = badgeWidth + visibleWidth(right);
+	const extras: string[] = [];
+	if (model?.provider === "deepseek") {
+		extras.push(badge(theme, new Date()));
+		if (balanceText) extras.push(theme.fg("dim", balanceText));
+	}
+	const extrasText = extras.length > 0 ? `${extras.join(" ")} ` : "";
+	const extrasWidth = visibleWidth(extrasText);
+	const rightWidth = extrasWidth + visibleWidth(right);
 
 	const minPadding = 2;
 	let statsLine: string;
 	if (leftWidth + rightWidth + minPadding <= width) {
 		const padding = " ".repeat(width - leftWidth - rightWidth);
-		statsLine = theme.fg("dim", left) + padding + (badgeText ? `${badgeText} ` : "") + theme.fg("dim", right);
+		statsLine = theme.fg("dim", left) + padding + extrasText + theme.fg("dim", right);
 	} else {
 		const available = width - leftWidth - minPadding;
-		if (available > badgeWidth + 3) {
-			const truncated = truncateToWidth(right, available - badgeWidth, "");
-			const truncatedWidth = badgeWidth + visibleWidth(truncated);
+		if (available > extrasWidth + 3) {
+			const truncated = truncateToWidth(right, available - extrasWidth, "");
+			const truncatedWidth = extrasWidth + visibleWidth(truncated);
 			const padding = " ".repeat(Math.max(0, width - leftWidth - truncatedWidth));
-			statsLine = theme.fg("dim", left) + padding + (badgeText ? `${badgeText} ` : "") + theme.fg("dim", truncated);
+			statsLine = theme.fg("dim", left) + padding + extrasText + theme.fg("dim", truncated);
 		} else {
 			statsLine = theme.fg("dim", left);
 		}
@@ -313,6 +398,7 @@ function applyFooter(ctx: ExtensionContext): void {
 	} else {
 		ctx.ui.setFooter(undefined);
 	}
+	startBalanceRefresh(ctx);
 }
 
 export default function (pi: ExtensionAPI) {
@@ -336,6 +422,7 @@ export default function (pi: ExtensionAPI) {
 	pi.on("agent_end", async (_event, ctx) => {
 		currentCtx = ctx;
 		currentTui?.requestRender();
+		void refreshBalance(ctx);
 	});
 
 	pi.on("thinking_level_select", async (_event, ctx) => {
@@ -345,6 +432,7 @@ export default function (pi: ExtensionAPI) {
 
 	pi.on("session_shutdown", async () => {
 		clearPauseTimer();
+		stopBalanceRefresh();
 		currentTui = undefined;
 	});
 }
