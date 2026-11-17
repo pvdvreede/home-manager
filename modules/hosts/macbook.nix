@@ -127,10 +127,8 @@
         self.homeModules.direnv
         self.homeModules.vscode
         self.homeModules.zed-editor
-        self.homeModules.antigravity
         self.homeModules.pi-coding-agent
-        self.homeModules.zerostack
-        self.homeModules.herdr
+        self.homeModules.wezterm
         self.homeModules.herdr-app
         self.homeModules.t3-code
       ];
