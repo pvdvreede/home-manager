@@ -1,5 +1,7 @@
 {...}: {
   flake.homeModules.lazygit = {...}: {
+    programs.fish.shellAliases.lz = "lazygit";
+
     programs.lazygit = {
       enable = true;
       settings = {
