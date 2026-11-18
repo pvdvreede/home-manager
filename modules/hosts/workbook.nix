@@ -123,12 +123,22 @@
         self.homeModules.granted
         self.homeModules.herdr-app
         self.homeModules.t3-code
+        self.homeModules.wezterm
       ];
 
       programs.pi-coding-agent.settings = {
         defaultProvider = "anthropic";
         defaultModel = "claude-opus-5-5";
         defaultThinkingLevel = "medium";
+      };
+
+      # Read-only store symlink: /mcp exposure and enable toggles cannot be
+      # saved here. OAuth tokens live in ~/.pi/agent/mcp-auth.json.
+      home.file.".pi/agent/mcp.json".text = builtins.toJSON {
+        mcpServers.datadog = {
+          url = "https://mcp.datadoghq.com/v1/mcp";
+          description = "Query Datadog logs, metrics, traces, monitors, dashboards and incidents";
+        };
       };
     };
 
