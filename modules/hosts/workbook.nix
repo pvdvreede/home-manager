@@ -107,6 +107,7 @@
         self.homeModules.zoxide
         self.homeModules.eza
         self.homeModules.gh
+        self.homeModules.gh-dash
         self.homeModules.ghq
         self.homeModules.wt
         self.homeModules.starship
