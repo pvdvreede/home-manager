@@ -40,7 +40,6 @@
           statusPanelView = "dashboard";
         };
         git = {
-          diffRenderers = [];
           commit = {
             signOff = false;
             autoWrapCommitMessage = true;

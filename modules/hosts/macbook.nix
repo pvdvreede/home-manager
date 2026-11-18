@@ -7,7 +7,6 @@
     modules = [
       inputs.home-manager.darwinModules.home-manager
       self.darwinModules.macbook
-      self.darwinModules.wm
     ];
   };
 
@@ -86,7 +85,6 @@
     homebrew.casks = [
       "google-chrome"
       "tailscale-app"
-      "kitty"
       "visual-studio-code"
       "zed"
       "herdr-app"
@@ -132,6 +130,7 @@
         self.homeModules.wezterm
         self.homeModules.herdr-app
         self.homeModules.t3-code
+        self.homeModules.delta
       ];
     };
 

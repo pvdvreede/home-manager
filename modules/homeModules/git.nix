@@ -1,5 +1,5 @@
 {...}: {
-  flake.homeModules.git = {pkgs, ...}: {
+  flake.homeModules.git = {...}: {
     programs.git = {
       enable = true;
       signing.format = null;
