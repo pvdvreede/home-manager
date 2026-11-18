@@ -1,99 +1,11 @@
 local wezterm = require("wezterm")
 local mux = wezterm.mux
 local config = wezterm.config_builder()
-
-local function shell_quote(s)
-  return "'" .. s:gsub("'", "'\\''") .. "'"
-end
-
-local function current_dir(pane)
-  local cwd = pane:get_current_working_dir()
-  if not cwd then
-    return nil
-  end
-  return cwd.file_path or tostring(cwd)
-end
-
--- Names are generated: the worktree branch and the workspace name match.
--- Format: branch wz-<dir name>-<timestamp>, workspace <dir name>-<timestamp>.
--- Git ref rules apply, so reduce the dir name to lowercase word characters
--- and dashes. Returns branch, workspace.
-local function worktree_names(pane)
-  local path = current_dir(pane) or ""
-  local base = path:match("([^/\\]+)[/\\]*$") or "root"
-  base = base:lower():gsub("[^%w]+", "-"):gsub("^%-+", ""):gsub("%-+$", "")
-  if base == "" then
-    base = "root"
-  end
-  local stem = string.format("%s-%s", base, os.date("%Y%m%d-%H%M%S"))
-  return "wz-" .. stem, stem
-end
-
--- Fetch origin/main, then create the branch and worktree from it.
--- Returns the worktree path, or nil and an error message.
-local function create_worktree(dir, branch)
-  if not dir then
-    return nil, "current directory is unknown"
-  end
-  -- wezterm.run_child_process takes only an argv list, no cwd option, so the
-  -- directory change happens inside the shell. An empty list panics wezterm.
-  -- The GUI has no profile PATH, so the tools are absolute store paths.
-  local ok, stdout, stderr = wezterm.run_child_process({
-    "@bash@",
-    "-c",
-    'export PATH=@toolsPath@:$PATH; cd "$1" && git fetch --quiet origin main && wt switch -c "$2" --base origin/main --no-cd -y --format json',
-    "sh",
-    dir,
-    branch,
-  })
-  if not ok then
-    return nil, (stderr ~= "" and stderr or stdout)
-  end
-  local path = stdout:match('"path"%s*:%s*"(.-)"')
-  if not path then
-    return nil, "cannot read worktree path from: " .. stdout
-  end
-  return path
-end
-
--- WezTerm has no "workspace created" event, so creation goes through this
--- keybinding: the worktree is created first, then the panes start in it.
--- Tab 1 is a horizontal split, pi on the left (60%), lazygit on the right
--- (40%). Tab 2 runs the editor.
-local function new_workspace(window, pane)
-  local branch, name = worktree_names(pane)
-  local dir = current_dir(pane)
-  local path, err = create_worktree(dir, branch)
-
-  if not path then
-    local _, failed_pane = mux.spawn_window({ workspace = name, cwd = dir })
-    mux.set_active_workspace(name)
-    failed_pane:send_text("echo " .. shell_quote("worktree failed: " .. err) .. "\r")
-    return
-  end
-
-  local tab, new_pane, new_window = mux.spawn_window({
-    workspace = name,
-    cwd = path,
-    args = { "@pi@" },
-  })
-  mux.set_active_workspace(name)
-
-  -- size is the fraction of the new pane: 0.4 lazygit, 0.6 pi.
-  new_pane:split({
-    direction = "Right",
-    size = 0.4,
-    cwd = path,
-    args = { "@lazygit@" },
-  })
-
-  new_window:spawn_tab({ cwd = path, args = { "@hx@", "." } })
-  tab:activate()
-end
+local worktree = require("worktree")
 
 -- The leader keys below use these actions, and so does the command palette.
 -- Build them once: each action_callback call registers a new event handler.
-local new_workspace_action = wezterm.action_callback(new_workspace)
+local new_workspace_action = wezterm.action_callback(worktree.new_workspace)
 local workspace_picker = wezterm.action.ShowLauncherArgs({
   flags = "FUZZY|WORKSPACES",
   title = "Workspaces",
@@ -105,7 +17,7 @@ wezterm.on("augment-command-palette", function()
   return {
     {
       brief = "New worktree workspace",
-      doc = "Creates a git worktree from origin/main, then opens a workspace for it with pi, lazygit and helix",
+      doc = "Creates a git worktree from origin/main or origin/master, then opens a workspace for it with pi, lazygit and helix",
       icon = "md_source_branch",
       action = new_workspace_action,
     },

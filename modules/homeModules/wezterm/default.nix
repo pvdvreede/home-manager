@@ -14,7 +14,8 @@
 
     # The GUI app does not inherit the home-manager profile PATH, so every
     # command that wezterm.lua starts uses an absolute store path.
-    xdg.configFile."wezterm/wezterm.lua".source = pkgs.replaceVars ./wezterm.lua {
+    xdg.configFile."wezterm/wezterm.lua".source = ./wezterm.lua;
+    xdg.configFile."wezterm/worktree.lua".source = pkgs.replaceVars ./worktree.lua {
       bash = lib.getExe pkgs.bash;
       pi = lib.getExe pi;
       lazygit = lib.getExe pkgs.lazygit;
