@@ -1,15 +1,21 @@
-{...}: {
-  flake.homeModules.helix = {pkgs, ...}: {
+{
+  inputs,
+  ...
+}: {
+  flake.homeModules.helix = {pkgs, ...}: let
+    helix = inputs.helix.packages.${pkgs.stdenv.hostPlatform.system}.helix;
+  in {
     home.sessionVariables = {
-      EDITOR = "${pkgs.helix}/bin/hx";
+      EDITOR = "${helix}/bin/hx";
     };
 
     programs.fish.interactiveShellInit = ''
-      set -gx EDITOR ${pkgs.helix}/bin/hx
+      set -gx EDITOR ${helix}/bin/hx
     '';
 
     programs.helix = {
       enable = true;
+      package = helix;
       extraPackages = [
         pkgs.docker-compose-language-service
         pkgs.dockerfile-language-server
