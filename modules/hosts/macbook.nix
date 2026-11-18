@@ -91,6 +91,7 @@
       "zed"
       "herdr-app"
       "t3-code"
+      "wezterm@nightly"
     ];
 
     users.users.pvdvreede = {

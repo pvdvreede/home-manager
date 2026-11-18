@@ -29,17 +29,66 @@ local function worktree_names(pane)
   return "wz-" .. stem, stem
 end
 
+-- Fetch origin/main, then create the branch and worktree from it.
+-- Returns the worktree path, or nil and an error message.
+local function create_worktree(dir, branch)
+  if not dir then
+    return nil, "current directory is unknown"
+  end
+  -- wezterm.run_child_process takes only an argv list, no cwd option, so the
+  -- directory change happens inside the shell. An empty list panics wezterm.
+  -- The GUI has no profile PATH, so the tools are absolute store paths.
+  local ok, stdout, stderr = wezterm.run_child_process({
+    "@bash@",
+    "-c",
+    'export PATH=@toolsPath@:$PATH; cd "$1" && git fetch --quiet origin main && wt switch -c "$2" --base origin/main --no-cd -y --format json',
+    "sh",
+    dir,
+    branch,
+  })
+  if not ok then
+    return nil, (stderr ~= "" and stderr or stdout)
+  end
+  local path = stdout:match('"path"%s*:%s*"(.-)"')
+  if not path then
+    return nil, "cannot read worktree path from: " .. stdout
+  end
+  return path
+end
+
 -- WezTerm has no "workspace created" event, so creation goes through this
--- keybinding and the worktree command runs in the new workspace's pane.
+-- keybinding: the worktree is created first, then the panes start in it.
+-- Tab 1 is a horizontal split, pi on the left (60%), lazygit on the right
+-- (40%). Tab 2 runs the editor.
 local function new_workspace(window, pane)
   local branch, name = worktree_names(pane)
-  local _, new_pane = mux.spawn_window({
+  local dir = current_dir(pane)
+  local path, err = create_worktree(dir, branch)
+
+  if not path then
+    local _, failed_pane = mux.spawn_window({ workspace = name, cwd = dir })
+    mux.set_active_workspace(name)
+    failed_pane:send_text("echo " .. shell_quote("worktree failed: " .. err) .. "\r")
+    return
+  end
+
+  local tab, new_pane, new_window = mux.spawn_window({
     workspace = name,
-    cwd = current_dir(pane),
+    cwd = path,
+    args = { "@pi@" },
   })
   mux.set_active_workspace(name)
 
-  new_pane:send_text("wt switch -c " .. shell_quote(branch) .. " 2>/dev/null || true\r")
+  -- size is the fraction of the new pane: 0.4 lazygit, 0.6 pi.
+  new_pane:split({
+    direction = "Right",
+    size = 0.4,
+    cwd = path,
+    args = { "@lazygit@" },
+  })
+
+  new_window:spawn_tab({ cwd = path, args = { "@hx@", "." } })
+  tab:activate()
 end
 
 config.font = wezterm.font("JetBrains Mono")
@@ -74,20 +123,44 @@ config.colors = {
       fg_color = "#a9b1d6",
     },
   },
+  -- Also colours the selected row of the command palette.
+  selection_fg = "#c0caf5",
+  selection_bg = "#283457",
 }
 
--- Command palette: roomier layout (font family is not configurable here).
+-- Command palette (CTRL+SHIFT+P). It has its own font settings: the family
+-- and size do not follow config.font.
+config.command_palette_font = wezterm.font("JetBrains Mono")
 config.command_palette_font_size = 16
+config.command_palette_line_height = 1.4
 config.command_palette_rows = 14
+config.command_palette_bg_color = "#1a1b26"
+config.command_palette_fg_color = "#c0caf5"
 
+-- Draw shortcut key caps with mac symbols (Super, Alt, Ctrl, Shift).
+if wezterm.target_triple:find("darwin") then
+  config.ui_key_cap_rendering = "AppleSymbols"
+end
+
+-- Leader indicator: while the leader key waits for the next key, the right
+-- status shows a badge in front of the workspace name.
+--
 -- Workspace name on the right side of the tab bar.
 wezterm.on("update-right-status", function(window, _)
-  window:set_right_status(wezterm.format({
-    { Background = { Color = "#16161e" } },
-    { Foreground = { Color = "#7aa2f7" } },
-    { Attribute = { Intensity = "Bold" } },
-    { Text = " " .. mux.get_active_workspace() .. " " },
-  }))
+  local cells = {}
+  if window:leader_is_active() then
+    cells = {
+      { Background = { Color = "#7aa2f7" } },
+      { Foreground = { Color = "#16161e" } },
+      { Attribute = { Intensity = "Bold" } },
+      { Text = " LEADER " },
+    }
+  end
+  table.insert(cells, { Background = { Color = "#16161e" } })
+  table.insert(cells, { Foreground = { Color = "#7aa2f7" } })
+  table.insert(cells, { Attribute = { Intensity = "Bold" } })
+  table.insert(cells, { Text = " " .. mux.get_active_workspace() .. " " })
+  window:set_right_status(wezterm.format(cells))
 end)
 
 config.leader = { key = "Space", mods = "CTRL", timeout_milliseconds = 1000 }
