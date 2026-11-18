@@ -91,6 +91,33 @@ local function new_workspace(window, pane)
   tab:activate()
 end
 
+-- The leader keys below use these actions, and so does the command palette.
+-- Build them once: each action_callback call registers a new event handler.
+local new_workspace_action = wezterm.action_callback(new_workspace)
+local workspace_picker = wezterm.action.ShowLauncherArgs({
+  flags = "FUZZY|WORKSPACES",
+  title = "Workspaces",
+})
+
+-- WezTerm only adds built-in commands to the command palette, so user
+-- bindings need this hook to show up there under a readable brief.
+wezterm.on("augment-command-palette", function()
+  return {
+    {
+      brief = "New worktree workspace",
+      doc = "Creates a git worktree from origin/main, then opens a workspace for it with pi, lazygit and helix",
+      icon = "md_source_branch",
+      action = new_workspace_action,
+    },
+    {
+      brief = "Switch workspace",
+      doc = "Fuzzy picks an existing workspace",
+      icon = "md_view_grid",
+      action = workspace_picker,
+    },
+  }
+end)
+
 config.font = wezterm.font("JetBrains Mono")
 config.font_size = 16
 config.color_scheme = "Tokyo Night"
@@ -168,7 +195,7 @@ config.leader = { key = "Space", mods = "CTRL", timeout_milliseconds = 1000 }
 -- Keybinds mirror the tmux config (prefix C-Space).
 config.keys = {
   -- project worktree workspace
-  { key = "w", mods = "LEADER", action = wezterm.action_callback(new_workspace) },
+  { key = "w", mods = "LEADER", action = new_workspace_action },
 
   -- tmux: split-window -h
   { key = "v", mods = "LEADER", action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) },
@@ -200,7 +227,7 @@ config.keys = {
   { key = "p", mods = "LEADER", action = wezterm.action.ActivateTabRelative(-1) },
 
   -- workspace picker (fuzzy)
-  { key = "f", mods = "LEADER", action = wezterm.action.ShowLauncherArgs({ flags = "FUZZY|WORKSPACES", title = "Workspaces" }) },
+  { key = "f", mods = "LEADER", action = workspace_picker },
 
   -- tmux copy mode
   { key = "[", mods = "LEADER", action = wezterm.action.ActivateCopyMode },
