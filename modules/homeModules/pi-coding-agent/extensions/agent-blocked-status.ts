@@ -1,20 +1,21 @@
 /**
- * Herdr blocked status for questionnaires
+ * Blocked status for questionnaires
  *
- * Herdr reads an agent's state from OSC 7501 (see `~/.config/herdr-app/AGENTS.md`:
- * agents are terminals whose program reports `working`/`blocked`/`idle`/`done`).
+ * Terminals and terminal UIs read an agent's state from the program-status
+ * sequence OSC 7501: the program reports `working`/`blocked`/`idle`/`done`.
  * Pi reports `blocked` only for dialogs it pushes with a blocked descriptor:
  * `showExtensionSelector`, `showExtensionInput`, `showExtensionEditor` and login.
  * `ui.custom()` passes none — the inline branch calls `pushExtensionDialog(c)`
  * with no status, and the overlay branch (`showOverlay`) never reports. So
  * `@juicesharp/rpiv-ask-user-question`, which mounts through `ui.custom()`, kept
- * Herdr on the stale `working` state while the questionnaire waited for an answer.
+ * the surface on the stale `working` state while the questionnaire waited for an
+ * answer.
  *
  * This extension listens to the plugin's public `rpiv:ask-user:*` events and
  * writes the status itself, then restores `working` when the questionnaire ends.
  *
  * Gated on `HC_TERMINAL_ID`: only herdr-core terminals are known to answer the
- * OSC 7501 support query, and an unsupported terminal would print the sequence.
+ * OSC 7501 support query. An unsupported terminal would print the sequence.
  */
 
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
@@ -36,7 +37,7 @@ interface AskUserBlockedPayload {
 /** Fallback label when the prompt event carried no usable question text. */
 const DEFAULT_BLOCKED_MESSAGE = "Waiting for your answer";
 
-export default function herdrBlockedStatus(pi: ExtensionAPI): void {
+export default function agentBlockedStatus(pi: ExtensionAPI): void {
 	if (!process.stdout.isTTY || !process.env.HC_TERMINAL_ID) return;
 
 	const labels = new Map<string, string>();
