@@ -7,6 +7,12 @@ local function shell_quote(s)
   return "'" .. s:gsub("'", "'\\''") .. "'"
 end
 
+-- Run cmd in an interactive login fish. The login config sets the full nix
+-- PATH, and fish stays open as the pane shell when cmd exits.
+local function in_shell(cmd)
+  return { "@fish@", "-l", "-C", cmd }
+end
+
 local function current_dir(pane)
   local cwd = pane:get_current_working_dir()
   if not cwd then
@@ -119,7 +125,7 @@ function M.new_workspace(window, pane)
   local tab, new_pane, new_window = mux.spawn_window({
     workspace = name,
     cwd = path,
-    args = { "@pi@" },
+    args = in_shell("@pi@"),
   })
   mux.set_active_workspace(name)
 
@@ -128,12 +134,88 @@ function M.new_workspace(window, pane)
     direction = "Right",
     size = 0.4,
     cwd = path,
-    args = { "@lazygit@" },
+    args = in_shell("@lazygit@"),
   })
 
-  new_window:spawn_tab({ cwd = path, args = { "@hx@", "." } })
+  new_window:spawn_tab({ cwd = path, args = in_shell("@hx@ .") })
   tab:activate()
   new_pane:activate()
+end
+
+-- The top level of the worktree that holds dir.
+local function worktree_root(dir)
+  local ok, stdout = wezterm.run_child_process({
+    "@bash@",
+    "-c",
+    [[
+export PATH=@toolsPath@:$PATH
+cd "$1" && git rev-parse --show-toplevel
+]],
+    "sh",
+    dir,
+  })
+  if not ok then
+    return nil
+  end
+  local root = stdout:gsub("%s+$", "")
+  return root ~= "" and root or nil
+end
+
+local function notify(window, msg)
+  window:toast_notification("wezterm", msg, nil, 5000)
+end
+
+-- Closes every pane in the current workspace, then removes its worktree with
+-- wt. The main worktree is never removed. The panes close first, so that no
+-- process holds the directory during the removal.
+function M.delete_workspace(window, pane)
+  local name = window:active_workspace()
+  local dir = current_dir(pane)
+  local main = repo_root(dir)
+  local path = dir and worktree_root(dir)
+  if not main or not path then
+    notify(window, "not in a git worktree")
+    return
+  end
+  if path == main then
+    notify(window, "will not remove the main worktree: " .. path)
+    return
+  end
+
+  local target = "default"
+  for _, ws in ipairs(mux.get_workspace_names()) do
+    if ws ~= name then
+      target = ws
+      break
+    end
+  end
+  window:perform_action(wezterm.action.SwitchToWorkspace({ name = target }), pane)
+
+  local cli = wezterm.executable_dir .. "/wezterm"
+  for _, w in ipairs(mux.all_windows()) do
+    if w:get_workspace() == name then
+      for _, t in ipairs(w:tabs()) do
+        for _, p in ipairs(t:panes()) do
+          wezterm.run_child_process({ cli, "cli", "kill-pane", "--pane-id", tostring(p:pane_id()) })
+        end
+      end
+    end
+  end
+
+  local ok, stdout, stderr = wezterm.run_child_process({
+    "@bash@",
+    "-c",
+    [[
+export PATH=@toolsPath@:$PATH
+cd "$1" && wt remove --foreground -y "$2"
+]],
+    "sh",
+    main,
+    path,
+  })
+  if not ok then
+    notify(window, "wt remove failed: " .. (stderr ~= "" and stderr or stdout))
+  end
 end
 
 return M

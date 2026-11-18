@@ -6,6 +6,7 @@ local worktree = require("worktree")
 -- The leader keys below use these actions, and so does the command palette.
 -- Build them once: each action_callback call registers a new event handler.
 local new_workspace_action = wezterm.action_callback(worktree.new_workspace)
+local delete_workspace_action = wezterm.action_callback(worktree.delete_workspace)
 local workspace_picker = wezterm.action.ShowLauncherArgs({
   flags = "FUZZY|WORKSPACES",
   title = "Workspaces",
@@ -20,6 +21,12 @@ wezterm.on("augment-command-palette", function()
       doc = "Creates a git worktree from origin/main or origin/master, then opens a workspace for it with pi, lazygit and helix",
       icon = "md_source_branch",
       action = new_workspace_action,
+    },
+    {
+      brief = "Delete worktree workspace",
+      doc = "Closes all panes in the current workspace, then removes its git worktree with wt",
+      icon = "md_delete",
+      action = delete_workspace_action,
     },
     {
       brief = "Switch workspace",
@@ -102,7 +109,7 @@ wezterm.on("update-right-status", function(window, _)
   window:set_right_status(wezterm.format(cells))
 end)
 
-config.leader = { key = "Space", mods = "CTRL", timeout_milliseconds = 1000 }
+config.leader = { key = "Space", mods = "CTRL", timeout_milliseconds = 2000 }
 
 -- Keybinds mirror the tmux config (prefix C-Space).
 config.keys = {

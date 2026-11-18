@@ -17,6 +17,7 @@
     xdg.configFile."wezterm/wezterm.lua".source = ./wezterm.lua;
     xdg.configFile."wezterm/worktree.lua".source = pkgs.replaceVars ./worktree.lua {
       bash = lib.getExe pkgs.bash;
+      fish = lib.getExe pkgs.fish;
       pi = lib.getExe pi;
       lazygit = lib.getExe pkgs.lazygit;
       hx = lib.getExe pkgs.helix;
