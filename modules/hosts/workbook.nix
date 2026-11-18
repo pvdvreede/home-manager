@@ -19,6 +19,11 @@
     nixpkgs.hostPlatform = "aarch64-darwin";
 
     nix.settings.trusted-users = ["root" "paul.vandevreede"];
+    nix.settings.ssl-cert-file = "/Users/paul.vandevreede/.all-ca-bundle.pem";
+    environment.variables = {
+      SSL_CERT_FILE = "/Users/paul.vandevreede/.all-ca-bundle.pem";
+      NIX_SSL_CERT_FILE = "/Users/paul.vandevreede/.all-ca-bundle.pem";
+    };
     nixpkgs.config.allowUnfree = true;
 
     system.defaults = {
@@ -74,8 +79,6 @@
     homebrew.onActivation.autoUpdate = true;
     homebrew.onActivation.upgrade = true;
     homebrew.casks = [
-      "kitty"
-      "visual-studio-code"
       "zed"
       "herdr-app"
       "t3-code"
@@ -116,7 +119,6 @@
         self.homeModules.nix
         self.homeModules.devenv
         self.homeModules.direnv
-        self.homeModules.vscode
         self.homeModules.zed-editor
         self.homeModules.pi-coding-agent
         self.homeModules.awscli
@@ -124,6 +126,7 @@
         self.homeModules.herdr-app
         self.homeModules.t3-code
         self.homeModules.wezterm
+        self.homeModules.delta
       ];
 
       programs.pi-coding-agent.settings = {
