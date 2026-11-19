@@ -132,7 +132,7 @@ config.keys = {
   -- tmux window/pane management defaults
   { key = "z", mods = "LEADER", action = wezterm.action.TogglePaneZoomState },
   { key = "x", mods = "LEADER", action = wezterm.action.CloseCurrentPane({ confirm = true }) },
-  { key = ",", mods = "LEADER", action = wezterm.action.PromptInputLine({
+  { key = "r", mods = "LEADER", action = wezterm.action.PromptInputLine({
     description = "Rename tab",
     action = wezterm.action_callback(function(window, _, line)
       if line and #line > 0 then
@@ -144,6 +144,10 @@ config.keys = {
   -- tmux next/previous window
   { key = "n", mods = "LEADER", action = wezterm.action.ActivateTabRelative(1) },
   { key = "p", mods = "LEADER", action = wezterm.action.ActivateTabRelative(-1) },
+
+  -- previous/next workspace
+  { key = ",", mods = "LEADER", action = wezterm.action.SwitchWorkspaceRelative(-1) },
+  { key = ".", mods = "LEADER", action = wezterm.action.SwitchWorkspaceRelative(1) },
 
   -- workspace picker (fuzzy)
   { key = "f", mods = "LEADER", action = workspace_picker },
