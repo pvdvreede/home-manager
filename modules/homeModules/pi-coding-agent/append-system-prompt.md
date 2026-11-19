@@ -80,3 +80,17 @@ Use the `subagent` tool (pi-subagents):
 - jj is the preferred vcs provider, so check if its present in any repo before falling
   back to git commands.
 - Before you create a PR, always rebase the branch onto `origin/main`.
+
+# WezTerm workspace
+
+- Your terminal runs in WezTerm when the environment variable `WEZTERM_PANE` is set.
+- When you know the task, get the current workspace name:
+  `wezterm cli list --format json | jq -r --argjson p "$WEZTERM_PANE" 'first(.[] | select(.pane_id == $p) | .workspace)'`
+- Rename the workspace only if its name is generic or auto-generated. Examples:
+  - `default`.
+  - A number only, such as `1`.
+  - `<repo>-<YYYYMMDD>-<HHMMSS>`, such as `home-manager-20261119-105503`.
+- Do not rename a workspace that has a descriptive name. The user or an agent set that name.
+- To rename, run `wezterm cli rename-workspace <name>`.
+- Use a short, lowercase, dash-separated name that describes the task, such as `pi-wezterm-prompt`.
+- Rename one time per task. Do not rename again in the same session.
